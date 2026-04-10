@@ -1,20 +1,18 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HR Quiz Academy</title>
+<title>Academia de RRHH - Quiz</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
   --gold:#C9A84C;
-  --gold-light:#E8C96A;
   --dark:#0F0F0F;
   --dark-2:#1A1A1A;
   --dark-3:#242424;
-  --dark-4:#2E2E2E;
   --cream:#F5F0E8;
   --cream-dim:#D4CFC7;
   --green:#4CAF7A;
@@ -29,26 +27,33 @@ body{
   color:var(--cream);
 }
 
-.app{max-width:900px;margin:auto;padding:30px}
+.app{
+  max-width:900px;
+  margin:auto;
+  padding:30px;
+}
 
 .screen{display:none}
 .screen.active{display:block}
 
 h1{
   font-family:Playfair Display,serif;
-  font-size:42px;
   text-align:center;
-  margin-bottom:10px;
   color:var(--gold);
+  font-size:40px;
+  margin-bottom:10px;
 }
 
-p{text-align:center;color:var(--cream-dim);margin-bottom:30px}
+p{
+  text-align:center;
+  color:var(--cream-dim);
+  margin-bottom:30px;
+}
 
 .card{
   background:var(--dark-2);
   padding:20px;
   border-radius:12px;
-  margin-bottom:15px;
   border:1px solid #2a2a2a;
 }
 
@@ -68,11 +73,18 @@ button{
 }
 
 .option:hover{
-  background:var(--dark-4);
+  background:var(--dark-2);
 }
 
-.correct{background:var(--green)!important;color:#fff}
-.wrong{background:var(--red)!important;color:#fff}
+.correct{
+  background:var(--green)!important;
+  color:white;
+}
+
+.wrong{
+  background:var(--red)!important;
+  color:white;
+}
 
 .nav{
   display:flex;
@@ -84,7 +96,7 @@ button{
   width:auto;
   padding:10px 15px;
   background:var(--gold);
-  color:#000;
+  color:black;
 }
 </style>
 </head>
@@ -93,22 +105,24 @@ button{
 
 <div class="app">
 
+<!-- INICIO -->
 <div id="home" class="screen active">
-<h1>HR Quiz Academy</h1>
-<p>Lerne HR Strategien Schritt für Schritt</p>
+<h1>Academia RRHH</h1>
+<p>Aprende recursos humanos paso a paso</p>
 
 <div class="card">
-<button onclick="startQuiz()">Quiz starten</button>
+<button onclick="startQuiz()">Empezar quiz</button>
 </div>
 </div>
 
+<!-- QUIZ -->
 <div id="quiz" class="screen">
 <div class="card">
 <h2 id="question"></h2>
 <div id="answers"></div>
 
 <div class="nav">
-<button class="small-btn" onclick="next()">Weiter</button>
+<button class="small-btn" onclick="next()">Siguiente</button>
 </div>
 </div>
 </div>
@@ -116,61 +130,64 @@ button{
 </div>
 
 <script>
-const questions=[
+const preguntas = [
 {
-q:"Was ist strategisches HR?",
-a:["Nur Gehalt","Teil der Unternehmensstrategie","Nur Verwaltung"],
+q:"¿Qué es la gestión estratégica de RRHH?",
+a:["Solo nóminas","Parte de la estrategia empresarial","Solo contratación"],
 c:1
 },
 {
-q:"Was ist Recruiting?",
-a:["Mitarbeiter finden","Urlaub planen","Buchhaltung"],
+q:"¿Qué es el reclutamiento?",
+a:["Encontrar empleados","Gestionar vacaciones","Contabilidad"],
 c:0
 }
 ];
 
-let i=0;
-let score=0;
-let locked=false;
+let i = 0;
+let score = 0;
+let locked = false;
 
 function startQuiz(){
-i=0;
-score=0;
+i = 0;
+score = 0;
 show("quiz");
 load();
 }
 
 function load(){
-locked=false;
-let q=questions[i];
-document.getElementById("question").innerText=q.q;
+locked = false;
+let q = preguntas[i];
 
-let html="";
-q.a.forEach((x,idx)=>{
-html+=`<button class="option" onclick="select(${idx})">${x}</button>`;
+document.getElementById("question").innerText = q.q;
+
+let html = "";
+
+q.a.forEach((op, idx)=>{
+html += `<button class="option" onclick="select(${idx})">${op}</button>`;
 });
-document.getElementById("answers").innerHTML=html;
+
+document.getElementById("answers").innerHTML = html;
 }
 
 function select(idx){
-if(locked)return;
-locked=true;
+if(locked) return;
+locked = true;
 
-let q=questions[i];
-let btns=document.querySelectorAll(".option");
+let q = preguntas[i];
+let buttons = document.querySelectorAll(".option");
 
-btns.forEach((b,bi)=>{
-if(bi===q.c)b.classList.add("correct");
-if(bi===idx&&idx!==q.c)b.classList.add("wrong");
+buttons.forEach((b, bi)=>{
+if(bi === q.c) b.classList.add("correct");
+if(bi === idx && idx !== q.c) b.classList.add("wrong");
 });
 
-if(idx===q.c)score++;
+if(idx === q.c) score++;
 }
 
 function next(){
 i++;
-if(i>=questions.length){
-alert("Fertig! Score: "+score);
+if(i >= preguntas.length){
+alert("Fin del quiz. Puntuación: " + score);
 show("home");
 }else{
 load();
@@ -178,7 +195,7 @@ load();
 }
 
 function show(id){
-document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
 document.getElementById(id).classList.add("active");
 }
 </script>
