@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz RRHH Dirección Estratégica</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --gold:#C9A84C;
+  --gold-light:#E8C96A;
+  --dark:#0F0F0F;
+  --dark-2:#1A1A1A;
+  --dark-3:#242424;
+  --dark-4:#2E2E2E;
+  --cream:#F5F0E8;
+  --cream-dim:#D4CFC7;
+  --green:#4CAF7A;
+  --red:#E05252;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+  background:var(--dark);
+  color:var(--cream);
+  font-family:'DM Sans',sans-serif;
+}
+
+.app{
+  max-width:860px;
+  margin:0 auto;
+  padding:40px 20px;
+}
+
+.screen{display:none;}
+.screen.active{display:block;}
+
+button{
+  cursor:pointer;
+  padding:10px 14px;
+  margin:6px;
+  border:none;
+  border-radius:6px;
+}
+
+.option{
+  display:block;
+  width:100%;
+  background:var(--dark-3);
+  color:var(--cream);
+  margin:8px 0;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- HOME -->
+<div id="home" class="screen active">
+  <h1>Quiz RRHH</h1>
+  <p>Dirección Estratégica de Recursos Humanos</p>
+
+  <button onclick="start('bronze')">Nivel básico</button>
+  <button onclick="start('silver')">Nivel medio</button>
+  <button onclick="start('gold')">Nivel avanzado</button>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="screen">
+  <h2 id="question"></h2>
+  <div id="options"></div>
+  <p id="feedback"></p>
+  <button onclick="next()">Siguiente</button>
+</div>
+
+<!-- RESULT -->
+<div id="result" class="screen">
+  <h1>Resultado</h1>
+  <p id="score"></p>
+  <button onclick="home()">Volver</button>
+</div>
+
+</div>
+
+<script>
+
+const Q = {
+bronze:[
+{
+text:"¿Qué es la Dirección Estratégica de RRHH?",
+opts:[
+"Solo nóminas",
+"Integrar RRHH en la estrategia de la empresa",
+"Solo contratación",
+"Externalización total"
+],
+c:1
+},
+{
+text:"¿Cómo ha evolucionado RRHH?",
+opts:[
+"Sin cambios",
+"Administración → Gestión → Estrategia",
+"Solo digitalización",
+"Solo selección"
+],
+c:1
+}
+],
+silver:[
+{
+text:"¿Objetivo de la planificación de RRHH?",
+opts:[
+"Reducir empleados",
+"Tener las personas adecuadas en el momento adecuado",
+"Aumentar costes",
+"Eliminar formación"
+],
+c:1
+}
+],
+gold:[
+{
+text:"¿Qué indica alta rotación voluntaria?",
+opts:[
+"Buen clima",
+"Problemas internos",
+"Crecimiento",
+"Más productividad"
+],
+c:1
+}
+]
+};
+
+let state={
+level:null,
+i:0,
+score:0,
+questions:[]
+};
+
+function start(level){
+state.level=level;
+state.i=0;
+state.score=0;
+state.questions=[...Q[level]];
+show("quiz");
+render();
+}
+
+function render(){
+let q=state.questions[state.i];
+document.getElementById("question").textContent=q.text;
+
+let box=document.getElementById("options");
+box.innerHTML="";
+
+q.opts.forEach((o,index)=>{
+let b=document.createElement("button");
+b.className="option";
+b.textContent=o;
+b.onclick=()=>answer(index,q.c);
+box.appendChild(b);
+});
+}
+
+function answer(i,c){
+let fb=document.getElementById("feedback");
+if(i===c){
+state.score++;
+fb.textContent="Correcto";
+fb.style.color="green";
+}else{
+fb.textContent="Incorrecto";
+fb.style.color="red";
+}
+}
+
+function next(){
+state.i++;
+if(state.i>=state.questions.length){
+document.getElementById("score").textContent=
+"Puntuación: "+state.score+" / "+state.questions.length;
+show("result");
+}else{
+render();
+document.getElementById("feedback").textContent="";
+}
+}
+
+function home(){
+show("home");
+}
+
+function show(id){
+document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+document.getElementById(id).classList.add("active");
+}
+
+</script>
+
+</body>
+</html>
