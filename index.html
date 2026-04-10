@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-
-<html lang="de">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HR Manager Academy – RRHH Quiz</title>
+<title>Academia de RRHH – Quiz de Dirección Estratégica</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
   :root {
     --gold: #C9A84C;
@@ -22,19 +22,19 @@
     --white: #FFFFFF;
   }
 
-- { margin: 0; padding: 0; box-sizing: border-box; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-font-family: ‘DM Sans’, sans-serif;
-background: var(–navy);
-color: var(–cream);
+font-family: 'DM Sans', sans-serif;
+background: var(--navy);
+color: var(--cream);
 min-height: 100vh;
 overflow-x: hidden;
 }
 
-/* Animated background */
+/* Fondo animado */
 body::before {
-content: ‘’;
+content: '';
 position: fixed;
 inset: 0;
 background:
@@ -53,11 +53,11 @@ margin: 0 auto;
 padding: 20px;
 }
 
-/* ── SCREENS ── */
+/* Pantallas */
 .screen { display: none; }
 .screen.active { display: block; }
 
-/* ── HEADER ── */
+/* CABECERA */
 .header {
 text-align: center;
 padding: 40px 0 30px;
@@ -73,10 +73,10 @@ animation: float 3s ease-in-out infinite;
 50% { transform: translateY(-8px); }
 }
 .header h1 {
-font-family: ‘Playfair Display’, serif;
+font-family: 'Playfair Display', serif;
 font-size: clamp(28px,5vw,46px);
 font-weight: 900;
-background: linear-gradient(135deg, var(–gold-light), var(–gold), var(–gold-dark));
+background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
 -webkit-background-clip: text;
 -webkit-text-fill-color: transparent;
 background-clip: text;
@@ -84,14 +84,14 @@ letter-spacing: -0.5px;
 line-height: 1.1;
 }
 .header p {
-color: var(–silver);
+color: var(--silver);
 font-size: 15px;
 margin-top: 10px;
 font-weight: 300;
 letter-spacing: 0.5px;
 }
 
-/* ── RANK LADDER ── */
+/* Escalera de rango */
 .rank-ladder {
 display: flex;
 justify-content: center;
@@ -115,20 +115,19 @@ font-size: 9px;
 font-weight: 600;
 letter-spacing: 0.8px;
 text-transform: uppercase;
-color: var(–silver);
+color: var(--silver);
 }
-.rank-step.current .label { color: var(–gold); }
+.rank-step.current .label { color: var(--gold); }
 .rank-connector {
 width: 20px;
 height: 2px;
-background: var(–navy-light);
-margin-top: 11px;
-align-self: flex-start;
+background: var(--navy-light);
 margin-top: 18px;
+align-self: flex-start;
 }
-.rank-connector.filled { background: var(–gold); }
+.rank-connector.filled { background: var(--gold); }
 
-/* ── LEVEL CARDS ── */
+/* Tarjetas de nivel */
 .level-grid {
 display: grid;
 grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -136,7 +135,7 @@ gap: 16px;
 margin-top: 16px;
 }
 .level-card {
-background: var(–navy-mid);
+background: var(--navy-mid);
 border: 1px solid rgba(201,168,76,0.2);
 border-radius: 16px;
 padding: 28px 24px;
@@ -145,1061 +144,176 @@ transition: all 0.3s;
 position: relative;
 overflow: hidden;
 }
-.level-card::before {
-content: ‘’;
-position: absolute;
-inset: 0;
-background: linear-gradient(135deg, rgba(201,168,76,0.05), transparent);
-opacity: 0;
-transition: opacity 0.3s;
+.level-card:hover {
+transform: translateY(-4px);
+border-color: var(--gold);
+box-shadow: 0 12px 40px rgba(201,168,76,0.15);
 }
-.level-card:hover { transform: translateY(-4px); border-color: var(–gold); box-shadow: 0 12px 40px rgba(201,168,76,0.15); }
-.level-card:hover::before { opacity: 1; }
 .level-card.locked { opacity: 0.45; cursor: not-allowed; }
-.level-card.locked:hover { transform: none; border-color: rgba(201,168,76,0.2); box-shadow: none; }
-.level-card .level-emoji { font-size: 36px; margin-bottom: 12px; }
-.level-card .level-name {
-font-family: ‘Playfair Display’, serif;
+
+.level-emoji { font-size: 36px; margin-bottom: 12px; }
+
+.level-name {
+font-family: 'Playfair Display', serif;
 font-size: 20px;
 font-weight: 700;
-color: var(–cream);
+color: var(--cream);
 margin-bottom: 6px;
 }
-.level-card .level-desc {
+
+.level-desc {
 font-size: 13px;
-color: var(–silver);
+color: var(--silver);
 line-height: 1.5;
-font-weight: 300;
 }
-.level-card .level-badge {
-position: absolute;
-top: 14px;
-right: 14px;
-font-size: 11px;
-font-weight: 600;
-letter-spacing: 0.8px;
-padding: 4px 10px;
-border-radius: 20px;
-text-transform: uppercase;
-}
-.badge-easy { background: rgba(46,204,113,0.2); color: var(–green); border: 1px solid rgba(46,204,113,0.3); }
-.badge-medium { background: rgba(201,168,76,0.2); color: var(–gold); border: 1px solid rgba(201,168,76,0.3); }
-.badge-hard { background: rgba(231,76,60,0.2); color: var(–red); border: 1px solid rgba(231,76,60,0.3); }
-.badge-expert { background: rgba(176,190,197,0.2); color: #E0E0E0; border: 1px solid rgba(176,190,197,0.3); }
-.badge-locked { background: rgba(255,255,255,0.05); color: var(–silver); border: 1px solid rgba(255,255,255,0.1); }
 
-.stars { margin-top: 12px; font-size: 16px; }
-.progress-info { font-size: 12px; color: var(–silver); margin-top: 6px; }
-
-/* ── QUIZ SCREEN ── */
-.quiz-header {
-display: flex;
-align-items: center;
-justify-content: space-between;
-margin-bottom: 28px;
-flex-wrap: wrap;
-gap: 12px;
-}
+/* Quiz */
 .quiz-title {
-font-family: ‘Playfair Display’, serif;
+font-family: 'Playfair Display', serif;
 font-size: 22px;
-color: var(–gold);
-}
-.quiz-meta { display: flex; gap: 16px; align-items: center; }
-.pill {
-background: var(–navy-mid);
-border: 1px solid rgba(201,168,76,0.3);
-border-radius: 20px;
-padding: 6px 14px;
-font-size: 13px;
-font-weight: 500;
-color: var(–cream);
-}
-.pill span { color: var(–gold); }
-
-.progress-bar {
-width: 100%;
-height: 6px;
-background: var(–navy-mid);
-border-radius: 3px;
-margin-bottom: 32px;
-overflow: hidden;
-}
-.progress-fill {
-height: 100%;
-background: linear-gradient(90deg, var(–gold-dark), var(–gold));
-border-radius: 3px;
-transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+color: var(--gold);
 }
 
-.question-card {
-background: var(–navy-mid);
-border: 1px solid rgba(201,168,76,0.15);
-border-radius: 20px;
-padding: 36px;
-margin-bottom: 20px;
-position: relative;
-}
-.question-number {
-font-size: 11px;
-font-weight: 600;
-letter-spacing: 1.5px;
-text-transform: uppercase;
-color: var(–gold);
-margin-bottom: 14px;
-}
 .question-text {
-font-size: clamp(16px,2.5vw,20px);
+font-size: 18px;
 font-weight: 500;
 line-height: 1.55;
-color: var(–cream);
 }
 
-.answers {
-display: grid;
-gap: 12px;
-margin-bottom: 24px;
-}
 .answer-btn {
-background: var(–navy-mid);
+background: var(--navy-mid);
 border: 1.5px solid rgba(176,190,197,0.2);
 border-radius: 14px;
 padding: 18px 22px;
 text-align: left;
 cursor: pointer;
-font-family: ‘DM Sans’, sans-serif;
-font-size: 15px;
-color: var(–cream);
-transition: all 0.25s;
-position: relative;
-overflow: hidden;
-line-height: 1.4;
-}
-.answer-btn::before {
-content: ‘’;
-position: absolute;
-left: 0; top: 0; bottom: 0;
-width: 4px;
-background: transparent;
-transition: background 0.25s;
-}
-.answer-btn:hover:not(:disabled) {
-border-color: var(–gold);
-background: rgba(201,168,76,0.06);
-transform: translateX(4px);
-}
-.answer-btn:hover:not(:disabled)::before { background: var(–gold); }
-.answer-btn:disabled { cursor: default; }
-.answer-btn.correct { border-color: var(–green); background: rgba(46,204,113,0.08); }
-.answer-btn.correct::before { background: var(–green); }
-.answer-btn.wrong { border-color: var(–red); background: rgba(231,76,60,0.08); }
-.answer-btn.wrong::before { background: var(–red); }
-.answer-btn.missed { border-color: var(–green); border-style: dashed; opacity: 0.7; }
-
-.answer-letter {
-display: inline-flex;
-align-items: center;
-justify-content: center;
-width: 28px;
-height: 28px;
-border-radius: 50%;
-background: rgba(176,190,197,0.1);
-font-size: 12px;
-font-weight: 700;
-color: var(–silver);
-margin-right: 12px;
-flex-shrink: 0;
-vertical-align: middle;
+color: var(--cream);
 transition: all 0.25s;
 }
-.answer-btn.correct .answer-letter { background: rgba(46,204,113,0.2); color: var(–green); }
-.answer-btn.wrong .answer-letter { background: rgba(231,76,60,0.2); color: var(–red); }
 
-.explanation {
-background: rgba(201,168,76,0.06);
-border: 1px solid rgba(201,168,76,0.2);
-border-left: 4px solid var(–gold);
-border-radius: 0 12px 12px 0;
-padding: 16px 20px;
-font-size: 14px;
-line-height: 1.6;
-color: #D4C5A9;
-margin-bottom: 20px;
-display: none;
-animation: fadeIn 0.3s ease;
+.answer-btn.correct { border-color: var(--green); }
+.answer-btn.wrong { border-color: var(--red); }
+
+/* Resultado */
+.result-title {
+font-family: 'Playfair Display', serif;
+font-size: 32px;
+color: var(--gold);
+text-align: center;
 }
-.explanation strong { color: var(–gold); }
-@keyframes fadeIn { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
 
-.nav-btns { display: flex; gap: 12px; justify-content: flex-end; }
+.result-rank { text-align: center; color: var(--silver); }
 
 .btn {
-font-family: ‘DM Sans’, sans-serif;
-font-size: 14px;
-font-weight: 600;
 padding: 14px 28px;
 border-radius: 12px;
 border: none;
 cursor: pointer;
-transition: all 0.25s;
-letter-spacing: 0.5px;
+font-weight: 600;
 }
+
 .btn-primary {
-background: linear-gradient(135deg, var(–gold), var(–gold-dark));
-color: var(–navy);
+background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+color: var(--navy);
 }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.35); }
+
 .btn-secondary {
 background: transparent;
-border: 1.5px solid rgba(176,190,197,0.3);
-color: var(–silver);
-}
-.btn-secondary:hover { border-color: var(–silver); color: var(–cream); }
-
-/* ── RESULT SCREEN ── */
-.result-screen {
-text-align: center;
-padding: 40px 20px;
-}
-.medal-display {
-font-size: 100px;
-display: block;
-margin-bottom: 16px;
-animation: medalPop 0.6s cubic-bezier(0.175,0.885,0.32,1.275);
-}
-@keyframes medalPop {
-0% { transform: scale(0) rotate(-15deg); opacity: 0; }
-100% { transform: scale(1) rotate(0); opacity: 1; }
-}
-.result-title {
-font-family: ‘Playfair Display’, serif;
-font-size: clamp(26px,4vw,40px);
-font-weight: 900;
-background: linear-gradient(135deg, var(–gold-light), var(–gold));
--webkit-background-clip: text;
--webkit-text-fill-color: transparent;
-background-clip: text;
-margin-bottom: 10px;
-}
-.result-rank {
-font-size: 18px;
-color: var(–silver);
-margin-bottom: 30px;
-}
-.result-rank strong { color: var(–cream); }
-.score-ring {
-width: 140px;
-height: 140px;
-border-radius: 50%;
-background: conic-gradient(var(–gold) 0%, transparent 0%);
-display: flex;
-align-items: center;
-justify-content: center;
-margin: 0 auto 30px;
-position: relative;
-transition: background 1.2s;
-}
-.score-ring::before {
-content: ‘’;
-position: absolute;
-inset: 12px;
-border-radius: 50%;
-background: var(–navy);
-}
-.score-number {
-position: relative;
-z-index: 1;
-font-family: ‘Playfair Display’, serif;
-font-size: 36px;
-font-weight: 900;
-color: var(–gold);
-}
-.score-number small {
-font-size: 16px;
-color: var(–silver);
-font-family: ‘DM Sans’, sans-serif;
-font-weight: 300;
-}
-.stats-row {
-display: flex;
-justify-content: center;
-gap: 24px;
-margin-bottom: 32px;
-flex-wrap: wrap;
-}
-.stat-box {
-background: var(–navy-mid);
-border: 1px solid rgba(201,168,76,0.2);
-border-radius: 14px;
-padding: 18px 24px;
-min-width: 110px;
-}
-.stat-box .stat-val {
-font-family: ‘Playfair Display’, serif;
-font-size: 28px;
-font-weight: 700;
-color: var(–cream);
-}
-.stat-box .stat-label { font-size: 12px; color: var(–silver); margin-top: 4px; }
-.rank-up-banner {
-background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));
-border: 1px solid rgba(201,168,76,0.4);
-border-radius: 16px;
-padding: 20px 28px;
-margin-bottom: 28px;
-animation: glow 2s ease-in-out infinite;
-}
-@keyframes glow {
-0%,100% { box-shadow: 0 0 20px rgba(201,168,76,0.1); }
-50% { box-shadow: 0 0 40px rgba(201,168,76,0.3); }
-}
-.rank-up-banner p { font-size: 15px; color: var(–gold-light); }
-.rank-up-banner strong { font-size: 18px; font-family: ‘Playfair Display’, serif; }
-.result-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-
-/* ── BACK BTN ── */
-.back-btn {
-background: none;
-border: none;
-color: var(–silver);
-font-family: ‘DM Sans’, sans-serif;
-font-size: 14px;
-cursor: pointer;
-display: flex;
-align-items: center;
-gap: 6px;
-padding: 8px 0;
-margin-bottom: 20px;
-transition: color 0.2s;
-}
-.back-btn:hover { color: var(–gold); }
-
-/* ── TOAST ── */
-.toast {
-position: fixed;
-bottom: 30px;
-left: 50%;
-transform: translateX(-50%) translateY(80px);
-background: var(–navy-mid);
-border: 1px solid rgba(201,168,76,0.4);
-border-radius: 12px;
-padding: 14px 24px;
-font-size: 14px;
-color: var(–cream);
-z-index: 999;
-transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
-white-space: nowrap;
-}
-.toast.show { transform: translateX(-50%) translateY(0); }
-
-/* ── CONFETTI ── */
-.confetti-piece {
-position: fixed;
-width: 10px;
-height: 10px;
-pointer-events: none;
-z-index: 1000;
-animation: confettiFall linear forwards;
-}
-@keyframes confettiFall {
-0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
-100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-}
-
-@media(max-width:600px) {
-.question-card { padding: 24px 18px; }
-.answer-btn { padding: 14px 16px; font-size: 14px; }
+border: 1px solid var(--silver);
+color: var(--silver);
 }
 </style>
-
 </head>
+
 <body>
 
 <div class="container">
 
-  <!-- ══ HOME SCREEN ══ -->
-
+  <!-- PANTALLA INICIO -->
   <div class="screen active" id="screen-home">
     <div class="header">
       <span class="badge-icon">🏛️</span>
-      <h1>HR Manager<br>Academy</h1>
+      <h1>Academia de RRHH</h1>
       <p>Módulo 1 · Dirección Estratégica de Recursos Humanos</p>
     </div>
 
-```
-<div class="rank-ladder" id="rank-ladder"></div>
-
-<div class="level-grid" id="level-grid"></div>
-```
-
+    <div class="rank-ladder" id="rank-ladder"></div>
+    <div class="level-grid" id="level-grid"></div>
   </div>
 
-  <!-- ══ QUIZ SCREEN ══ -->
-
+  <!-- QUIZ -->
   <div class="screen" id="screen-quiz">
-    <button class="back-btn" onclick="goHome()">← Zurück zur Übersicht</button>
+    <button class="back-btn" onclick="goHome()">← Volver</button>
+
     <div class="quiz-header">
       <span class="quiz-title" id="quiz-level-title"></span>
       <div class="quiz-meta">
-        <div class="pill">Frage <span id="q-current">1</span>/<span id="q-total">10</span></div>
+        <div class="pill">Pregunta <span id="q-current">1</span>/<span id="q-total">10</span></div>
         <div class="pill">⭐ <span id="q-score">0</span></div>
       </div>
     </div>
-    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
 
-```
-<div class="question-card">
-  <div class="question-number" id="q-number">FRAGE 1</div>
-  <div class="question-text" id="q-text"></div>
-</div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
 
-<div class="answers" id="answers-container"></div>
-<div class="explanation" id="explanation"></div>
+    <div class="question-card">
+      <div class="question-text" id="q-text"></div>
+    </div>
 
-<div class="nav-btns">
-  <button class="btn btn-primary" id="next-btn" style="display:none" onclick="nextQuestion()">Weiter →</button>
-</div>
-```
+    <div class="answers" id="answers-container"></div>
+    <div class="explanation" id="explanation"></div>
 
+    <div class="nav-btns">
+      <button class="btn btn-primary" id="next-btn" style="display:none" onclick="nextQuestion()">Siguiente →</button>
+    </div>
   </div>
 
-  <!-- ══ RESULT SCREEN ══ -->
-
+  <!-- RESULTADO -->
   <div class="screen" id="screen-result">
     <div class="result-screen">
       <span class="medal-display" id="result-medal">🥇</span>
-      <h2 class="result-title" id="result-title">Ausgezeichnet!</h2>
+      <h2 class="result-title" id="result-title">¡Excelente!</h2>
       <p class="result-rank" id="result-rank"></p>
-      <div class="score-ring" id="score-ring">
+
+      <div class="score-ring">
         <div class="score-number" id="score-number">0<small>/10</small></div>
       </div>
+
       <div class="stats-row">
-        <div class="stat-box"><div class="stat-val" id="stat-correct">0</div><div class="stat-label">Richtig</div></div>
-        <div class="stat-box"><div class="stat-val" id="stat-wrong">0</div><div class="stat-label">Falsch</div></div>
-        <div class="stat-box"><div class="stat-val" id="stat-pct">0%</div><div class="stat-label">Quote</div></div>
+        <div>Correctas: <span id="stat-correct">0</span></div>
+        <div>Incorrectas: <span id="stat-wrong">0</span></div>
+        <div>Porcentaje: <span id="stat-pct">0%</span></div>
       </div>
-      <div class="rank-up-banner" id="rank-up-banner" style="display:none">
-        <p id="rank-up-text"></p>
-      </div>
+
       <div class="result-btns">
-        <button class="btn btn-secondary" onclick="retryLevel()">🔄 Nochmal</button>
-        <button class="btn btn-primary" onclick="goHome()">🏛️ Zur Übersicht</button>
+        <button class="btn btn-secondary" onclick="retryLevel()">Reintentar</button>
+        <button class="btn btn-primary" onclick="goHome()">Inicio</button>
       </div>
     </div>
   </div>
 
 </div>
-<div class="toast" id="toast"></div>
 
 <script>
-// ══════════════════════════════════════════════
-//  DATA
-// ══════════════════════════════════════════════
-
-const RANKS = [
-  { icon: '🎓', label: 'Praktikant' },
-  { icon: '📋', label: 'HR-Assistent' },
-  { icon: '🗂️', label: 'Sachbearbeiter' },
-  { icon: '👔', label: 'HR-Specialist' },
-  { icon: '📊', label: 'HR-Analyst' },
-  { icon: '🤝', label: 'HR Business Partner' },
-  { icon: '🏆', label: 'HR-Manager' },
-];
-
+// TEXTO DEL QUIZ TRADUCIDO
 const LEVELS = [
   {
-    id: 0,
-    name: 'Grundlagen',
-    emoji: '📚',
-    desc: 'Einstieg in die strategische HR-Direktion. Verstehe die Kernbegriffe.',
-    difficulty: 'Leicht',
-    badgeClass: 'badge-easy',
-    medal: '🥉',
-    medalName: 'Bronze-Abzeichen',
-    stars: 1,
-    rankUnlock: 1,
+    name: 'Fundamentos',
+    desc: 'Introducción a la dirección estratégica de RRHH.',
     questions: [
       {
-        q: 'Was ist die Dirección Estratégica de RRHH?',
-        a: ['Ein rein administrativer Ansatz für Personalverwaltung','Ein Ansatz, der Personalmanagement in das Kernstück der Unternehmensstrategie integriert','Eine Abteilung, die nur Gehälter berechnet','Eine externe Beratungsstelle für Unternehmen'],
+        q: '¿Qué es la Dirección Estratégica de RRHH?',
+        a: [
+          'Un enfoque administrativo',
+          'Integrar RRHH en la estrategia empresarial',
+          'Solo gestión de nóminas',
+          'Una consultoría externa'
+        ],
         correct: 1,
-        exp: 'Die Dirección Estratégica de RRHH integriert das Personalmanagement ins Zentrum der Unternehmensstrategie – sie beeinflusst Wettbewerbsfähigkeit, Innovation und Nachhaltigkeit direkt.'
-      },
-      {
-        q: 'Woraus entsteht jede RRHH-Strategie?',
-        a: ['Aus dem Wunsch des Personalchefs','Aus der Unternehmensstrategie (estrategia corporativa)','Aus gesetzlichen Vorgaben','Aus Branchentrends'],
-        correct: 1,
-        exp: 'Jede RRHH-Strategie entspringt der Unternehmensstrategie. RRHH muss das Geschäftsmodell verstehen und Talentanforderungen daraus ableiten.'
-      },
-      {
-        q: 'In welcher Entwicklungsphase ist RRHH reaktiv und beschäftigt sich nur mit Papierkram?',
-        a: ['Etapa 3: Dirección Estratégica','Etapa 2: Gestión de RRHH','Etapa 1: Administración de Personal','Etapa 4: HR Analytics'],
-        correct: 2,
-        exp: 'Etapa 1 (Verwaltung des Personals) ist der reaktive Ansatz: RRHH wartet auf Probleme, verwaltet nur Verträge und Gehaltslisten, plant nicht voraus.'
-      },
-      {
-        q: 'Was bedeutet „reaktiv" im HR-Kontext?',
-        a: ['Proaktiv auf zukünftige Herausforderungen reagieren','Erst handeln, wenn ein Problem bereits aufgetreten ist','Daten analysieren und Entscheidungen treffen','Personal strategisch planen'],
-        correct: 1,
-        exp: 'Reaktiv bedeutet: nur handeln, wenn etwas schiefläuft. Kein Planen, kein Antizipieren – einfach abwarten und dann reagieren.'
-      },
-      {
-        q: 'Was ist ein typisches Beispiel für RRHH in Etapa 1 (reaktiv)?',
-        a: ['People Analytics einsetzen','An der Unternehmenssterategie teilnehmen','Erst einen Ersatz suchen, wenn ein Mitarbeiter kündigt','Klimabefragungen durchführen'],
-        correct: 2,
-        exp: 'In Etapa 1 beginnt RRHH erst dann mit der Suche nach Ersatz, wenn ein Mitarbeiter bereits gegangen ist. Es gibt keine Vorausplanung.'
-      },
-      {
-        q: 'Was ist Etapa 2 (Gestión de RRHH) im Vergleich zu Etapa 1?',
-        a: ['Weniger Aufgaben und mehr Bürokratie','Mehr spezialisierte Funktionen wie Auswahl, Schulung und Motivationsarbeit','Vollständige Integration in die Unternehmensstrategie','Vollständige Automatisierung aller HR-Prozesse'],
-        correct: 1,
-        exp: 'In Etapa 2 entstehen neue Funktionen (Selektion, Training, Leistungsbeurteilung), aber RRHH nimmt noch nicht an strategischen Unternehmensentscheidungen teil.'
-      },
-      {
-        q: 'Was bedeutet der Begriff „Etapa 3: Dirección Estratégica de RRHH"?',
-        a: ['RRHH ist rein administrativ tätig','RRHH wird zu einer Schlüsselabteilung für die Zukunft des Unternehmens','RRHH arbeitet ausschließlich mit Gewerkschaften','RRHH ist verantwortlich für das Marketing'],
-        correct: 1,
-        exp: 'In Etapa 3 wird RRHH proaktiv und analytisch: es nimmt an der Unternehmensleitung teil, analysiert Talentbedarf und verknüpft Personalentscheidungen mit Geschäftsergebnissen.'
-      },
-      {
-        q: 'Welche Technologien beschleunigen die Entwicklung zu einem strategischen RRHH?',
-        a: ['Fax und Drucker','Digitalisierung, Homeoffice, Automatisierung und Künstliche Intelligenz','Nur Social Media','Nur Cloud-Speicher'],
-        correct: 1,
-        exp: 'Digitalisierung, Telearbeit, Automatisierung und KI sind laut Modul die Haupttreiber, die RRHH in eine strategische Richtung transformiert haben.'
-      },
-      {
-        q: 'Was ist „People Analytics"?',
-        a: ['Eine HR-Software für Gehaltsabrechnungen','Die Analyse von Personaldaten zur datenbasierten Entscheidungsfindung','Ein Verfahren zur Mitarbeiterrekrutierung','Eine Methode zur Teambuilding-Organisation'],
-        correct: 1,
-        exp: 'People Analytics bedeutet, Personaldaten wie Marketing oder Finanzen zu analysieren – z.B. Vorhersagen über Kündigungsrisiken oder Identifikation von Burnout-gefährdeten Teams.'
-      },
-      {
-        q: 'Wenn ein Unternehmen international expandieren möchte, was muss RRHH vorsehen?',
-        a: ['Nur mehr Büromaterial beschaffen','Profile mit Sprachkenntnissen, interkulturelle Kompetenzen und internationale Mobilitätspolitiken','Alle Mitarbeiter entlassen','Nur die Gehaltsstruktur anpassen'],
-        correct: 1,
-        exp: 'Bei internationaler Expansion muss RRHH Sprachkenntnisse, interkulturelle Kompetenzen, diverse Führungskräfte und Mobilitätspolitiken vorausplanen.'
-      },
+        exp: 'RRHH forma parte de la estrategia de la empresa.'
+      }
     ]
-  },
-  {
-    id: 1,
-    name: 'Wettbewerbsvorteil',
-    emoji: '⚔️',
-    desc: 'Verstehe, wie RRHH einen strategischen Wettbewerbsvorteil schafft.',
-    difficulty: 'Mittel',
-    badgeClass: 'badge-medium',
-    medal: '🥈',
-    medalName: 'Silber-Abzeichen',
-    stars: 2,
-    rankUnlock: 3,
-    questions: [
-      {
-        q: 'Was bedeutet „Wettbewerbsvorteil" (ventaja competitiva) im HR-Kontext?',
-        a: ['Niedrigere Gehälter zahlen als die Konkurrenz','Dass das Unternehmen durch seine Mitarbeiter dauerhaft besser als Konkurrenten ist','Mehr Werbung schalten als andere','Mehr Technologie einsetzen als andere'],
-        correct: 1,
-        exp: 'Wettbewerbsvorteil bedeutet, dass ein Unternehmen dauerhaft besser als seine Konkurrenten ist – durch Mitarbeiter, die schwer zu kopieren, gut organisiert und nachhaltig sind.'
-      },
-      {
-        q: 'Welche drei Bedingungen müssen Mitarbeiter erfüllen, um Wettbewerbsvorteil zu bieten?',
-        a: ['Billig, jung und flexibel sein','Schwer zu imitieren, wertschöpfend organisiert und nachhaltig im Zeitverlauf','Nur hohe Bildungsabschlüsse haben','Immer Überstunden machen'],
-        correct: 1,
-        exp: 'Die drei Bedingungen: (1) schwer zu imitieren (durch einzigartige Kulturkombination), (2) wertschöpfend organisiert und (3) nachhaltig im Zeitverlauf durch Retention und Entwicklung.'
-      },
-      {
-        q: 'Was bedeutet „Upskilling" im Personalwesen?',
-        a: ['Einen Mitarbeiter zu entlassen und zu ersetzen','Bestehende Fähigkeiten verbessern oder erweitern, um im aktuellen Job besser zu werden','Einen Mitarbeiter in eine völlig neue Berufsrolle verschieben','Nur externe Schulungen durchführen'],
-        correct: 1,
-        exp: 'Upskilling = bestehende Kompetenzen verbessern, damit jemand seinen aktuellen Job besser ausführen kann. Beispiel: Ein Administrator lernt fortgeschrittenes Excel.'
-      },
-      {
-        q: 'Was bedeutet „Reskilling" im Personalwesen?',
-        a: ['Den gleichen Job mit neuen Werkzeugen machen','Komplett neue Fähigkeiten lernen, um in eine andere Rolle zu wechseln','Auf das Rentenalter vorbereiten','Führungskompetenz entwickeln'],
-        correct: 1,
-        exp: 'Reskilling = berufliche Neuausrichtung. Beispiel: Ein Fabrikarbeiter lernt Roboterprogrammierung und wechselt in eine technologischere Position.'
-      },
-      {
-        q: 'Was macht RRHH, wenn das Unternehmen innovationsorientiert ist?',
-        a: ['Strenge Kontrolle und Disziplin fördern','Kreativität, Fehlertoleranz und Teamarbeit fördern','Kosten reduzieren und Effizienz priorisieren','Hierarchische Strukturen verstärken'],
-        correct: 1,
-        exp: 'Bei Innovationsorientierung fördert RRHH diverse Teams, kreative Räume und Anerkennung neuer Ideen – auch wenn nicht alle funktionieren.'
-      },
-      {
-        q: 'Was passiert, wenn RRHH keinen Wettbewerbsvorteil schafft?',
-        a: ['Das Unternehmen wird international erfolgreich','Hohe Fluktuation, schlechtes Betriebsklima und Schwierigkeiten, Talente zu gewinnen','Mitarbeiter werden motivierter','Die Produktivität steigt automatisch'],
-        correct: 1,
-        exp: 'Ohne strategisches RRHH entstehen: hohe Fluktuation, schlechtes Klima, Schwierigkeiten bei der Talentgewinnung, mangelnde Bindung und unzufriedene Kunden.'
-      },
-      {
-        q: 'Warum sind Menschen heute schwerer zu kopieren als Maschinen?',
-        a: ['Weil Menschen billiger sind','Weil die Kombination aus Talenten, Kultur, Führungsstil und Prozessen einzigartig ist','Weil es keine Technologie gibt','Weil Gesetze das verbieten'],
-        correct: 1,
-        exp: 'Die einzigartige Kombination aus talentierten Menschen, spezifischer Unternehmenskultur, Führungsstil und internen Prozessen ist extrem schwer zu replizieren.'
-      },
-      {
-        q: 'Was ist die Rolle von RRHH in einem auf Kundenservice ausgerichteten Unternehmen?',
-        a: ['Nur Technikspezialisten einstellen','Personen mit sozialen Kompetenzen auswählen, in Empathie schulen und kundenbezogene Anreize schaffen','Nur Gehaltspolitik verwalten','Ausschließlich auf Effizienz achten'],
-        correct: 1,
-        exp: 'Bei Kundenservice-Fokus: RRHH wählt Personen mit sozialen Fähigkeiten, schult Empathie und aktives Zuhören, und schafft Anreize, die an Kundenzufriedenheit geknüpft sind.'
-      },
-      {
-        q: 'Was ist Aufgabe von RRHH bezüglich Führung (Liderazgo)?',
-        a: ['Führungskräfte aus dem Amt entfernen','Führungskräfte in Kommunikation, Motivation und Konfliktmanagement schulen','Nur Gehaltserhöhungen für Manager beantragen','Führungskräfte ignorieren'],
-        correct: 1,
-        exp: 'RRHH schult Führungskräfte in Kommunikation, Motivation und Konfliktlösung. Gute Führung multipliziert Talent – schlechte zerstört es.'
-      },
-      {
-        q: 'Was sind Systeme für Vergütung und Anerkennung (Compensación y reconocimiento)?',
-        a: ['Nur das monatliche Grundgehalt','Gehälter, Anreize und Vorteile, die Talente anziehen, binden und gewünschtes Verhalten fördern','Nur monetäre Boni','Strafmaßnahmen bei schlechter Leistung'],
-        correct: 1,
-        exp: 'RRHH gestaltet Gehälter, Anreize und Sozialleistungen, die Talent anziehen, die Besten binden und jene Verhaltensweisen fördern, die das Unternehmen braucht.'
-      },
-    ]
-  },
-  {
-    id: 2,
-    name: 'Planung & Struktur',
-    emoji: '📐',
-    desc: 'Meistere die strategische Personalplanung und Organisationsstruktur.',
-    difficulty: 'Schwer',
-    badgeClass: 'badge-hard',
-    medal: '🥇',
-    medalName: 'Gold-Abzeichen',
-    stars: 3,
-    rankUnlock: 5,
-    questions: [
-      {
-        q: 'Was ist die strategische Personalplanung (Planificación Estratégica de RRHH)?',
-        a: ['Nur auf Vakanzen reagieren, wenn sie entstehen','Vorausdenken, welche Mitarbeiter das Unternehmen braucht, um künftige Ziele zu erfüllen','Alle Mitarbeiter im gleichen Bereich einsetzen','Nur externe Beratung nutzen'],
-        correct: 1,
-        exp: 'Strategische Planung bedeutet: vorhersehen (wie viele, welche Profile, wann), vorbereiten (Schulung, neue Profile) und ausrichten (alles an der Unternehmensstrategie).'
-      },
-      {
-        q: 'Was ist der logische Reihenfolge bei der Personalplanung?',
-        a: ['1. RRHH plant → 2. Unternehmen entscheidet → 3. Markt reagiert','1. Unternehmen definiert Strategie → 2. RRHH übersetzt in Personalbedarf → 3. Plan wird entworfen','1. Mitarbeiter fordern → 2. RRHH reagiert → 3. Unternehmen akzeptiert','1. Gesetz schreibt vor → 2. RRHH reagiert → 3. Unternehmen stimmt zu'],
-        correct: 1,
-        exp: 'Die Logik: Unternehmensstrategie → RRHH übersetzt in Talentbedarf → Aktionsplan mit Selektion, Training, Entwicklung, Compensation und Klimamaßnahmen.'
-      },
-      {
-        q: 'Was analysiert RRHH beim internen Audit (Análisis interno)?',
-        a: ['Nur die Konkurrenz','Aktuelle Belegschaft, Kompetenzen, Betriebsklima und HR-Prozesse','Nur finanzielle Kennzahlen','Nur die Gehaltsstruktur'],
-        correct: 1,
-        exp: 'Intern analysiert RRHH: Ist-Belegschaft (Zahl, Stellen, Alter), Kompetenzen (was fehlt?), Engagement/Klima und die Effizienz der HR-Prozesse selbst.'
-      },
-      {
-        q: 'Was enthält ein DAFO (SWOT) für RRHH?',
-        a: ['Nur Stärken und Schwächen','Stärken, Schwächen, Chancen und Risiken des HR-Bereichs','Nur externe Marktanalyse','Nur Mitarbeiterzufriedenheitsdaten'],
-        correct: 1,
-        exp: 'DAFO für RRHH: Fortalezas (Stärken), Debilidades (Schwächen), Oportunidades (Chancen: Förderprogramme, neue Profile) und Amenazas (Risiken: Konkurrenz, Rechtsänderungen).'
-      },
-      {
-        q: 'Was ist der Unterschied zwischen quantitativer und qualitativer Personalplanung?',
-        a: ['Quantitativ = Gehälter; Qualitativ = Kompetenzen','Quantitativ = Wie viele Personen? Qualitativ = Welche Profile/Kompetenzen?','Quantitativ = Interne Planung; Qualitativ = Externe Planung','Kein Unterschied – beide bedeuten dasselbe'],
-        correct: 1,
-        exp: 'Quantitative Planung: „Wir brauchen 10 Verkäufer mehr." Qualitative Planung: „Diese müssen Sprachkenntnisse, CRM-Erfahrung und Verhandlungsgeschick haben." Gute Planung kombiniert beides.'
-      },
-      {
-        q: 'Was sind typische KPIs (Indikatoren) in RRHH?',
-        a: ['Aktienkurs und Marktanteile','Fluktuationsrate, Absentismus, Vakanzdauer, Schulungsstunden und Mitarbeiterzufriedenheit','Nur Umsatzzahlen','Nur Kundenbewertungen'],
-        correct: 1,
-        exp: 'Typische HR-KPIs: Fluktuation, Absentismus, Vakanzdauer, Einstellungskosten, Schulungsstunden pro Person, Zufriedenheitsindex und Produktivität.'
-      },
-      {
-        q: 'Was ist die Funktion des Bereichs „Selección y Reclutamiento" (Auswahl & Rekrutierung)?',
-        a: ['Nur Gehaltsverhandlungen führen','Die richtigen Personen ins Unternehmen bringen: vom Profil über die Stelle bis zum Onboarding','Nur externe Schulungen organisieren','Nur gesetzliche Pflichten erfüllen'],
-        correct: 1,
-        exp: 'Selektion & Rekrutierung: Profil definieren, Stellen ausschreiben, CVs sichten, Interviews führen, mit Führungskräften zusammenarbeiten und das Onboarding begleiten.'
-      },
-      {
-        q: 'Was ist die Rolle des HR Business Partner (HRBP)?',
-        a: ['Ein externer Berater ohne Entscheidungsgewalt','Eine RRHH-Person, die einem bestimmten Geschäftsbereich zugeordnet ist und als interner Berater agiert','Der CEO des Unternehmens','Ein Mitarbeiter, der nur Schulungen durchführt'],
-        correct: 1,
-        exp: 'HRBP ist RRHH-Spezialist, der einem konkreten Unternehmensbereich (z.B. Verkauf, Produktion) zugeordnet ist und als deren interner HR-Vertrauensberater fungiert.'
-      },
-      {
-        q: 'Was macht ein People Analyst (HR Analyst)?',
-        a: ['Er koordiniert Teambuilding-Events','Er analysiert Personaldaten (Fluktuation, Absentismus, Leistung) und unterstützt datenbasierte Entscheidungen','Er verhandelt Tarifverträge','Er organisiert nur Stellenausschreibungen'],
-        correct: 1,
-        exp: 'Der People Analyst arbeitet mit HR-Daten (Fluktuation, Absentismus, Performance, Klima) und hilft, Entscheidungen auf Datenbasis statt auf Intuition zu treffen.'
-      },
-      {
-        q: 'Wie unterscheidet sich die RRHH-Struktur einer Großunternehmen von einer KMU?',
-        a: ['Großunternehmen hat weniger RRHH-Mitarbeiter','Großunternehmen hat spezialisierte Abteilungen, fortgeschrittene Rollen und mehr Ressourcen; KMU kombiniert oft alle Funktionen in 1–3 Personen','KMU haben immer ausgelagerte RRHH-Abteilungen','Es gibt keinen Unterschied'],
-        correct: 1,
-        exp: 'Großunternehmen: vollständige RRHH-Abteilung mit Spezialisten, HRBP, People Analyst etc. KMU: 1–3 Personen decken alle Funktionen ab, vieles wird ausgelagert (Gehaltsabrechnung, PRL).'
-      },
-    ]
-  },
-  {
-    id: 3,
-    name: 'HR-Manager Level',
-    emoji: '👑',
-    desc: 'Der ultimative Test. Beweise, dass du ein echter HR-Manager bist!',
-    difficulty: 'Experte',
-    badgeClass: 'badge-expert',
-    medal: '🏆',
-    medalName: 'HR-Manager-Trophäe',
-    stars: 4,
-    rankUnlock: 6,
-    questions: [
-      {
-        q: 'Was bedeutet es für RRHH, „Agente de Transformación" (Transformationsagent) zu sein?',
-        a: ['Nur bestehende Strukturen verwalten','Veränderungen aktiv anstoßen, Personen begleiten, Widerstände reduzieren und als Brücke zwischen Führung und Mitarbeitern agieren','Alle alten Mitarbeiter ersetzen','Nur externe Berater einstellen'],
-        correct: 1,
-        exp: 'Als Transformationsagent geht RRHH über die reine Verwaltung hinaus: es initiiert Wandel, begleitet Mitarbeiter dabei, reduziert Widerstände und verbindet die Unternehmensvision mit den menschlichen Bedürfnissen.'
-      },
-      {
-        q: 'Bei einer digitalen Transformation übernimmt RRHH welche spezifischen Aufgaben?',
-        a: ['Nur neue Software kaufen','Fehlende Kompetenzen identifizieren, digitale Schulungen entwerfen und Personen mit Technologieschwierigkeiten begleiten','Alle Mitarbeiter durch Roboter ersetzen','Nur die IT-Abteilung koordinieren'],
-        correct: 1,
-        exp: 'Bei Digitaltransformation: RRHH identifiziert Kompetenzlücken, gestaltet digitale Schulungen und begleitet insbesondere jene, die mehr Unterstützung mit Technologie brauchen.'
-      },
-      {
-        q: 'Was sind die Hauptziele der RRHH-Gestión (HR-Management)?',
-        a: ['Nur Kosten senken und Regeln einhalten','Die richtigen Personen gewinnen, ihre Kapazitäten entwickeln, Schlüsseltalente halten, Motivation fördern und ein sicheres Umfeld gewährleisten','Nur Gehälter verwalten','Nur gesetzliche Pflichten erfüllen'],
-        correct: 1,
-        exp: 'Die 6 Hauptziele: (1) Richtige Personen anziehen, (2) Kapazitäten entwickeln, (3) Schlüsseltalente halten, (4) motivieren & binden, (5) sicheres/gesundes Umfeld, (6) Leistung mit Unternehmenszielen ausrichten.'
-      },
-      {
-        q: 'Was bedeuten strategische, taktische und operative Ziele in RRHH?',
-        a: ['Alle drei sind identisch','Strategisch = Langfristig/Richtung; Taktisch = Mittelfristig/Pläne; Operativ = Kurzfristig/konkrete Maßnahmen','Operativ ist langfristiger als strategisch','Taktisch bedeutet immer länger als 5 Jahre'],
-        correct: 1,
-        exp: 'Strategisch (mehrere Jahre, z.B. "Innovationskultur entwickeln") → Taktisch (1-2 Jahre, z.B. "Leistungsbewertungssystem einführen") → Operativ (Monate, z.B. "Stelle in 30 Tagen besetzen").'
-      },
-      {
-        q: 'Was zeigt eine hohe freiwillige Fluktuation (rotación voluntaria)?',
-        a: ['Dass das Unternehmen sehr attraktiv ist','Mögliche Probleme mit Betriebsklima, Führung, Gehalt oder Entwicklungsmöglichkeiten','Dass die Mitarbeiter in Rente gehen','Dass das Unternehmen wächst'],
-        correct: 1,
-        exp: 'Hohe freiwillige Fluktuation = Mitarbeiter wählen selbst zu gehen. Das deutet auf Probleme hin: schlechtes Klima, schwache Führung, zu niedriges Gehalt oder fehlende Karrierechancen.'
-      },
-      {
-        q: 'Wie verbindet sich eine bessere RRHH-Selektion mit Unternehmensresultaten?',
-        a: ['Gar nicht – RRHH und Unternehmensergebnisse sind unabhängig','Bessere Selektion → besserer Service → zufriedenere Kunden → mehr Umsatz','Bessere Selektion erhöht nur die Gehälter','Bessere Selektion macht Werbung überflüssig'],
-        correct: 1,
-        exp: 'Die Kette: Bessere Selektion → weniger Fehler, besseres Kundenerlebnis, höhere Qualität → zufriedenere Kunden → mehr Verkäufe → Wettbewerbsvorteil.'
-      },
-      {
-        q: 'Was ist das Risiko, wenn RRHH keine klaren Ziele hat?',
-        a: ['Alles läuft besser ohne klare Ziele','Aktionen werden ohne erkennbaren Nutzen durchgeführt, Geld wird ohne Rücklauf ausgegeben und Fehler wiederholen sich','Mitarbeiter werden selbstständiger','Kosten sinken automatisch'],
-        correct: 1,
-        exp: 'Ohne klare Ziele: Maßnahmen werden „um des Tuns willen" durchgeführt, Geld wird ohne Rückfluss ausgegeben, wertvolle Personen gehen ohne Verständnis warum, und Fehler bei Selektion/Führung wiederholen sich.'
-      },
-      {
-        q: 'Was ist die Funktion des Bereichs „Prevención de Riesgos Laborales" (PRL)?',
-        a: ['Nur administrative Aufgaben','Risiken am Arbeitsplatz bewerten, Präventionsmaßnahmen vorschlagen, PRL-Schulungen organisieren und Unfälle untersuchen','Nur Gehaltsverhandlungen','Nur externe Audits durchführen'],
-        correct: 1,
-        exp: 'PRL: Arbeitsplatzrisiken evaluieren, Präventivmaßnahmen vorschlagen, PRL-Schulungen organisieren, Unfälle untersuchen und mit dem externen Präventionsdienst koordinieren.'
-      },
-      {
-        q: 'Was umfasst das Gebiet „Diversidad e Inclusión" (Vielfalt & Inklusion) bei RRHH?',
-        a: ['Nur Frauen einstellen','Gleichstellungspolitiken entwerfen, die Belegschaft sensibilisieren und Prozesse überprüfen, um Diskriminierung bei Selektion, Beförderung und Gehalt zu vermeiden','Nur gesetzliche Mindestquoten einhalten','Nur Teams nach Alter sortieren'],
-        correct: 1,
-        exp: 'D&I umfasst: Gleichstellungspolitiken gestalten, Sensibilisierung der Belegschaft und Überprüfung von Prozessen (Selektion, Beförderung, Gehälter) auf Diskriminierungsfreiheit – für Menschen verschiedener Alter, Kulturen, Geschlechter und Fähigkeiten.'
-      },
-      {
-        q: 'Was bedeutet es, RRHH-Indikatoren zu „interpretieren" statt sie nur zu „betrachten"?',
-        a: ['Nur die Zahlen anschauen und weitermachen','Zahlen mit Zielen und Vorjahresdaten vergleichen, kritische Fragen stellen (Warum steigt die Fluktuation?) und Ursachen suchen','Daten an externe Berater weitergeben','Indikatoren nur jährlich messen'],
-        correct: 1,
-        exp: 'Interpretation heißt: Zahlen vergleichen (Ziele, Vorjahre, Branche), Fragen stellen (Warum? In welcher Abteilung?) und Ursachen finden (Führungswechsel, Überlastung, mangelnde Anerkennung, unattraktive Gehälter).'
-      },
-    ]
-  },
+  }
 ];
-
-// ══════════════════════════════════════════════
-//  STATE
-// ══════════════════════════════════════════════
-let state = {
-  currentLevel: null,
-  currentQ: 0,
-  score: 0,
-  answered: false,
-  results: [], // per-question {correct}
-  unlockedLevels: [0], // always unlock first
-  completedLevels: {}, // levelId -> stars earned
-  currentRank: 0,
-};
-
-// ══════════════════════════════════════════════
-//  INIT
-// ══════════════════════════════════════════════
-function init() {
-  load();
-  renderRankLadder();
-  renderLevels();
-}
-
-function save() {
-  localStorage.setItem('hr_quiz_state', JSON.stringify({
-    unlockedLevels: state.unlockedLevels,
-    completedLevels: state.completedLevels,
-    currentRank: state.currentRank,
-  }));
-}
-
-function load() {
-  const s = localStorage.getItem('hr_quiz_state');
-  if (s) {
-    const d = JSON.parse(s);
-    state.unlockedLevels = d.unlockedLevels || [0];
-    state.completedLevels = d.completedLevels || {};
-    state.currentRank = d.currentRank || 0;
-  }
-}
-
-// ══════════════════════════════════════════════
-//  RENDER HOME
-// ══════════════════════════════════════════════
-function renderRankLadder() {
-  const el = document.getElementById('rank-ladder');
-  el.innerHTML = '';
-  RANKS.forEach((r, i) => {
-    if (i > 0) {
-      const conn = document.createElement('div');
-      conn.className = 'rank-connector' + (i <= state.currentRank ? ' filled' : '');
-      el.appendChild(conn);
-    }
-    const step = document.createElement('div');
-    step.className = 'rank-step' + (i < state.currentRank ? ' unlocked' : '') + (i === state.currentRank ? ' current' : '');
-    step.innerHTML = `<span class="icon">${r.icon}</span><span class="label">${r.label}</span>`;
-    el.appendChild(step);
-  });
-}
-
-function renderLevels() {
-  const el = document.getElementById('level-grid');
-  el.innerHTML = '';
-  LEVELS.forEach((lv, i) => {
-    const unlocked = state.unlockedLevels.includes(i);
-    const completed = state.completedLevels[i];
-    const card = document.createElement('div');
-    card.className = 'level-card' + (unlocked ? '' : ' locked');
-    card.onclick = () => unlocked ? startLevel(i) : showToast('🔒 Schließe zuerst das vorherige Level ab!');
-
-    let starsHtml = '';
-    if (completed !== undefined) {
-      for (let s = 0; s < 4; s++) starsHtml += s < completed ? '⭐' : '☆';
-    }
-
-    card.innerHTML = `
-      <span class="level-badge ${unlocked ? lv.badgeClass : 'badge-locked'}">${unlocked ? lv.difficulty : '🔒 Gesperrt'}</span>
-      <div class="level-emoji">${lv.emoji}</div>
-      <div class="level-name">${lv.name}</div>
-      <div class="level-desc">${lv.desc}</div>
-      ${completed !== undefined ? `<div class="stars">${starsHtml}</div>` : ''}
-      <div class="progress-info">${completed !== undefined ? `Beste Medaille: ${lv.medal}` : unlocked ? '10 Fragen · Abzeichen: '+lv.medal : 'Vorheriges Level abschließen'}</div>
-    `;
-    el.appendChild(card);
-  });
-}
-
-// ══════════════════════════════════════════════
-//  START LEVEL
-// ══════════════════════════════════════════════
-function startLevel(levelId) {
-  const lv = LEVELS[levelId];
-  state.currentLevel = levelId;
-  state.currentQ = 0;
-  state.score = 0;
-  state.answered = false;
-  state.results = [];
-
-  // Shuffle questions
-  lv._shuffled = [...lv.questions].sort(() => Math.random() - 0.5);
-
-  document.getElementById('quiz-level-title').textContent = lv.emoji + ' ' + lv.name;
-  document.getElementById('q-total').textContent = lv._shuffled.length;
-  document.getElementById('q-score').textContent = '0';
-
-  showScreen('screen-quiz');
-  renderQuestion();
-}
-
-function renderQuestion() {
-  const lv = LEVELS[state.currentLevel];
-  const q = lv._shuffled[state.currentQ];
-  const total = lv._shuffled.length;
-
-  state.answered = false;
-
-  document.getElementById('q-current').textContent = state.currentQ + 1;
-  document.getElementById('q-number').textContent = `FRAGE ${state.currentQ + 1} VON ${total}`;
-  document.getElementById('q-text').textContent = q.q;
-  document.getElementById('progress-fill').style.width = ((state.currentQ / total) * 100) + '%';
-
-  const expl = document.getElementById('explanation');
-  expl.style.display = 'none';
-  expl.innerHTML = '';
-
-  const nextBtn = document.getElementById('next-btn');
-  nextBtn.style.display = 'none';
-
-  const container = document.getElementById('answers-container');
-  container.innerHTML = '';
-  const letters = ['A', 'B', 'C', 'D'];
-
-  // Shuffle answers while tracking correct
-  const indices = q.a.map((_, i) => i);
-  indices.sort(() => Math.random() - 0.5);
-  const shuffledAnswers = indices.map(i => ({ text: q.a[i], origIdx: i }));
-  const correctShuffledIdx = shuffledAnswers.findIndex(a => a.origIdx === q.correct);
-
-  shuffledAnswers.forEach((ans, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'answer-btn';
-    btn.innerHTML = `<span class="answer-letter">${letters[i]}</span>${ans.text}`;
-    btn.onclick = () => handleAnswer(i, correctShuffledIdx, q.exp);
-    container.appendChild(btn);
-  });
-}
-
-function handleAnswer(selected, correct, explanation) {
-  if (state.answered) return;
-  state.answered = true;
-
-  const btns = document.querySelectorAll('.answer-btn');
-  btns.forEach(b => b.disabled = true);
-
-  const isCorrect = selected === correct;
-  if (isCorrect) {
-    state.score++;
-    document.getElementById('q-score').textContent = state.score;
-    btns[selected].classList.add('correct');
-  } else {
-    btns[selected].classList.add('wrong');
-    btns[correct].classList.add('missed');
-  }
-  state.results.push({ correct: isCorrect });
-
-  // Show explanation
-  const expl = document.getElementById('explanation');
-  expl.innerHTML = `<strong>${isCorrect ? '✅ Richtig!' : '❌ Falsch.'}</strong> ${explanation}`;
-  expl.style.display = 'block';
-
-  document.getElementById('next-btn').style.display = 'block';
-}
-
-function nextQuestion() {
-  const lv = LEVELS[state.currentLevel];
-  state.currentQ++;
-  if (state.currentQ >= lv._shuffled.length) {
-    showResults();
-  } else {
-    renderQuestion();
-  }
-}
-
-// ══════════════════════════════════════════════
-//  RESULTS
-// ══════════════════════════════════════════════
-function showResults() {
-  const lv = LEVELS[state.currentLevel];
-  const total = lv._shuffled.length;
-  const correct = state.score;
-  const pct = Math.round((correct / total) * 100);
-
-  // Determine stars (1–4)
-  let starsEarned = 1;
-  if (pct >= 90) starsEarned = 4;
-  else if (pct >= 75) starsEarned = 3;
-  else if (pct >= 50) starsEarned = 2;
-
-  const prevBest = state.completedLevels[state.currentLevel] || 0;
-  const newBest = Math.max(prevBest, starsEarned);
-  state.completedLevels[state.currentLevel] = newBest;
-
-  // Unlock next level
-  let rankedUp = false;
-  if (pct >= 50 && !state.unlockedLevels.includes(state.currentLevel + 1) && state.currentLevel + 1 < LEVELS.length) {
-    state.unlockedLevels.push(state.currentLevel + 1);
-  }
-
-  // Rank up
-  const newRankNeeded = lv.rankUnlock;
-  if (pct >= 60 && state.currentRank < newRankNeeded) {
-    state.currentRank = newRankNeeded;
-    rankedUp = true;
-  }
-
-  save();
-
-  // Render
-  document.getElementById('result-medal').textContent = lv.medal;
-  document.getElementById('result-title').textContent = pct >= 90 ? 'Hervorragend! 🎉' : pct >= 70 ? 'Sehr gut! 👏' : pct >= 50 ? 'Bestanden! 👍' : 'Versuch es nochmal 💪';
-
-  const currentRankName = RANKS[state.currentRank].label;
-  document.getElementById('result-rank').innerHTML = `Du bist jetzt: <strong>${RANKS[state.currentRank].icon} ${currentRankName}</strong>`;
-  document.getElementById('score-number').innerHTML = `${correct}<small>/${total}</small>`;
-
-  // Animate ring
-  setTimeout(() => {
-    document.getElementById('score-ring').style.background =
-      `conic-gradient(var(--gold) ${pct * 3.6}deg, rgba(26,46,69,1) 0deg)`;
-  }, 300);
-
-  document.getElementById('stat-correct').textContent = correct;
-  document.getElementById('stat-wrong').textContent = total - correct;
-  document.getElementById('stat-pct').textContent = pct + '%';
-
-  const banner = document.getElementById('rank-up-banner');
-  if (rankedUp) {
-    banner.style.display = 'block';
-    document.getElementById('rank-up-text').innerHTML = `🎉 Rang-Aufstieg! Du bist jetzt: <strong>${RANKS[state.currentRank].icon} ${RANKS[state.currentRank].label}</strong>`;
-    spawnConfetti();
-  } else {
-    banner.style.display = 'none';
-  }
-
-  showScreen('screen-result');
-  if (pct >= 70) spawnConfetti();
-}
-
-function retryLevel() {
-  startLevel(state.currentLevel);
-}
-
-function goHome() {
-  renderRankLadder();
-  renderLevels();
-  showScreen('screen-home');
-}
-
-// ══════════════════════════════════════════════
-//  UTILITIES
-// ══════════════════════════════════════════════
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  window.scrollTo(0, 0);
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
-}
-
-function spawnConfetti() {
-  const colors = ['#C9A84C','#E8C97A','#2ECC71','#E74C3C','#3498DB','#9B59B6'];
-  for (let i = 0; i < 60; i++) {
-    const el = document.createElement('div');
-    el.className = 'confetti-piece';
-    el.style.cssText = `
-      left: ${Math.random() * 100}vw;
-      top: -10px;
-      background: ${colors[Math.floor(Math.random() * colors.length)]};
-      width: ${6 + Math.random() * 8}px;
-      height: ${6 + Math.random() * 8}px;
-      border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
-      animation-duration: ${1.5 + Math.random() * 2}s;
-      animation-delay: ${Math.random() * 0.8}s;
-    `;
-    document.body.appendChild(el);
-    setTimeout(() => el.remove(), 4000);
-  }
-}
-
-init();
 </script>
 
 </body>
