@@ -1,642 +1,656 @@
-/**
+<!DOCTYPE html>
 
-- ============================================================
-- UPSKILL ACADEMY — script.js
-- © Copyright by Sara Manoochehri
-- ============================================================
-- 
-- SECTIONS:
-- 1. i18n / Translations
-- 1. Question Database (5 modules × 4 levels × 15 questions)
-- 1. App State
-- 1. Initialisation
-- 1. Language
-- 1. Navigation / Drawer / Legal
-- 1. Accessibility Toolbar
-- 1. Auth (Login / Register / Logout)
-- 1. Quiz Rendering
-- 1. Quiz Logic (start, answer, next, result)
-- 1. Result / UI Updates
-- 1. PDF Certificate
-- 1. Dashboard
-- 1. Share
-- 1. Utilities (toast, confetti, topic/level grids)
-- ============================================================
-  */
+<html lang="de" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Upskill Academy – Interaktive Lernplattform für HR, Gehaltsabrechnung und mehr." />
+  <meta name="theme-color" content="#4F46E5" />
+  <title>Upskill Academy</title>
 
-‘use strict’;
+  <!-- Google Fonts -->
 
-/* ============================================================
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap"
+    rel="stylesheet"
+  />
 
-1. i18n / TRANSLATIONS
-   ============================================================ */
-   const TR = {
-   de: {
-   /* Nav */
-   navHome: ‘Home’, navWhat: ‘Was ist UA’, navTopics: ‘Themen’,
-   navCert: ‘Zertifikat’, navAbout: ‘Über mich’, navLogin: ‘Anmelden’,
-   langLabel: ‘Sprache’,
-   /* Hero */
-   heroBadge: ‘Interaktives Lernen’, heroTitle: ‘Academy’,
-   heroDesc: ‘Die Upskill Academy App ist eine interaktive Lernplattform, die dir ermöglicht, Fachwissen in administrativen Bereichen wie HR, Gehaltsabrechnung und mehr spielerisch zu erlernen – auch direkt am Smartphone oder Tablet möglich.’,
-   heroQuiz: ‘🚀 Zum Quiz’, heroMore: ‘Mehr erfahren’,
-   /* Features */
-   featLabel: ‘Warum Upskill Academy?’, featTitle: ‘Lernen, das wirklich funktioniert’,
-   featSub: ‘Entwickelt für Kursteilnehmer in Weiterbildungsprogrammen.’,
-   f1T: ‘Sofortiges Feedback’, f1P: ‘Nach jeder Antwort siehst du direkt ob du richtig lagst.’,
-   f2T: ‘Lernen unterwegs’,   f2P: ‘Optimiert für Smartphone und Tablet.’,
-   f3T: ‘Praxisnah’,          f3P: ‘Echte Inhalte aus Weiterbildungskursen.’,
-   f4T: ‘Persönliche Urkunde’,f4P: ‘Zertifikat nach Abschluss.’,
-   s1: ‘Fragen · HR’, s2: ‘Sprachen’, s3: ‘Module’, s4: ‘Gratis starten’,
-   /* About platform */
-   apLabel: ‘Die Plattform’, apTitle: ‘Was ist Upskill Academy?’,
-   apSub: ‘Interaktive Lernapp für Weiterbildungskurse.’,
-   st1T: ‘Quiz-basiertes Lernen’, st1P: ‘Lerne durch gezielte Fragen und Antworten.’,
-   st2T: ‘Sofortiges Feedback’,   st2P: ‘Verstehe warum eine Antwort richtig oder falsch ist.’,
-   st3T: ‘Stufensystem’,          st3P: ‘Von Grundlagen bis Expertenlevel.’,
-   st4T: ‘Drei Sprachen’,         st4P: ‘DE, EN und ES.’,
-   st5T: ‘Barrierefreies Lernen’, st5P: ‘Screenreader, Tastatur, Dunkel-Modus für alle.’,
-   advTitle: ‘Deine Vorteile’,
-   av1T: ‘Interaktiv’, av1P: ‘Aktives Lernen.’,
-   av2T: ‘Praxisnah’,  av2P: ‘Echte Kursinhalte.’,
-   av3T: ‘Sofortig’,   av3P: ‘Zur Prüfungsvorbereitung.’,
-   /* Topics */
-   topLabel: ‘Lernbereiche’, topTitle: ‘Wähle dein Thema’,
-   topSub: ‘Jedes Thema führt dich durch 4 Level mit je 15 Fragen.’,
-   soon: ‘Demnächst’,
-   /* Quiz */
-   backTop: ‘Zurück zu Themen’, qsTitle: ‘Wähle dein Level’,
-   backMod: ‘Zurück zu Leveln’, qPill: ‘Frage’,
-   errNoAnswer: ‘Bitte wähle eine Antwort aus.’,
-   /* Certificate */
-   certLabel: ‘Abschluss’, certTitle: ‘Dein Zertifikat’, certSub: ‘Zertifikate nach Leistung.’,
-   ct0T: ‘Teilnahme’, ct0P: ‘Unter 50%’,
-   ct1T: ‘Bestanden’,  ct1P: ‘50–74%’,
-   ct2T: ‘Mit Auszeichnung’, ct2P: ‘75–99%’,
-   ct3T: ‘Höchstauszeichnung’, ct3P: ‘100% – Perfekt!’,
-   premH: ‘Premium Download’,
-   premP: ‘Teilen ist kostenlos. PDF-Download nach Registrierung.’,
-   premBtn: ‘Jetzt registrieren’,
-   /* About me */
-   amLabel: ‘Gründerin’,
-   amBio: ‘Ich bin gebürtige Iranerin, aufgewachsen in Deutschland – und lebe heute auf Teneriffa.’,
-   amQuote: ‘„Ich habe einen Weiterbildungskurs im Bereich HR gemacht – auf Spanisch. Ich dachte: Wie cool wäre es, das am Handy zu lernen und direkt abgefragt zu werden. Und hier sind wir.”’,
-   amMiss: ‘Upskill Academy macht Lernen einfacher und zugänglicher. Langfristig für Kurscenter wie CEP Norte.’,
-   /* Result */
-   shareT: ‘🎉 Ergebnis teilen’, shareCopy: ‘📋 Kopieren’,
-   certHint: ‘🔒 Registriere dich, um deine Urkunde als PDF herunterzuladen.’,
-   certRegBtn: ‘Jetzt registrieren’, lblCertName: ‘📝 Name für die Urkunde:’,
-   namePH: ‘Vollständiger Name…’,
-   btnRetry: ‘🔄 Nochmal’, btnDL: ‘📜 Urkunde herunterladen’, btnOvr: ‘🏛️ Übersicht’,
-   /* Dashboard */
-   dashLabel: ‘Mein Bereich’, dashTitle: ‘Mein Lernfortschritt’,
-   dashQ: ‘Quizzes’, dashC: ‘Urkunden’,
-   dashMyCerts: ‘Meine Urkunden’, noCerts: ‘Noch keine Urkunden. Starte ein Quiz!’,
-   dashAchiev: ‘Errungenschaften’, dashProg: ‘Lernfortschritt’, btnLogout: ‘Abmelden’,
-   /* Legal / Footer */
-   legalLabel: ‘Rechtliches’, legalTitle: ‘AGB & Datenschutz’,
-   tabImp: ‘Impressum’, tabDSde: ‘Datenschutz (DE)’, tabDSes: ‘Privacidad (ES)’,
-   footDesc: ‘Interaktives Lernen für HR & Administration.’,
-   footNav: ‘Navigation’, footLegal: ‘AGB & Rechtliches’, footRights: ‘Alle Rechte vorbehalten’,
-   /* Auth */
-   authSub: ‘Fortschritt speichern & Urkunden herunterladen’,
-   tabLogin: ‘Anmelden’, tabReg: ‘Registrieren’,
-   lEmail: ‘E-Mail’, lPW: ‘Passwort’, lName: ‘Name’,
-   pwNote: ‘Mindestens 8 Zeichen.’, doLogin: ‘Anmelden’, doReg: ‘Konto erstellen’,
-   orWith: ‘oder’, regTerms: ‘Mit der Registrierung stimmst du unserer Datenschutzerklärung zu.’,
-   /* Quiz display */
-   qLabel: ‘FRAGE’, qOf: ‘von’, qNext: ‘Weiter →’,
-   qRight: ‘✅ Richtig!’, qWrong: ‘❌ Falsch.’,
-   lCorr: ‘Richtig’, lWrong: ‘Falsch’, lPct: ‘Quote’,
-   /* Rank / Result text */
-   ranks: [‘Praktikant’, ‘HR-Assistent’, ‘Sachbearbeiter’, ‘HR-Specialist’, ‘HR-Analyst’, ‘HR Business Partner’, ‘HR-Manager’],
-   difficulties: [‘Grundlagen’, ‘Aufbau’, ‘Profi’, ‘Experte’],
-   rankUp: ‘🎉 Rang-Aufstieg! Du bist jetzt:’, rankNow: ‘Du bist jetzt:’,
-   bestMed: ‘Beste Medaille:’, qInfo: ‘15 Fragen ·’, prevLvl: ‘Vorheriges Level abschließen’,
-   lockedMsg: ‘🔒 Schließe zuerst das vorherige Level ab!’,
-   noName: ‘✏️ Bitte gib deinen Namen ein!’,
-   dlOk: ‘📜 Urkunde heruntergeladen!’,
-   resultT: [‘Versuch es nochmal 💪’, ‘Bestanden! 👍’, ‘Sehr gut! 👏’, ‘Hervorragend! 🎉’],
-   ratings: [‘🌱 Anfänger (0–5 Punkte)’, ‘📈 Fortgeschritten (6–10 Punkte)’, ‘🏆 Profi (11–15 Punkte)’],
-   certTiers: [
-   { min: 0,   max: 49,  title: ‘Teilnahmeurkunde’,        medal: ‘📜’ },
-   { min: 50,  max: 74,  title: ‘Urkunde – Bestanden’,     medal: ‘🥉’ },
-   { min: 75,  max: 99,  title: ‘Urkunde – Mit Auszeichnung’, medal: ‘🥈’ },
-   { min: 100, max: 100, title: ‘Urkunde – Höchstauszeichnung’, medal: ‘🏆’ },
-   ],
-   certHereby: ‘hat erfolgreich am Quiz’, certComp: ‘der Upskill Academy teilgenommen und’,
-   certScored: ‘der Fragen korrekt beantwortet.’, certSign: ‘Ausgestellt von’, certDate: ‘Datum’,
-   /* Module names */
-   moduleNames: [
-   ‘Módulo 1 – Dirección Estratégica RRHH’,
-   ‘Módulo 2 – Procesos de RRHH’,
-   ‘Módulo 3 – Política Retributiva’,
-   ‘Módulo 4 – PRL y Formación’,
-   ‘Módulo 5 – Legislación Laboral’,
-   ],
-   moduleShort: [‘Estrategia RRHH’, ‘Procesos RRHH’, ‘Retribución’, ‘PRL & Formación’, ‘Legislación’],
-   moduleDesc: [
-   ‘Strategische HR-Ausrichtung, Wettbewerbsvorteil, Planung & Struktur.’,
-   ‘Rekrutierung, Onboarding, Leistungsbeurteilung & Mitarbeiterentwicklung.’,
-   ‘Gehaltsstrukturen, Anreize, variable Vergütung & Sozialleistungen.’,
-   ‘Arbeitssicherheit, Prävention, Ausbildungsplanung & Entwicklung.’,
-   ‘Arbeitsrecht, Tarifverträge, Kündigungsschutz & Sozialversicherung.’,
-   ],
-   },
-   en: {
-   navHome: ‘Home’, navWhat: ‘About UA’, navTopics: ‘Topics’,
-   navCert: ‘Certificate’, navAbout: ‘About me’, navLogin: ‘Sign in’, langLabel: ‘Language’,
-   heroBadge: ‘Interactive Learning’, heroTitle: ‘Academy’,
-   heroDesc: ‘The Upskill Academy app is an interactive learning platform to master HR, payroll and more – directly on your smartphone or tablet.’,
-   heroQuiz: ‘🚀 Go to Quiz’, heroMore: ‘Learn more’,
-   featLabel: ‘Why Upskill Academy?’, featTitle: ‘Learning that actually works’,
-   featSub: ‘Built for continuing education students.’,
-   f1T: ‘Instant Feedback’, f1P: ‘After every answer you know immediately.’,
-   f2T: ‘Learn on the go’, f2P: ‘Optimised for smartphone and tablet.’,
-   f3T: ‘Practical’, f3P: ‘Real content from training courses.’,
-   f4T: ‘Personal Certificate’, f4P: ‘Certificate after completion.’,
-   s1: ‘Questions · HR’, s2: ‘Languages’, s3: ‘Modules’, s4: ‘Free to start’,
-   apLabel: ‘The Platform’, apTitle: ‘What is Upskill Academy?’, apSub: ‘Interactive learning app.’,
-   st1T: ‘Quiz-based learning’, st1P: ‘Learn through targeted Q&A.’,
-   st2T: ‘Instant feedback’, st2P: ‘Understand why an answer is right or wrong.’,
-   st3T: ‘Level system’, st3P: ‘From basics to expert.’,
-   st4T: ‘Three languages’, st4P: ‘DE, EN and ES.’,
-   st5T: ‘Accessible learning’, st5P: ‘Screen reader, keyboard, dark mode for everyone.’,
-   advTitle: ‘Your benefits’,
-   av1T: ‘Interactive’, av1P: ‘Active learning.’,
-   av2T: ‘Practical’, av2P: ‘Real course content.’,
-   av3T: ‘Instant’, av3P: ‘Perfect for exam prep.’,
-   topLabel: ‘Learning areas’, topTitle: ‘Choose your topic’,
-   topSub: ‘Each topic guides you through 4 levels with 15 questions each.’,
-   soon: ‘Coming soon’,
-   backTop: ‘Back to topics’, qsTitle: ‘Choose your level’,
-   backMod: ‘Back to levels’, qPill: ‘Question’,
-   errNoAnswer: ‘Please select an answer.’,
-   certLabel: ‘Completion’, certTitle: ‘Your Certificate’, certSub: ‘Certificates graded by performance.’,
-   ct0T: ‘Participation’, ct0P: ‘Under 50%’,
-   ct1T: ‘Passed’, ct1P: ‘50–74%’,
-   ct2T: ‘With Distinction’, ct2P: ‘75–99%’,
-   ct3T: ‘Highest Distinction’, ct3P: ‘100% – Perfect!’,
-   premH: ‘Premium Download’, premP: ‘Sharing is free. PDF download after registration.’, premBtn: ‘Register now’,
-   amLabel: ‘Founder’,
-   amBio: ‘Born in Iran, raised in Germany, living in Tenerife.’,
-   amQuote: ‘“I did an HR training course – in Spanish. How cool would it be to learn on my phone and get quizzed. And here we are.”’,
-   amMiss: ‘Upskill Academy makes learning simpler and more accessible. Long-term for course centres like CEP Norte.’,
-   shareT: ‘🎉 Share your result’, shareCopy: ‘📋 Copy’,
-   certHint: ‘🔒 Register to download your certificate as PDF.’,
-   certRegBtn: ‘Register now’, lblCertName: ‘📝 Your name for the certificate:’,
-   namePH: ‘Full name…’,
-   btnRetry: ‘🔄 Try again’, btnDL: ‘📜 Download Certificate’, btnOvr: ‘🏛️ Overview’,
-   dashLabel: ‘My area’, dashTitle: ‘My Learning Progress’,
-   dashQ: ‘Quizzes’, dashC: ‘Certs’,
-   dashMyCerts: ‘My Certificates’, noCerts: ‘No certificates yet. Start a quiz!’,
-   dashAchiev: ‘Achievements’, dashProg: ‘Learning Progress’, btnLogout: ‘Sign out’,
-   legalLabel: ‘Legal’, legalTitle: ‘Terms & Privacy’,
-   tabImp: ‘Legal Notice’, tabDSde: ‘Privacy (DE)’, tabDSes: ‘Privacidad (ES)’,
-   footDesc: ‘Interactive learning for HR & Administration.’,
-   footNav: ‘Navigation’, footLegal: ‘Legal’, footRights: ‘All rights reserved’,
-   authSub: ‘Save progress & download certificates’,
-   tabLogin: ‘Sign in’, tabReg: ‘Register’,
-   lEmail: ‘Email’, lPW: ‘Password’, lName: ‘Name’,
-   pwNote: ‘At least 8 characters.’, doLogin: ‘Sign in’, doReg: ‘Create account’,
-   orWith: ‘or’, regTerms: ‘By registering you agree to our privacy policy.’,
-   qLabel: ‘QUESTION’, qOf: ‘of’, qNext: ‘Next →’,
-   qRight: ‘✅ Correct!’, qWrong: ‘❌ Wrong.’,
-   lCorr: ‘Correct’, lWrong: ‘Wrong’, lPct: ‘Score’,
-   ranks: [‘Intern’, ‘HR Assistant’, ‘Administrator’, ‘HR Specialist’, ‘HR Analyst’, ‘HR Business Partner’, ‘HR Manager’],
-   difficulties: [‘Fundamentals’, ‘Intermediate’, ‘Advanced’, ‘Expert’],
-   rankUp: ‘🎉 Rank up! You are now:’, rankNow: ‘You are now:’,
-   bestMed: ‘Best medal:’, qInfo: ‘15 questions ·’, prevLvl: ‘Complete previous level first’,
-   lockedMsg: ‘🔒 Complete the previous level first!’,
-   noName: ‘✏️ Please enter your name!’, dlOk: ‘📜 Certificate downloaded!’,
-   resultT: [‘Try again 💪’, ‘Passed! 👍’, ‘Well done! 👏’, ‘Outstanding! 🎉’],
-   ratings: [‘🌱 Beginner (0–5 pts)’, ‘📈 Intermediate (6–10 pts)’, ‘🏆 Pro (11–15 pts)’],
-   certTiers: [
-   { min: 0,   max: 49,  title: ‘Certificate of Participation’, medal: ‘📜’ },
-   { min: 50,  max: 74,  title: ‘Certificate – Passed’,          medal: ‘🥉’ },
-   { min: 75,  max: 99,  title: ‘Certificate – With Distinction’, medal: ‘🥈’ },
-   { min: 100, max: 100, title: ‘Certificate – Highest Distinction’, medal: ‘🏆’ },
-   ],
-   certHereby: ‘has successfully participated in the quiz’, certComp: ‘of Upskill Academy and answered’,
-   certScored: ‘questions correctly.’, certSign: ‘Issued by’, certDate: ‘Date’,
-   moduleNames: [
-   ‘Module 1 – Strategic HR Management’,
-   ‘Module 2 – HR Processes’,
-   ‘Module 3 – Compensation Policy’,
-   ‘Module 4 – OHS & Training’,
-   ‘Module 5 – Labour Law’,
-   ],
-   moduleShort: [‘Strategic HR’, ‘HR Processes’, ‘Compensation’, ‘OHS & Training’, ‘Labour Law’],
-   moduleDesc: [
-   ‘Strategic HR alignment, competitive advantage, planning & structure.’,
-   ‘Recruitment, onboarding, performance management & development.’,
-   ‘Salary structures, incentives, variable pay & benefits.’,
-   ‘Occupational health, prevention, training planning & development.’,
-   ‘Labour law, collective agreements, dismissal protection & social insurance.’,
-   ],
-   },
-   es: {
-   navHome: ‘Inicio’, navWhat: ‘Qué es UA’, navTopics: ‘Temas’,
-   navCert: ‘Certificado’, navAbout: ‘Sobre mí’, navLogin: ‘Acceder’, langLabel: ‘Idioma’,
-   heroBadge: ‘Aprendizaje interactivo’, heroTitle: ‘Academy’,
-   heroDesc: ‘La app Upskill Academy es una plataforma de aprendizaje interactiva para dominar RRHH, nóminas y más – directamente en tu smartphone o tablet.’,
-   heroQuiz: ‘🚀 Al Quiz’, heroMore: ‘Saber más’,
-   featLabel: ‘¿Por qué Upskill Academy?’, featTitle: ‘Aprendizaje que funciona de verdad’,
-   featSub: ‘Para estudiantes de cursos de formación continua.’,
-   f1T: ‘Feedback inmediato’, f1P: ‘Tras cada respuesta sabes si acertaste.’,
-   f2T: ‘Aprende en movimiento’, f2P: ‘Optimizado para smartphone y tablet.’,
-   f3T: ‘Práctico’, f3P: ‘Contenido real de cursos.’,
-   f4T: ‘Certificado personal’, f4P: ‘Certificado al completar un módulo.’,
-   s1: ‘Preguntas · RRHH’, s2: ‘Idiomas’, s3: ‘Módulos’, s4: ‘Empieza gratis’,
-   apLabel: ‘La plataforma’, apTitle: ‘¿Qué es Upskill Academy?’, apSub: ‘App de aprendizaje interactiva.’,
-   st1T: ‘Aprendizaje por quiz’, st1P: ‘Aprende con preguntas y respuestas.’,
-   st2T: ‘Feedback inmediato’, st2P: ‘Entiende por qué una respuesta es correcta.’,
-   st3T: ‘Sistema de niveles’, st3P: ‘De principiante a experto.’,
-   st4T: ‘Tres idiomas’, st4P: ‘DE, EN y ES.’,
-   st5T: ‘Aprendizaje accesible’, st5P: ‘Lector de pantalla, teclado, modo oscuro para todos.’,
-   advTitle: ‘Tus ventajas’,
-   av1T: ‘Interactivo’, av1P: ‘Aprendizaje activo.’,
-   av2T: ‘Práctico’, av2P: ‘Contenido real.’,
-   av3T: ‘Inmediato’, av3P: ‘Para preparar exámenes.’,
-   topLabel: ‘Áreas de aprendizaje’, topTitle: ‘Elige tu tema’,
-   topSub: ‘Cada tema guía por 4 niveles con 15 preguntas cada uno.’,
-   soon: ‘Próximamente’,
-   backTop: ‘Volver a temas’, qsTitle: ‘Elige tu nivel’,
-   backMod: ‘Volver a niveles’, qPill: ‘Pregunta’,
-   errNoAnswer: ‘Por favor, selecciona una respuesta.’,
-   certLabel: ‘Finalización’, certTitle: ‘Tu Certificado’, certSub: ‘Certificados según rendimiento.’,
-   ct0T: ‘Participación’, ct0P: ‘Menos del 50%’,
-   ct1T: ‘Aprobado’, ct1P: ‘50–74%’,
-   ct2T: ‘Con distinción’, ct2P: ‘75–99%’,
-   ct3T: ‘Máxima distinción’, ct3P: ‘100% – ¡Perfecto!’,
-   premH: ‘Descarga Premium’, premP: ‘Compartir es gratis. PDF tras registro.’, premBtn: ‘Regístrate’,
-   amLabel: ‘Fundadora’,
-   amBio: ‘De origen iraní, criada en Alemania, vive en Tenerife.’,
-   amQuote: ‘“Hice un curso de RRHH en español. ¡Qué genial sería aprender en el móvil y que me preguntaran! Y aquí estamos.”’,
-   amMiss: ‘Upskill Academy hace el aprendizaje más sencillo y accesible. A largo plazo para centros como CEP Norte.’,
-   shareT: ‘🎉 Compartir resultado’, shareCopy: ‘📋 Copiar’,
-   certHint: ‘🔒 Regístrate para descargar tu diploma en PDF.’,
-   certRegBtn: ‘Registrarse’, lblCertName: ‘📝 Tu nombre para el diploma:’,
-   namePH: ‘Nombre completo…’,
-   btnRetry: ‘🔄 Reintentar’, btnDL: ‘📜 Descargar Diploma’, btnOvr: ‘🏛️ Inicio’,
-   dashLabel: ‘Mi área’, dashTitle: ‘Mi progreso’,
-   dashQ: ‘Quizzes’, dashC: ‘Diplomas’,
-   dashMyCerts: ‘Mis Diplomas’, noCerts: ‘Sin diplomas. ¡Empieza un quiz!’,
-   dashAchiev: ‘Logros’, dashProg: ‘Progreso’, btnLogout: ‘Cerrar sesión’,
-   legalLabel: ‘Legal’, legalTitle: ‘AGB y Privacidad’,
-   tabImp: ‘Aviso legal’, tabDSde: ‘Datenschutz (DE)’, tabDSes: ‘Privacidad (ES)’,
-   footDesc: ‘Aprendizaje interactivo para RRHH y administración.’,
-   footNav: ‘Navegación’, footLegal: ‘Legal’, footRights: ‘Todos los derechos reservados’,
-   authSub: ‘Guarda progreso y descarga diplomas’,
-   tabLogin: ‘Acceder’, tabReg: ‘Registrarse’,
-   lEmail: ‘Correo’, lPW: ‘Contraseña’, lName: ‘Nombre’,
-   pwNote: ‘Mínimo 8 caracteres.’, doLogin: ‘Acceder’, doReg: ‘Crear cuenta’,
-   orWith: ‘o’, regTerms: ‘Al registrarte aceptas nuestra política de privacidad.’,
-   qLabel: ‘PREGUNTA’, qOf: ‘de’, qNext: ‘Siguiente →’,
-   qRight: ‘✅ ¡Correcto!’, qWrong: ‘❌ Incorrecto.’,
-   lCorr: ‘Correctas’, lWrong: ‘Incorrectas’, lPct: ‘Porcentaje’,
-   ranks: [‘Becario’, ‘Asistente RRHH’, ‘Administrativo’, ‘Especialista RRHH’, ‘Analista RRHH’, ‘HR Business Partner’, ‘HR Manager’],
-   difficulties: [‘Fundamentos’, ‘Intermedio’, ‘Avanzado’, ‘Experto’],
-   rankUp: ‘🎉 ¡Subida de rango! Ahora eres:’, rankNow: ‘Ahora eres:’,
-   bestMed: ‘Mejor medalla:’, qInfo: ‘15 preguntas ·’, prevLvl: ‘Completa el nivel anterior’,
-   lockedMsg: ‘🔒 ¡Completa primero el nivel anterior!’,
-   noName: ‘✏️ Introduce tu nombre.’, dlOk: ‘📜 ¡Diploma descargado!’,
-   resultT: [’¡Inténtalo de nuevo! 💪’, ‘¡Aprobado! 👍’, ‘¡Muy bien! 👏’, ‘¡Excelente! 🎉’],
-   ratings: [‘🌱 Principiante (0–5 pts)’, ‘📈 Intermedio (6–10 pts)’, ‘🏆 Profesional (11–15 pts)’],
-   certTiers: [
-   { min: 0,   max: 49,  title: ‘Certificado de Participación’, medal: ‘📜’ },
-   { min: 50,  max: 74,  title: ‘Certificado – Aprobado’,        medal: ‘🥉’ },
-   { min: 75,  max: 99,  title: ‘Certificado – Con distinción’,  medal: ‘🥈’ },
-   { min: 100, max: 100, title: ‘Certificado – Máxima distinción’, medal: ‘🏆’ },
-   ],
-   certHereby: ‘ha participado exitosamente en el quiz’, certComp: ‘de Upskill Academy y ha respondido’,
-   certScored: ‘de las preguntas correctamente.’, certSign: ‘Emitido por’, certDate: ‘Fecha’,
-   moduleNames: [
-   ‘Módulo 1 – Dirección Estratégica RRHH’,
-   ‘Módulo 2 – Procesos de RRHH’,
-   ‘Módulo 3 – Política Retributiva’,
-   ‘Módulo 4 – PRL y Formación’,
-   ‘Módulo 5 – Legislación Laboral’,
-   ],
-   moduleShort: [‘Estrategia RRHH’, ‘Procesos RRHH’, ‘Retribución’, ‘PRL & Formación’, ‘Legislación’],
-   moduleDesc: [
-   ‘Dirección estratégica, ventaja competitiva, planificación y estructura.’,
-   ‘Reclutamiento, onboarding, evaluación del desempeño y desarrollo.’,
-   ‘Estructuras salariales, incentivos, retribución variable y beneficios.’,
-   ‘Seguridad laboral, prevención, planificación formativa y desarrollo.’,
-   ‘Derecho laboral, convenios colectivos, despido y seguridad social.’,
-   ],
-   },
-   };
+  <!-- jsPDF (CDN) -->
 
-/* ============================================================
-2. QUESTION DATABASE
-5 modules × 4 levels × 15 questions each
-Format: { q, a:[…], correct (0-based index), exp }
-============================================================ */
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-/**
+  <!-- Stylesheet -->
 
-- Questions are written in Spanish (the study language) but
-- the UI / feedback / explanations work in all 3 UI languages.
-- Each module has 4 levels; each level has 15 questions.
-  */
-  const QDB = {
-  /** MODULE 0 – Dirección Estratégica RRHH */
-  0: [
-  /* Level 0 – Fundamentos */
-  [
-  { q: ‘¿Qué es la Dirección Estratégica de RRHH?’, a: [‘Solo administrar nóminas’, ‘Integrar la gestión de personas en la estrategia empresarial’, ‘Contratar personal temporal’, ‘Gestionar solo ausencias’], correct: 1, exp: ‘La Dirección Estratégica integra la gestión de personas en el núcleo de la estrategia corporativa.’ },
-  { q: ‘¿De dónde surge la estrategia de RRHH?’, a: [‘Del deseo del director’, ‘De la estrategia corporativa’, ‘De la ley’, ‘Del mercado externo’], correct: 1, exp: ‘La estrategia de RRHH deriva directamente de la estrategia corporativa.’ },
-  { q: ‘¿Qué caracteriza la Etapa 1 (Administración de Personal)?’, a: [‘Es proactiva’, ‘Es reactiva y solo gestiona contratos/nóminas’, ‘Planifica talento’, ‘Usa People Analytics’], correct: 1, exp: ‘La Etapa 1 es reactiva: solo gestiona contratos y nóminas sin anticiparse.’ },
-  { q: ‘¿Qué significa “reactivo” en RRHH?’, a: [‘Actuar antes del problema’, ‘Actuar solo cuando ya existe un problema’, ‘Planificar a largo plazo’, ‘Usar datos para decidir’], correct: 1, exp: ‘Reactivo significa actuar solo cuando el problema ya ha ocurrido.’ },
-  { q: ‘¿Qué ejemplo describe RRHH en Etapa 1?’, a: [‘People Analytics’, ‘Buscar sustituto cuando alguien ya se ha ido’, ‘Plan de sucesión’, ‘Encuesta de clima’], correct: 1, exp: ‘En Etapa 1 RRHH solo busca sustituto cuando el empleado ya se ha marchado.’ },
-  { q: ‘¿Qué aporta la Etapa 2 frente a la Etapa 1?’, a: [‘Solo burocracia’, ‘Funciones especializadas: selección, formación, motivación’, ‘Integración estratégica completa’, ‘Automatización total’], correct: 1, exp: ‘En Etapa 2 aparecen funciones especializadas aunque sin participación estratégica.’ },
-  { q: ‘¿Qué caracteriza la Etapa 3?’, a: [‘Solo administrativo’, ‘RRHH es departamento clave para el futuro’, ‘Solo trabaja con sindicatos’, ‘Gestiona solo nóminas’], correct: 1, exp: ‘En Etapa 3 RRHH es proactivo, analítico y participa en la dirección de la empresa.’ },
-  { q: ‘¿Qué tecnologías aceleran el RRHH estratégico?’, a: [‘Fax e impresoras’, ‘Digitalización, teletrabajo, automatización e IA’, ‘Solo redes sociales’, ‘Solo almacenamiento en nube’], correct: 1, exp: ‘La digitalización, teletrabajo, automatización e IA impulsan el RRHH estratégico.’ },
-  { q: ‘¿Qué es People Analytics?’, a: [‘Software de nóminas’, ‘Análisis de datos de personas para tomar decisiones’, ‘Proceso de reclutamiento’, ‘Método de teambuilding’], correct: 1, exp: ‘People Analytics analiza datos de personas como si fuera finanzas o marketing.’ },
-  { q: ‘Ante una expansión internacional, ¿qué debe prever RRHH?’, a: [‘Solo material de oficina’, ‘Perfiles con idiomas, competencias interculturales y movilidad’, ‘Despedir empleados’, ‘Solo ajustar salarios’], correct: 1, exp: ‘RRHH debe anticipar idiomas, competencias interculturales y políticas de movilidad.’ },
-  { q: ‘¿Cuál es el objetivo principal de la Dirección Estratégica de RRHH?’, a: [‘Reducir costes al mínimo’, ‘Alinear las personas con los objetivos estratégicos’, ‘Gestionar solo bajas laborales’, ‘Controlar asistencia’], correct: 1, exp: ‘El objetivo central es alinear la gestión de personas con los objetivos estratégicos.’ },
-  { q: ‘¿Qué diferencia a un HRBP de un generalista?’, a: [‘El HRBP solo hace nóminas’, ‘El HRBP actúa como consultor estratégico de una unidad de negocio’, ‘No hay diferencia’, ‘El HRBP gestiona solo selección’], correct: 1, exp: ‘El HRBP (HR Business Partner) asesora estratégicamente a una unidad de negocio concreta.’ },
-  { q: ‘¿Qué significa “ventaja competitiva” en RRHH?’, a: [‘Pagar salarios bajos’, ‘Superar permanentemente a competidores gracias a las personas’, ‘Más publicidad’, ‘Más tecnología’], correct: 1, exp: ‘La ventaja competitiva proviene de personas difíciles de imitar, bien organizadas y sostenibles.’ },
-  { q: ‘¿Qué es el capital humano?’, a: [‘El dinero que cobra RRHH’, ‘El valor económico que aportan las competencias y experiencias de las personas’, ‘El número de empleados’, ‘El presupuesto de formación’], correct: 1, exp: ‘El capital humano es el valor económico derivado de competencias, habilidades y experiencias.’ },
-  { q: ‘¿Qué es la planificación estratégica de RRHH?’, a: [‘Reaccionar a vacantes’, ‘Anticipar qué personas necesitará la empresa para alcanzar sus objetivos’, ‘Gestionar solo nóminas’, ‘Contratar sin planificar’], correct: 1, exp: ‘Consiste en anticipar, preparar y alinear las necesidades de personas con la estrategia.’ },
-  ],
-  /* Level 1 – Aufbau */
-  [
-  { q: ‘¿Cuáles son las tres condiciones para que las personas sean ventaja competitiva?’, a: [‘Baratas, jóvenes y flexibles’, ‘Difíciles de imitar, organizadas con valor y sostenibles’, ‘Solo titulación alta’, ‘Hacer siempre horas extra’], correct: 1, exp: ‘Las personas crean ventaja si son difíciles de imitar, generan valor y son sostenibles.’ },
-  { q: ‘¿Qué es el upskilling?’, a: [‘Despedir y sustituir’, ‘Mejorar competencias existentes para el puesto actual’, ‘Cambiar de rol completamente’, ‘Solo formación externa’], correct: 1, exp: ‘Upskilling consiste en mejorar habilidades actuales para desempeñar mejor el mismo puesto.’ },
-  { q: ‘¿Qué es el reskilling?’, a: [‘Mismo trabajo con nuevas herramientas’, ‘Aprender competencias nuevas para cambiar de rol’, ‘Prepararse para la jubilación’, ‘Desarrollar liderazgo’], correct: 1, exp: ‘Reskilling es aprender competencias completamente nuevas para asumir un rol diferente.’ },
-  { q: ‘¿Cómo actúa RRHH en una empresa orientada a la innovación?’, a: [‘Control estricto’, ‘Fomenta creatividad, tolerancia al error y trabajo en equipo’, ‘Reduce costes’, ‘Refuerza jerarquías’], correct: 1, exp: ‘En empresas innovadoras RRHH fomenta creatividad, espacios creativos y reconocimiento de ideas.’ },
-  { q: ‘¿Qué ocurre si RRHH no crea ventaja competitiva?’, a: [‘Todo va mejor’, ‘Alta rotación, mal clima y dificultad para atraer talento’, ‘Más motivación’, ‘Más productividad’], correct: 1, exp: ‘Sin RRHH estratégico: alta rotación, mal clima, escasez de talento.’ },
-  { q: ‘¿Por qué las personas son más difíciles de copiar que la tecnología?’, a: [‘Son más baratas’, ‘La combinación única de talento, cultura y procesos no se puede replicar’, ‘No existe tecnología’, ‘La ley lo prohíbe’], correct: 1, exp: ‘La combinación única de personas, cultura, liderazgo y procesos es prácticamente imposible de copiar.’ },
-  { q: ‘¿Qué hace RRHH en una empresa orientada al cliente?’, a: [‘Solo contratar técnicos’, ‘Selecciona personas con habilidades sociales y crea incentivos ligados al cliente’, ‘Solo política salarial’, ‘Solo eficiencia’], correct: 1, exp: ‘RRHH selecciona personas con competencias sociales y vincula incentivos a la satisfacción del cliente.’ },
-  { q: ‘¿Cuál es la función de RRHH respecto al liderazgo?’, a: [‘Retirar líderes’, ‘Formar en comunicación, motivación y gestión de conflictos’, ‘Solo pedir aumentos’, ‘Ignorarlos’], correct: 1, exp: ‘RRHH forma a los líderes en comunicación, motivación y resolución de conflictos.’ },
-  { q: ‘¿Qué son los sistemas de compensación y reconocimiento?’, a: [‘Solo salario base’, ‘Salarios, incentivos y beneficios para atraer, retener y motivar talento’, ‘Solo bonos’, ‘Solo medidas disciplinarias’], correct: 1, exp: ‘Incluyen salarios, incentivos y beneficios diseñados para atraer y retener el talento.’ },
-  { q: ‘¿Qué diferencia cuantitativa y cualitativa en la planificación de personal?’, a: [‘Cuantitativa=salarios; Cualitativa=competencias’, ‘Cuantitativa=¿cuántos?; Cualitativa=¿qué perfiles?’, ‘Interna vs externa’, ‘Sin diferencia’], correct: 1, exp: ‘La planificación cuantitativa dice cuántos y la cualitativa qué perfiles o competencias.’ },
-  { q: ‘¿Qué analiza RRHH en una auditoría interna?’, a: [‘Solo la competencia’, ‘Plantilla actual, competencias, clima y procesos de RRHH’, ‘Solo finanzas’, ‘Solo salarios’], correct: 1, exp: ‘La auditoría interna analiza plantilla, competencias, clima y eficiencia de los procesos de RRHH.’ },
-  { q: ‘¿Qué contiene un análisis DAFO para RRHH?’, a: [‘Solo fortalezas’, ‘Fortalezas, Debilidades, Oportunidades y Amenazas del área de RRHH’, ‘Solo análisis externo’, ‘Solo datos de satisfacción’], correct: 1, exp: ‘El DAFO en RRHH analiza las cuatro dimensiones para orientar la estrategia.’ },
-  { q: ‘¿Cuáles son los KPIs típicos de RRHH?’, a: [‘Precio de la acción’, ‘Rotación, absentismo, horas de formación, satisfacción’, ‘Solo ventas’, ‘Solo valoraciones’], correct: 1, exp: ‘KPIs clave: rotación, absentismo, duración de vacantes, horas de formación, índice de satisfacción.’ },
-  { q: ‘¿Cuál es el riesgo si RRHH no tiene objetivos claros?’, a: [‘Todo va mejor’, ‘Acciones sin valor, dinero sin retorno, errores repetidos’, ‘Empleados más autónomos’, ‘Costes reducidos’], correct: 1, exp: ‘Sin objetivos claros RRHH actúa sin propósito, desperdicia recursos y repite errores.’ },
-  { q: ‘¿Qué significa interpretar indicadores de RRHH en lugar de solo observarlos?’, a: [‘Ver números y continuar’, ‘Comparar, hacer preguntas críticas y buscar causas raíz’, ‘Pasar datos a consultores’, ‘Medir solo anualmente’], correct: 1, exp: ‘Interpretar implica comparar con objetivos, cuestionar y encontrar causas raíz.’ },
-  ],
-  /* Level 2 – Profi */
-  [
-  { q: ‘¿Qué significa ser “agente de transformación” en RRHH?’, a: [‘Solo gestionar estructuras’, ‘Impulsar cambios, acompañar personas y reducir resistencias’, ‘Sustituir empleados’, ‘Solo contratar consultores’], correct: 1, exp: ‘Como agente de transformación RRHH impulsa el cambio y acompaña a las personas.’ },
-  { q: ‘¿Qué hace RRHH en una transformación digital?’, a: [‘Solo comprar software’, ‘Identifica brechas de competencias, diseña formación digital y acompaña’, ‘Sustituir todo por robots’, ‘Solo coordinar IT’], correct: 1, exp: ‘RRHH identifica brechas, diseña formación digital y acompaña especialmente a quienes más lo necesitan.’ },
-  { q: ‘¿Cuáles son los 6 objetivos principales de la gestión de RRHH?’, a: [‘Solo reducir costes’, ‘Atraer, desarrollar, retener, motivar, entorno seguro y alinear desempeño’, ‘Solo nóminas’, ‘Solo leyes’], correct: 1, exp: ‘Los 6 objetivos: atraer, desarrollar, retener, motivar, entorno seguro y alinear el desempeño.’ },
-  { q: ‘¿Cuál es la diferencia entre objetivos estratégicos, tácticos y operativos?’, a: [‘Son iguales’, ‘Estratégico=largo plazo; Táctico=medio; Operativo=corto plazo’, ‘Operativo es más largo’, ‘Táctico=+5 años’], correct: 1, exp: ‘Estratégico (años) → Táctico (1-2 años) → Operativo (meses, acciones concretas).’ },
-  { q: ‘¿Qué indica una alta rotación voluntaria?’, a: [‘La empresa es atractiva’, ‘Problemas de clima, liderazgo, salario u oportunidades’, ‘Empleados jubilándose’, ‘Empresa creciendo’], correct: 1, exp: ‘Alta rotación voluntaria señala problemas: mal clima, liderazgo débil, salario bajo o falta de desarrollo.’ },
-  { q: ‘¿Cómo conecta una mejor selección con los resultados empresariales?’, a: [‘No hay relación’, ‘Mejor selección → mejor servicio → clientes satisfechos → más ventas’, ‘Solo salarios más altos’, ‘Publicidad innecesaria’], correct: 1, exp: ‘La cadena es: mejor selección → calidad → satisfacción del cliente → ventas → ventaja competitiva.’ },
-  { q: ‘¿Cuál es la función del área de Prevención de Riesgos Laborales?’, a: [‘Solo administrativo’, ‘Evaluar riesgos, proponer prevención, impartir formación e investigar accidentes’, ‘Solo nóminas’, ‘Solo auditorías’], correct: 1, exp: ‘PRL evalúa riesgos, propone medidas, organiza formación e investiga accidentes.’ },
-  { q: ‘¿Qué abarca Diversidad e Inclusión en RRHH?’, a: [‘Solo contratar mujeres’, ‘Políticas de igualdad, sensibilización y procesos libres de discriminación’, ‘Solo cuotas’, ‘Solo edad’], correct: 1, exp: ‘D&I diseña políticas de igualdad, sensibiliza a la plantilla y elimina discriminación en los procesos.’ },
-  { q: ‘¿Qué hace el área de Selección y Reclutamiento?’, a: [‘Solo negociación salarial’, ‘Define perfil, publica, filtra, entrevista y gestiona onboarding’, ‘Solo formación’, ‘Solo trámites’], correct: 1, exp: ‘Reclutamiento abarca desde definir el perfil hasta acompañar el onboarding del nuevo empleado.’ },
-  { q: ‘¿Qué hace un People Analyst?’, a: [‘Organiza teambuilding’, ‘Analiza datos de RRHH para apoyar decisiones basadas en evidencia’, ‘Negocia convenios’, ‘Solo publica ofertas’], correct: 1, exp: ‘El People Analyst trabaja con datos de RRHH para tomar decisiones basadas en evidencia.’ },
-  { q: ‘¿Cómo difiere la estructura de RRHH en una gran empresa vs. PYME?’, a: [‘Las grandes tienen menos RRHH’, ‘Las grandes tienen departamentos especializados; las PYMES, 1-3 personas para todo’, ‘Las PYMES siempre externalizan’, ‘Sin diferencia’], correct: 1, exp: ‘Gran empresa: departamentos especializados. PYME: 1-3 personas cubren todas las funciones.’ },
-  { q: ‘¿Qué es la gestión del cambio en RRHH?’, a: [‘Cambiar de empresa’, ‘Proceso de planificación y acompañamiento de transformaciones organizativas’, ‘Solo comunicar cambios’, ‘Despedir al personal antiguo’], correct: 1, exp: ‘La gestión del cambio planifica, comunica y acompaña las transformaciones organizativas.’ },
-  { q: ‘¿Qué es el employer branding?’, a: [‘Publicidad de productos’, ‘La imagen de la empresa como empleador para atraer y retener talento’, ‘La marca del CEO’, ‘El logo de la empresa’], correct: 1, exp: ‘Employer branding construye la reputación de la empresa como empleador deseable.’ },
-  { q: ‘¿Qué es la evaluación del desempeño?’, a: [‘Controlar la asistencia’, ‘Proceso sistemático para valorar contribuciones y fijar objetivos’, ‘Solo calcular bonus’, ‘Revisar expedientes’], correct: 1, exp: ‘La evaluación del desempeño valora contribuciones y establece objetivos de mejora.’ },
-  { q: ‘¿Qué es la gestión del talento?’, a: [‘Solo contratar a los mejores’, ‘Identificar, desarrollar y retener a personas clave para el futuro de la empresa’, ‘Solo dar formación’, ‘Gestionar currículums’], correct: 1, exp: ‘La gestión del talento identifica, desarrolla y retiene personas clave para el futuro.’ },
-  ],
-  /* Level 3 – Experte */
-  [
-  { q: ‘¿Qué es la planificación de la sucesión?’, a: [‘Contratar cuando hay vacante’, ‘Identificar y preparar candidatos internos para roles clave con antelación’, ‘Despedir a directivos’, ‘Solo hacer organigramas’], correct: 1, exp: ‘La planificación de la sucesión prepara candidatos internos para roles clave antes de que surja la necesidad.’ },
-  { q: ‘¿Qué es el employee journey map?’, a: [‘Un mapa de la oficina’, ‘Representación visual de todas las experiencias del empleado desde la atracción hasta la salida’, ‘Un plano de evacuación’, ‘El organigrama de la empresa’], correct: 1, exp: ‘El employee journey map visualiza todas las etapas de la experiencia del empleado.’ },
-  { q: ‘¿Qué es el modelo de las 9-Box Grid?’, a: [‘Un sistema de nóminas’, ‘Herramienta para evaluar desempeño y potencial de los empleados’, ‘Un tipo de organigrama’, ‘Un método de selección’], correct: 1, exp: ‘La 9-Box Grid evalúa a los empleados según desempeño y potencial para gestionar talento.’ },
-  { q: ‘¿Qué es el índice de rotación y cómo se calcula?’, a: [‘Número total de empleados’, ‘(Bajas / Plantilla media) × 100’, ‘Solo el número de despidos’, ‘El coste de formación’], correct: 1, exp: ‘Rotación = (Nº de bajas / Plantilla media) × 100. Mide la estabilidad de la plantilla.’ },
-  { q: ‘¿Qué factores determinan el clima organizacional?’, a: [‘Solo el salario’, ‘Liderazgo, comunicación, condiciones laborales, reconocimiento y trabajo en equipo’, ‘Solo el espacio físico’, ‘Solo la jornada laboral’], correct: 1, exp: ‘El clima depende de liderazgo, comunicación, condiciones, reconocimiento y cohesión del equipo.’ },
-  { q: ‘¿Qué es la cultura organizacional y quién la gestiona?’, a: [‘Solo el CEO la define’, ‘Conjunto de valores, normas y comportamientos compartidos; RRHH la impulsa y cuida’, ‘Solo el área de marketing’, ‘No se puede gestionar’], correct: 1, exp: ‘La cultura es el conjunto de valores y comportamientos compartidos; RRHH la impulsa activamente.’ },
-  { q: ‘¿Cómo impacta el liderazgo transformacional en RRHH?’, a: [‘Solo aumenta salarios’, ‘Inspira, motiva y desarrolla al equipo para lograr cambios profundos’, ‘Controla solo resultados’, ‘Reduce la formación’], correct: 1, exp: ‘El liderazgo transformacional inspira y desarrolla a las personas para lograr cambios profundos.’ },
-  { q: ‘¿Qué es el análisis de brechas de competencias?’, a: [‘Revisar los títulos’, ‘Comparar las competencias actuales con las necesarias para alcanzar los objetivos’, ‘Calcular sueldos’, ‘Revisar contratos’], correct: 1, exp: ‘El análisis de brechas compara competencias actuales con las requeridas para los objetivos futuros.’ },
-  { q: ‘¿Qué indica un NPS (Net Promoter Score) de empleados alto?’, a: [‘Alta rotación’, ‘Alto nivel de compromiso y satisfacción: los empleados recomendarían la empresa’, ‘Muchas ausencias’, ‘Bajo rendimiento’], correct: 1, exp: ‘Un eNPS alto indica empleados comprometidos que recomendarían la empresa como lugar de trabajo.’ },
-  { q: ‘¿Qué son las políticas de RRHH?’, a: [‘Contratos laborales’, ‘Directrices formales que guían decisiones y comportamientos en la gestión de personas’, ‘Solo el código ético’, ‘Los organigramas’], correct: 1, exp: ‘Las políticas de RRHH son directrices formales que orientan decisiones sobre la gestión de personas.’ },
-  { q: ‘¿Qué es el outsourcing de RRHH y cuándo se usa?’, a: [‘Contratar empleados temporales’, ‘Externalizar funciones de RRHH a empresas especializadas para ganar eficiencia’, ‘Despedir al equipo de RRHH’, ‘Solo para las nóminas’], correct: 1, exp: ‘El outsourcing de RRHH externaliza funciones específicas para ganar eficiencia y acceder a especialistas.’ },
-  { q: ‘¿Qué es la diversidad cognitiva y por qué importa?’, a: [‘Contratar personas de distintos países’, ‘Variedad en formas de pensar y resolver problemas: mejora la innovación’, ‘Tener distintas edades’, ‘Mezclar géneros’], correct: 1, exp: ‘La diversidad cognitiva aporta distintas formas de pensar y resolver problemas, impulsando la innovación.’ },
-  { q: ‘¿Qué es el bienestar organizacional?’, a: [‘Solo gimnasio en la oficina’, ‘Conjunto de iniciativas para mejorar la salud física, mental y social de los empleados’, ‘Solo jornada reducida’, ‘Solo seguro médico’], correct: 1, exp: ‘El bienestar organizacional abarca iniciativas físicas, mentales y sociales para cuidar a las personas.’ },
-  { q: ‘¿Cómo se mide el ROI de la formación?’, a: [‘Contando participantes’, ‘(Beneficio obtenido - Coste de formación) / Coste de formación × 100’, ‘Solo con encuestas’, ‘No se puede medir’], correct: 1, exp: ‘El ROI de formación mide el retorno económico: (beneficio − coste) / coste × 100.’ },
-  { q: ‘¿Qué es la gestión por competencias?’, a: [‘Pagar según titulación’, ‘Modelo que basa selección, evaluación y desarrollo en competencias clave para el negocio’, ‘Controlar solo resultados’, ‘Solo dar cursos’], correct: 1, exp: ‘La gestión por competencias alinea selección, evaluación y desarrollo con competencias clave del negocio.’ },
-  ],
-  ],
+  <link rel="stylesheet" href="style.css" />
+</head>
 
-/** MODULE 1 – Procesos de RRHH */
-1: [
-/* Level 0 */
-[
-{ q: ‘¿Cuál es el primer paso en un proceso de selección?’, a: [‘Publicar la oferta’, ‘Definir el perfil del puesto’, ‘Hacer entrevistas’, ‘Firmar el contrato’], correct: 1, exp: ‘Antes de publicar hay que definir el perfil: competencias, formación y experiencia necesarias.’ },
-{ q: ‘¿Qué es el onboarding?’, a: [‘Despedir a un empleado’, ‘Proceso de integración de un nuevo empleado’, ‘Evaluación anual’, ‘Encuesta de clima’], correct: 1, exp: ‘El onboarding es el proceso que facilita la incorporación y adaptación de nuevos empleados.’ },
-{ q: ‘¿Qué es una entrevista por competencias?’, a: [‘Una entrevista informal’, ‘Entrevista que evalúa comportamientos pasados para predecir el rendimiento futuro’, ‘Una prueba escrita’, ‘Una visita a la empresa’], correct: 1, exp: ‘La entrevista por competencias usa ejemplos reales del pasado para predecir el comportamiento futuro.’ },
-{ q: ‘¿Qué es el reclutamiento interno?’, a: [‘Contratar a familiares’, ‘Cubrir vacantes con empleados ya presentes en la organización’, ‘Publicar en portales externos’, ‘Contratar a través de ETTs’], correct: 1, exp: ‘El reclutamiento interno aprovecha el talento existente en la organización para cubrir vacantes.’ },
-{ q: ‘¿Qué es el reclutamiento externo?’, a: [‘Contratar empleados internos’, ‘Buscar candidatos fuera de la organización’, ‘Recolocar empleados’, ‘Contratar jubilados’], correct: 1, exp: ‘El reclutamiento externo busca candidatos fuera de la empresa a través de portales, redes sociales, etc.’ },
-{ q: ‘¿Qué es el assessment center?’, a: [‘Un centro de formación’, ‘Método de evaluación que usa múltiples pruebas para valorar candidatos’, ‘Una oficina de empleo’, ‘Un test de personalidad único’], correct: 1, exp: ‘El assessment center usa dinámicas, role plays y pruebas para evaluar competencias de forma integral.’ },
-{ q: ‘¿Qué es el periodo de prueba?’, a: [‘Vacaciones del primer mes’, ‘Periodo inicial en que empleador y empleado pueden rescindir el contrato sin indemnización’, ‘La evaluación del primer año’, ‘El contrato temporal’], correct: 1, exp: ‘El periodo de prueba permite a ambas partes verificar la idoneidad sin obligación de indemnización.’ },
-{ q: ‘¿Qué es la descripción de puestos de trabajo?’, a: [‘El contrato laboral’, ‘Documento que detalla funciones, responsabilidades y requisitos de un puesto’, ‘El organigrama’, ‘El manual de bienvenida’], correct: 1, exp: ‘La descripción de puesto detalla funciones, responsabilidades, relaciones y requisitos del cargo.’ },
-{ q: ‘¿Qué es el employer branding en selección?’, a: [‘Publicidad de productos’, ‘Reputación de la empresa como empleador para atraer talento’, ‘La marca del CEO’, ‘El logo’], correct: 1, exp: ‘El employer branding construye una imagen atractiva como empleador para captar mejores candidatos.’ },
-{ q: ‘¿Qué fuentes de reclutamiento existen?’, a: [‘Solo internet’, ‘Portales de empleo, redes sociales, referencias internas, universidades, ETTs’, ‘Solo periódicos’, ‘Solo agencias’], correct: 1, exp: ‘Las fuentes incluyen portales, LinkedIn, referencias, universidades, ferias de empleo y ETTs.’ },
-{ q: ‘¿Qué es la tasa de conversión en selección?’, a: [‘El porcentaje de contratos renovados’, ‘Proporción de candidatos que avanzan de una fase a la siguiente’, ‘El coste por contratación’, ‘El tiempo de adaptación’], correct: 1, exp: ‘La tasa de conversión mide cuántos candidatos avanzan en cada fase del proceso de selección.’ },
-{ q: ‘¿Qué es la inducción de un nuevo empleado?’, a: [‘La evaluación del primer año’, ‘El programa inicial de bienvenida y orientación en la empresa’, ‘El primer aumento salarial’, ‘La renovación del contrato’], correct: 1, exp: ‘La inducción es el programa inicial que orienta al nuevo empleado sobre la empresa, políticas y cultura.’ },
-{ q: ‘¿Para qué sirven las pruebas psicotécnicas en selección?’, a: [‘Para conocer el sueldo deseado’, ‘Para medir aptitudes cognitivas, razonamiento y personalidad’, ‘Para verificar experiencia’, ‘Para comprobar idiomas’], correct: 1, exp: ‘Los tests psicotécnicos miden capacidades cognitivas, personalidad y aptitudes relevantes para el puesto.’ },
-{ q: ‘¿Qué es el coste por contratación?’, a: [‘El salario del empleado’, ‘Suma de todos los costes del proceso de selección hasta incorporar al candidato’, ‘El coste del contrato’, ‘Solo el coste del anuncio’], correct: 1, exp: ‘El coste por contratación incluye anuncios, tiempo del equipo, pruebas y onboarding.’ },
-{ q: ‘¿Qué es el time-to-hire?’, a: [‘El tiempo de vacaciones’, ‘Días entre la apertura de la vacante y la aceptación de la oferta’, ‘El periodo de prueba’, ‘El tiempo de formación’], correct: 1, exp: ‘El time-to-hire mide la eficiencia del proceso de selección desde la apertura hasta la aceptación.’ },
-],
-/* Level 1 */
-[
-{ q: ‘¿Qué es la gestión del desempeño?’, a: [‘Controlar asistencia’, ‘Proceso continuo de fijación de objetivos, seguimiento y evaluación del rendimiento’, ‘Solo calcular bonus’, ‘Revisar contratos’], correct: 1, exp: ‘La gestión del desempeño es un ciclo continuo: fijar objetivos, dar feedback y evaluar resultados.’ },
-{ q: ‘¿Qué es el feedback 360 grados?’, a: [‘Un tipo de contrato’, ‘Evaluación del empleado por superiores, compañeros, subordinados y autoevaluación’, ‘Un test de personalidad’, ‘Una encuesta de clima’], correct: 1, exp: ‘El 360° recoge opiniones de todas las personas del entorno laboral del evaluado.’ },
-{ q: ‘¿Cuál es la diferencia entre formación y desarrollo?’, a: [‘Son lo mismo’, ‘Formación cubre necesidades actuales; desarrollo prepara para el futuro’, ‘Desarrollo es solo para directivos’, ‘Formación es solo técnica’], correct: 1, exp: ‘La formación resuelve necesidades inmediatas; el desarrollo prepara para responsabilidades futuras.’ },
-{ q: ‘¿Qué es el plan de formación anual?’, a: [‘El calendario de vacaciones’, ‘Documento que recoge las necesidades de formación y las acciones planificadas’, ‘El presupuesto de RRHH’, ‘El plan de prevención’], correct: 1, exp: ‘El plan de formación recoge necesidades detectadas y planifica las acciones para cubrirlas.’ },
-{ q: ‘¿Qué es la detección de necesidades formativas?’, a: [‘Preguntar qué cursos se quieren’, ‘Proceso para identificar brechas entre competencias actuales y requeridas’, ‘Revisar el catálogo de cursos’, ‘Calcular el presupuesto’], correct: 1, exp: ‘La DNC identifica la brecha entre competencias actuales y las necesarias para los objetivos.’ },
-{ q: ‘¿Qué es el plan de carrera?’, a: [‘El currículum del empleado’, ‘Hoja de ruta que define el desarrollo profesional del empleado dentro de la empresa’, ‘El contrato de trabajo’, ‘El plan de jubilación’], correct: 1, exp: ‘El plan de carrera define la progresión profesional y las acciones de desarrollo necesarias.’ },
-{ q: ‘¿Qué es el mentoring?’, a: [‘Un tipo de contrato’, ‘Relación en la que un profesional experimentado guía el desarrollo de otro’, ‘Un programa de descuentos’, ‘Una evaluación anual’], correct: 1, exp: ‘El mentoring es una relación guiada donde un mentor experimientado apoya el desarrollo profesional.’ },
-{ q: ‘¿Qué es el coaching en el ámbito laboral?’, a: [‘Dar órdenes’, ‘Proceso de acompañamiento para desarrollar potencial y alcanzar objetivos’, ‘Controlar resultados’, ‘Hacer feedback anual’], correct: 1, exp: ‘El coaching acompaña al profesional para que descubra su potencial y alcance sus objetivos.’ },
-{ q: ‘¿Qué es el absentismo laboral?’, a: [‘Las vacaciones’, ‘Ausencias no planificadas al trabajo, medidas como porcentaje de horas perdidas’, ‘Las bajas por maternidad’, ‘Los festivos’], correct: 1, exp: ‘El absentismo son las ausencias no planificadas; se mide como % de horas perdidas sobre las previstas.’ },
-{ q: ‘¿Cómo se calcula la tasa de absentismo?’, a: [‘Bajas / empleados’, ‘(Horas ausencia / Horas previstas) × 100’, ‘Días de baja × salario’, ‘Número de bajas totales’], correct: 1, exp: ‘Tasa de absentismo = (horas de ausencia / horas previstas) × 100.’ },
-{ q: ‘¿Qué es el job posting interno?’, a: [‘Un contrato temporal’, ‘Publicación de vacantes interna para que los empleados puedan postularse’, ‘Un tipo de nómina’, ‘Un plan de pensiones’], correct: 1, exp: ‘El job posting interno permite que los propios empleados conozcan y se postulen a vacantes.’ },
-{ q: ‘¿Qué es la entrevista de salida?’, a: [‘La entrevista de selección final’, ‘Conversación al término de la relación laboral para conocer causas y mejorar retención’, ‘La evaluación de desempeño final’, ‘El trámite de baja en seguridad social’], correct: 1, exp: ‘La entrevista de salida recoge información valiosa para mejorar retención y clima organizacional.’ },
-{ q: ‘¿Qué es la gestión del conocimiento en RRHH?’, a: [‘Guardar currículums’, ‘Capturar, organizar y compartir el conocimiento de la organización’, ‘Solo formación técnica’, ‘El archivo de contratos’], correct: 1, exp: ‘La gestión del conocimiento captura y difunde el saber organizacional para que no se pierda.’ },
-{ q: ‘¿Qué es la gestión por objetivos (MBO)?’, a: [‘Control de asistencia’, ‘Modelo que fija objetivos acordados entre empleado y superior para guiar el desempeño’, ‘Solo evaluación anual’, ‘El plan de incentivos’], correct: 1, exp: ‘La MBO (Management by Objectives) alinea objetivos individuales con los organizacionales.’ },
-{ q: ‘¿Qué es la rotación de puestos (job rotation)?’, a: [‘Cambiar de empresa’, ‘Movimiento planificado de empleados entre distintos puestos para ampliar competencias’, ‘Cambiar el contrato’, ‘El turno rotativo’], correct: 1, exp: ‘La rotación de puestos desarrolla competencias y flexibilidad al mover empleados entre diferentes roles.’ },
-],
-/* Level 2 */
-[
-{ q: ‘¿Qué es el workforce planning?’, a: [‘Hacer turnos’, ‘Planificación estratégica para tener las personas adecuadas en el momento adecuado’, ‘Calcular nóminas’, ‘Gestionar vacaciones’], correct: 1, exp: ‘El workforce planning asegura el número y perfil correcto de personas en el momento oportuno.’ },
-{ q: ‘¿Qué es la employer value proposition (EVP)?’, a: [‘El salario ofrecido’, ‘Conjunto de beneficios y valores que ofrece la empresa a sus empleados a cambio de su trabajo’, ‘El contrato colectivo’, ‘El plan de pensiones’], correct: 1, exp: ‘La EVP es el conjunto de atributos únicos que la empresa ofrece a sus empleados.’ },
-{ q: ‘¿Qué es la gestión de la diversidad?’, a: [‘Contratar solo mujeres’, ‘Crear entornos inclusivos que valoren las diferencias de personas con distintos perfiles’, ‘Solo cuotas legales’, ‘Eventos de teambuilding’], correct: 1, exp: ‘La gestión de la diversidad crea entornos donde se valoran y aprovechan las diferencias.’ },
-{ q: ‘¿Qué mide el índice de compromiso de los empleados?’, a: [‘Las horas trabajadas’, ‘El grado en que los empleados están motivados, involucrados y alineados con la empresa’, ‘El absentismo’, ‘El coste de formación’], correct: 1, exp: ‘El índice de compromiso (engagement) mide motivación, implicación y alineación con la empresa.’ },
-{ q: ‘¿Qué es la gestión de la desvinculación?’, a: [‘Gestionar bajas voluntarias’, ‘Proceso de salida de la empresa: tipos de despido, trámites y entrevista de salida’, ‘Solo hacer el finiquito’, ‘Solo tramitar la baja en SS’], correct: 1, exp: ‘La gestión de la desvinculación cubre todo el proceso de salida: tipos, trámites, impacto y entrevista.’ },
-{ q: ‘¿Qué es el talent pipeline?’, a: [‘Una base de datos de clientes’, ‘Grupo de candidatos internos y externos preparados para cubrir posiciones clave’, ‘El listado de empleados actuales’, ‘El plan de formación’], correct: 1, exp: ‘El talent pipeline es un grupo preparado de candidatos para cubrir posiciones clave cuando se necesite.’ },
-{ q: ‘¿Qué es el Employee Value Proposition?’, a: [‘El salario bruto’, ‘La propuesta de valor que hace la empresa a sus empleados: salario, desarrollo, cultura y beneficios’, ‘El contrato colectivo’, ‘Solo los beneficios sociales’], correct: 1, exp: ‘La EVP es la propuesta de valor total: salario, desarrollo, cultura, propósito y beneficios.’ },
-{ q: ‘¿Qué son las soft skills?’, a: [‘Habilidades técnicas’, ‘Habilidades sociales y emocionales como comunicación, empatía y trabajo en equipo’, ‘Idiomas extranjeros’, ‘Certificaciones técnicas’], correct: 1, exp: ‘Las soft skills son habilidades interpersonales y emocionales fundamentales en el entorno laboral.’ },
-{ q: ‘¿Qué es la evaluación de potencial?’, a: [‘Evaluar resultados pasados’, ‘Valorar la capacidad de un empleado para asumir roles de mayor responsabilidad en el futuro’, ‘Calcular el bonus’, ‘Revisar el absentismo’], correct: 1, exp: ‘La evaluación de potencial estima la capacidad futura de un empleado para crecer en la organización.’ },
-{ q: ‘¿Qué es el aprendizaje organizacional?’, a: [‘Cursos de empresa’, ‘Capacidad de la organización para aprender de experiencias y adaptarse continuamente’, ‘Solo formación técnica’, ‘Solo formación de líderes’], correct: 1, exp: ‘El aprendizaje organizacional es la capacidad colectiva de aprender y mejorar de forma continua.’ },
-{ q: ‘¿Qué es el LMS (Learning Management System)?’, a: [‘Un sistema de nóminas’, ‘Plataforma digital para gestionar, distribuir y hacer seguimiento de la formación’, ‘Un software de RRHH’, ‘Un sistema de evaluación’], correct: 1, exp: ‘El LMS es la plataforma digital que gestiona y distribuye la formación online en la organización.’ },
-{ q: ‘¿Qué es la oferta interna de empleo?’, a: [‘El contrato indefinido’, ‘Publicación de vacantes exclusivamente para empleados de la empresa’, ‘Un tipo de beneficio social’, ‘Un programa de movilidad’], correct: 1, exp: ‘La oferta interna permite que los empleados actuales opten a nuevas posiciones antes que candidatos externos.’ },
-{ q: ‘¿Qué es el plan de acogida?’, a: [‘El plan de vacaciones’, ‘Conjunto de acciones planificadas para integrar al nuevo empleado en la empresa’, ‘El contrato de prueba’, ‘El manual de normas’], correct: 1, exp: ‘El plan de acogida facilita la integración del nuevo empleado: visitas, presentaciones, formación inicial.’ },
-{ q: ‘¿Para qué sirven los KPIs de selección?’, a: [‘Para calcular salarios’, ‘Para medir la eficiencia y calidad del proceso: time-to-hire, coste, tasa de retención’, ‘Para gestionar nóminas’, ‘Para controlar asistencia’], correct: 1, exp: ‘Los KPIs de selección (time-to-hire, coste, calidad de contratación) permiten mejorar el proceso.’ },
-{ q: ‘¿Qué es la desvinculación voluntaria vs. involuntaria?’, a: [‘Son lo mismo’, ‘Voluntaria: el empleado decide irse; Involuntaria: la empresa decide terminar la relación’, ‘Voluntaria es el despido’, ‘Involuntaria es la dimisión’], correct: 1, exp: ‘Voluntaria: el empleado dimite. Involuntaria: la empresa despide (procedente, improcedente, colectivo).’ },
-],
-/* Level 3 */
-[
-{ q: ‘¿Qué es el modelo Kirkpatrick de evaluación de la formación?’, a: [‘Un modelo salarial’, ‘Modelo de 4 niveles: reacción, aprendizaje, comportamiento y resultados’, ‘Un sistema de gestión’, ‘Un tipo de contrato’], correct: 1, exp: ‘Kirkpatrick evalúa formación en 4 niveles: reacción, aprendizaje, cambio de comportamiento y resultados.’ },
-{ q: ‘¿Qué es la curva de aprendizaje y cómo afecta a la productividad?’, a: [‘El tiempo de vacaciones’, ‘Relación entre experiencia acumulada y mejora del rendimiento; a más práctica, mayor productividad’, ‘El coste de formación’, ‘El número de cursos realizados’], correct: 1, exp: ‘La curva de aprendizaje muestra cómo la productividad mejora conforme se acumula experiencia.’ },
-{ q: ‘¿Qué es el job crafting?’, a: [‘Cambiar de empresa’, ‘Proceso por el que el empleado redefine activamente su trabajo para aumentar su significado’, ‘Un tipo de contrato flexible’, ‘Un método de selección’], correct: 1, exp: ‘El job crafting es la adaptación proactiva del propio puesto para aumentar motivación y bienestar.’ },
-{ q: ‘¿Qué es la gestión de conflictos en RRHH?’, a: [‘Despedir a los implicados’, ‘Identificar, analizar y resolver disputas para mantener el clima y la productividad’, ‘Ignorar el problema’, ‘Llamar a un abogado’], correct: 1, exp: ‘La gestión de conflictos identifica causas, media entre partes y busca soluciones constructivas.’ },
-{ q: ‘¿Qué es el programa de bienestar emocional en empresas?’, a: [‘Seguro médico’, ‘Conjunto de acciones para cuidar la salud mental, reducir estrés y aumentar resiliencia’, ‘Gimnasio en la oficina’, ‘Días libres extra’], correct: 1, exp: ‘El bienestar emocional incluye apoyo psicológico, programas de mindfulness y gestión del estrés.’ },
-{ q: ‘¿Qué es el plan de desarrollo individual (PDI)?’, a: [‘El contrato laboral’, ‘Plan personalizado que define objetivos de desarrollo y acciones para lograrlos’, ‘El plan de pensiones’, ‘El expediente disciplinario’], correct: 1, exp: ‘El PDI es un plan personalizado de desarrollo con objetivos concretos y acciones para alcanzarlos.’ },
-{ q: ‘¿Qué es la gestión de la experiencia del empleado (EX)?’, a: [‘La gestión de clientes’, ‘Enfoque holístico que cuida cada interacción del empleado con la empresa a lo largo de su ciclo’, ‘Solo el onboarding’, ‘Solo la evaluación’], correct: 1, exp: ‘La EX gestiona todas las interacciones del empleado: atracción, incorporación, desarrollo y salida.’ },
-{ q: ‘¿Qué diferencia hay entre formación online y blended learning?’, a: [‘Son iguales’, ‘Online es 100% digital; blended combina formación presencial y online’, ‘Blended es solo videoconferencia’, ‘Online es más caro’], correct: 1, exp: ‘El blended learning combina lo mejor de la formación presencial con la flexibilidad del e-learning.’ },
-{ q: ‘¿Qué es la gestión de carreras duales?’, a: [‘Tener dos trabajos’, ‘Sistema que ofrece dos vías de progresión: técnica y de gestión’, ‘Trabajar a media jornada’, ‘Dos contratos simultáneos’], correct: 1, exp: ‘La carrera dual ofrece progresión técnica y de gestión para retener a especialistas sin forzarlos a dirigir.’ },
-{ q: ‘¿Qué es el análisis predictivo en RRHH?’, a: [‘Revisar datos históricos’, ‘Usar datos y algoritmos para anticipar comportamientos futuros (rotación, rendimiento, etc.)’, ‘Hacer encuestas’, ‘Calcular nóminas’], correct: 1, exp: ‘El análisis predictivo usa datos para anticipar riesgos de rotación, rendimiento o necesidades de talento.’ },
-{ q: ‘¿Qué es la movilidad internacional de empleados?’, a: [‘Viajes de negocios’, ‘Desplazamiento de empleados a otros países para trabajar por un periodo definido’, ‘Teletrabajo desde el extranjero’, ‘Contratar extranjeros’], correct: 1, exp: ‘La movilidad internacional implica desplazar empleados a otro país con todos los trámites legales y de RRHH.’ },
-{ q: ‘¿Qué es el employee advocacy?’, a: [‘Un sindicato’, ‘Empleados que actúan como embajadores de la empresa en redes sociales y su entorno’, ‘Una reclamación laboral’, ‘Un tipo de convenio’], correct: 1, exp: ‘El employee advocacy convierte a los empleados satisfechos en promotores espontáneos de la empresa.’ },
-{ q: ‘¿Qué son los programas de reconocimiento no monetario?’, a: [‘Solo premios en dinero’, ‘Iniciativas que reconocen logros sin retribución económica: mención, flexibilidad, visibilidad’, ‘Solo ascensos’, ‘Solo diplomas’], correct: 1, exp: ‘El reconocimiento no monetario incluye menciones públicas, flexibilidad y visibilidad en proyectos.’ },
-{ q: ‘¿Cómo impacta la inteligencia emocional en el liderazgo?’, a: [‘No importa’, ‘Permite gestionar emociones propias y ajenas, mejorando relaciones, motivación y cohesión’, ‘Solo reduce conflictos’, ‘Solo mejora la comunicación’], correct: 1, exp: ‘La IE en líderes mejora la gestión emocional, la motivación del equipo y la cohesión organizacional.’ },
-{ q: ‘¿Qué es la agilidad organizacional?’, a: [‘Velocidad de producción’, ‘Capacidad de la empresa de adaptarse rápidamente a cambios del entorno manteniendo la eficiencia’, ‘Reducir plantilla’, ‘Digitalizar todos los procesos’], correct: 1, exp: ‘La agilidad organizacional es la capacidad de adaptarse rápido a cambios sin perder eficiencia.’ },
-],
-],
+<body>
 
-/** MODULE 2 – Política Retributiva */
-2: [
-/* Level 0 */
-[
-{ q: ‘¿Qué es la política retributiva?’, a: [‘Solo el salario base’, ‘Conjunto de decisiones sobre cómo remunerar a los empleados de forma justa y competitiva’, ‘El convenio colectivo’, ‘Solo los beneficios sociales’], correct: 1, exp: ‘La política retributiva define criterios de remuneración: fija, variable, beneficios y equidad.’ },
-{ q: ‘¿Qué diferencia hay entre salario bruto y neto?’, a: [‘Son iguales’, ‘Bruto incluye todos los conceptos; neto es lo que cobra el empleado tras retenciones e impuestos’, ‘Neto es mayor que bruto’, ‘Bruto es solo la base’], correct: 1, exp: ‘El salario bruto es el total pactado; el neto es lo que se cobra después de retenciones fiscales y SS.’ },
-{ q: ‘¿Qué es el Salario Mínimo Interprofesional (SMI)?’, a: [‘El salario promedio del sector’, ‘La retribución mínima legal que todo trabajador tiene derecho a percibir’, ‘El salario de los directivos’, ‘El salario del convenio’], correct: 1, exp: ‘El SMI es la retribución mínima legal establecida por el gobierno para cualquier tipo de trabajo.’ },
-{ q: ‘¿Qué es la retribución variable?’, a: [‘El salario fijo mensual’, ‘Parte de la retribución ligada al rendimiento, resultados o logro de objetivos’, ‘Los beneficios sociales’, ‘Las horas extra’], correct: 1, exp: ‘La retribución variable premia resultados: comisiones, bonus, participación en beneficios, etc.’ },
-{ q: ‘¿Qué son los beneficios sociales (fringe benefits)?’, a: [‘El salario fijo’, ‘Compensaciones adicionales no salariales: seguro médico, plan de pensiones, coche, etc.’, ‘Las horas extra’, ‘Los incentivos individuales’], correct: 1, exp: ‘Los beneficios sociales complementan el salario: seguro médico, pensión, coche, ticket restaurante, etc.’ },
-{ q: ‘¿Qué es la banda salarial?’, a: [‘El salario del convenio’, ‘Rango de retribución definido para un puesto: mínimo, punto medio y máximo’, ‘El complemento de antigüedad’, ‘El salario neto’], correct: 1, exp: ‘La banda salarial fija el rango retributivo para un puesto, con mínimo, punto medio y máximo.’ },
-{ q: ‘¿Qué es la equidad interna en retribución?’, a: [‘Pagar lo mismo a todos’, ‘Percepción de justicia comparando retribuciones dentro de la misma empresa’, ‘Que nadie sepa el salario’, ‘Solo cumplir el convenio’], correct: 1, exp: ‘La equidad interna garantiza que las diferencias salariales sean justas y coherentes dentro de la empresa.’ },
-{ q: ‘¿Qué es la competitividad externa en retribución?’, a: [‘Pagar menos que la competencia’, ‘Posicionamiento del salario respecto al mercado para atraer y retener talento’, ‘Ofrecer más vacaciones’, ‘Solo mejorar los bonus’], correct: 1, exp: ‘La competitividad externa compara nuestros salarios con el mercado para ser atractivos como empleador.’ },
-{ q: ‘¿Qué es una encuesta salarial?’, a: [‘Una encuesta de satisfacción’, ‘Estudio de mercado que recoge datos de retribución de distintas empresas del sector’, ‘Un cuestionario interno’, ‘El informe de nóminas’], correct: 1, exp: ‘La encuesta salarial aporta datos del mercado laboral para ajustar la política retributiva.’ },
-{ q: ‘¿Qué es el complemento de antigüedad?’, a: [‘El salario base’, ‘Complemento que aumenta la retribución según los años de servicio en la empresa’, ‘El plus de nocturnidad’, ‘El bonus anual’], correct: 1, exp: ‘El complemento de antigüedad premia la fidelidad del trabajador incrementando el salario por años de servicio.’ },
-{ q: ‘¿Qué es la nómina?’, a: [‘El contrato de trabajo’, ‘Documento mensual que detalla los conceptos retributivos y descuentos del empleado’, ‘El recibo del IRPF’, ‘El contrato indefinido’], correct: 1, exp: ‘La nómina es el documento mensual que detalla percepciones, deducciones y líquido a percibir.’ },
-{ q: ‘¿Qué es el bonus anual?’, a: [‘El salario mensual extra’, ‘Retribución variable ligada al cumplimiento de objetivos anuales de empresa e individuo’, ‘Las vacaciones pagadas’, ‘El complemento de transporte’], correct: 1, exp: ‘El bonus anual es una retribución variable que premia el cumplimiento de objetivos anuales.’ },
-{ q: ‘¿Qué es la retribución flexible?’, a: [‘Cambiar el salario cada mes’, ‘Sistema que permite al empleado destinar parte del salario bruto a productos/servicios con ventaja fiscal’, ‘Trabajar a tiempo parcial’, ‘Cobrar en especie’], correct: 1, exp: ‘La retribución flexible permite al empleado destinar parte del bruto a productos con ventaja fiscal.’ },
-{ q: ‘¿Qué es el salario emocional?’, a: [‘Un tipo de bonus’, ‘Conjunto de beneficios no económicos que mejoran la satisfacción y calidad de vida laboral’, ‘El plan de pensiones’, ‘Solo el teletrabajo’], correct: 1, exp: ‘El salario emocional incluye flexibilidad, conciliación, reconocimiento, y otros factores de bienestar.’ },
-{ q: ‘¿Qué es el plus de nocturnidad?’, a: [‘El trabajo nocturno no se paga más’, ‘Complemento salarial por trabajar entre las 22:00 y las 06:00 horas’, ‘El plus de peligrosidad’, ‘Las horas extra nocturnas’], correct: 1, exp: ‘El plus de nocturnidad remunera las horas trabajadas entre las 22h y las 6h con un incremento sobre el base.’ },
-],
-/* Level 1 */
-[
-{ q: ‘¿Qué es la valoración de puestos de trabajo?’, a: [‘Evaluar el rendimiento del empleado’, ‘Proceso sistemático para determinar la importancia relativa de cada puesto en la organización’, ‘Calcular el bonus’, ‘Revisar el contrato’], correct: 1, exp: ‘La valoración de puestos determina el peso relativo de cada cargo para construir una estructura salarial justa.’ },
-{ q: ‘¿Qué métodos existen para valorar puestos?’, a: [‘Solo el convenio colectivo’, ‘Ranking, clasificación por categorías, comparación de factores y puntuación’, ‘Solo las encuestas salariales’, ‘Solo la antigüedad’], correct: 1, exp: ‘Los métodos de valoración incluyen ranking, clasificación, factores comparados y sistemas de puntos.’ },
-{ q: ‘¿Qué es la brecha salarial de género?’, a: [‘Que las mujeres trabajan menos’, ‘Diferencia de retribución media entre hombres y mujeres en contextos equiparables’, ‘El coste de maternidad’, ‘La diferencia de categorías’], correct: 1, exp: ‘La brecha salarial de género mide la diferencia media de retribución entre hombres y mujeres.’ },
-{ q: ‘¿Qué es la transparencia retributiva?’, a: [‘Publicar todos los salarios’, ‘Deber de informar a empleados y representantes sobre criterios y políticas salariales’, ‘Que todos ganen lo mismo’, ‘Solo el registro salarial’], correct: 1, exp: ‘La transparencia retributiva implica comunicar los criterios de remuneración y el registro salarial.’ },
-{ q: ‘¿Qué es el registro salarial?’, a: [‘La nómina mensual’, ‘Documento obligatorio con los salarios medios desagregados por sexo, categoría y puesto’, ‘El contrato colectivo’, ‘La encuesta salarial’], correct: 1, exp: ‘El registro salarial es obligatorio y muestra medias salariales desglosadas para detectar brechas.’ },
-{ q: ‘¿Qué es la participación en beneficios?’, a: [‘Una forma de subsidio’, ‘Reparto de parte de los beneficios de la empresa entre los empleados’, ‘El plan de pensiones’, ‘Las comisiones de ventas’], correct: 1, exp: ‘La participación en beneficios distribuye parte de los resultados de la empresa entre sus empleados.’ },
-{ q: ‘¿Qué son las comisiones?’, a: [‘Bonus anuales’, ‘Retribución variable calculada como porcentaje sobre ventas o resultados generados’, ‘El salario base’, ‘Los beneficios sociales’], correct: 1, exp: ‘Las comisiones son retribución variable proporcional a las ventas o resultados del empleado.’ },
-{ q: ‘¿Qué es el pay equity?’, a: [‘Pagar igual a todos’, ‘Garantizar igual retribución por igual trabajo o trabajo de igual valor, sin discriminación’, ‘El SMI’, ‘El convenio colectivo’], correct: 1, exp: ‘El pay equity asegura igual pago por trabajo de igual valor, eliminando discriminaciones.’ },
-{ q: ‘¿Qué es la retribución total (Total Rewards)?’, a: [‘Solo el salario’, ‘Suma de salario fijo, variable, beneficios, desarrollo y bienestar ofrecidos al empleado’, ‘El coste de empresa’, ‘El salario neto’], correct: 1, exp: ‘Total Rewards engloba todo el valor que recibe el empleado: salario, beneficios, desarrollo y bienestar.’ },
-{ q: ‘¿Qué es el coste total de empresa?’, a: [‘El salario bruto’, ‘Todo lo que paga la empresa por el empleado: salario bruto + cuotas SS del empleador + beneficios’, ‘El salario neto’, ‘Solo las cotizaciones’], correct: 1, exp: ‘El coste total de empresa incluye salario bruto, cotizaciones sociales patronales y todos los beneficios.’ },
-{ q: ‘¿Qué es el plan de incentivos a largo plazo (LTIP)?’, a: [‘Un bonus mensual’, ‘Programa de retribución diferida ligada a objetivos plurianuales (acciones, opciones, etc.)’, ‘El plan de pensiones’, ‘Las comisiones anuales’], correct: 1, exp: ‘Los LTIP son planes plurianuales que alinean intereses de empleados clave con los de la empresa.’ },
-{ q: ‘¿Qué es la retención salarial?’, a: [‘No pagar el salario’, ‘Estrategia de mantener a empleados clave con incentivos económicos diferidos o cláusulas’, ‘El finiquito’, ‘La baja laboral’], correct: 1, exp: ‘La retención salarial usa bonus diferidos, stock options o cláusulas de permanencia para fidelizar talento clave.’ },
-{ q: ‘¿Cómo afecta la inflación a la política salarial?’, a: [‘No afecta’, ‘Erosiona el poder adquisitivo: RRHH debe revisar salarios para mantener competitividad y motivación’, ‘Solo afecta al convenio’, ‘Solo a los bonus’], correct: 1, exp: ‘La inflación reduce poder adquisitivo; RRHH debe revisar la política salarial para mantener la equidad.’ },
-{ q: ‘¿Qué es el incremento salarial por méritos?’, a: [‘El aumento del SMI’, ‘Subida de salario ligada al rendimiento individual del empleado’, ‘El IPC’, ‘El complemento de antigüedad’], correct: 1, exp: ‘El aumento por méritos vincula el incremento salarial al desempeño individual del empleado.’ },
-{ q: ‘¿Qué es la compensación por desempeño?’, a: [‘El salario fijo’, ‘Sistema que vincula una parte de la retribución al cumplimiento de objetivos individuales y/o colectivos’, ‘Los beneficios sociales’, ‘El complemento de turnicidad’], correct: 1, exp: ‘La pay-for-performance vincula la retribución al cumplimiento de objetivos individuales y/o de equipo.’ },
-],
-/* Level 2 – estructura abreviada para no superar límite de token */
-[
-{ q: ‘¿Qué es el benchmarking salarial?’, a: [‘Comparar productos’, ‘Comparar la retribución de la empresa con el mercado para detectar desviaciones’, ‘Calcular nóminas’, ‘Revisar contratos’], correct: 1, exp: ‘El benchmarking salarial compara nuestra retribución con la del mercado para ser competitivos.’ },
-{ q: ‘¿Qué es la horquilla salarial?’, a: [‘El salario neto’, ‘Rango entre el mínimo y máximo salarial de un puesto o categoría’, ‘El convenio colectivo’, ‘El complemento de antigüedad’], correct: 1, exp: ‘La horquilla (o banda) salarial define el rango retributivo para garantizar equidad interna.’ },
-{ q: ‘¿Qué es la pay mix?’, a: [‘El mix de beneficios’, ‘Proporción entre salario fijo y variable en el paquete retributivo’, ‘El total de nóminas’, ‘El plan de pensiones’], correct: 1, exp: ‘La pay mix define qué porcentaje del salario total es fijo y qué porcentaje es variable.’ },
-{ q: ‘¿Qué es el compa-ratio?’, a: [‘Una ratio de ventas’, ‘Ratio que compara el salario real de un empleado con el punto medio de su banda salarial’, ‘El ratio de absentismo’, ‘El coste por contratación’], correct: 1, exp: ‘El compa-ratio = salario real / punto medio de banda × 100. Indica posición dentro de la banda.’ },
-{ q: ‘¿Qué es la retribución en especie?’, a: [‘El pago en efectivo’, ‘Parte de la retribución no monetaria: coche, vivienda, acciones, tickets comida, etc.’, ‘Los bonus’, ‘Las horas extra’], correct: 1, exp: ‘La retribución en especie incluye coche de empresa, vivienda, seguro, tickets y otros bienes o servicios.’ },
-{ q: ‘¿Qué es el plan de pensiones de empresa?’, a: [‘La jubilación pública’, ‘Plan de previsión complementario financiado total o parcialmente por la empresa’, ‘El plan de formación’, ‘El seguro de accidentes’], correct: 1, exp: ‘El plan de pensiones de empresa complementa la pensión pública con aportaciones de la empresa.’ },
-{ q: ‘¿Qué efecto tiene una retribución variable mal diseñada?’, a: [‘Siempre motiva’, ‘Puede crear comportamientos no deseados, desmotivar o generar percepción de injusticia’, ‘No tiene efectos negativos’, ‘Reduce costes’], correct: 1, exp: ‘Un sistema variable mal diseñado puede desmotivar, generar conflictos o comportamientos no éticos.’ },
-{ q: ‘¿Qué es el ticket restaurante?’, a: [‘Un descuento en restaurantes’, ‘Beneficio social exento de IRPF hasta cierto límite para la manutención del empleado’, ‘Un tipo de bonus’, ‘El complemento de comida’], correct: 1, exp: ‘El ticket restaurante es un beneficio social con ventaja fiscal para cubrir gastos de comida del empleado.’ },
-{ q: ‘¿Qué es la movilidad geográfica voluntaria y cómo se compensa?’, a: [‘El teletrabajo’, ‘Traslado acordado del empleado con compensación por gastos y distancia’, ‘El viaje de empresa’, ‘La comisión de servicio’], correct: 1, exp: ‘La movilidad voluntaria se compensa con gastos de traslado, plus de distancia y adaptación al nuevo destino.’ },
-{ q: ‘¿Qué es el salario garantizado vs. salario en riesgo?’, a: [‘Son lo mismo’, ‘Garantizado: fijo asegurado; en riesgo: variable que depende del rendimiento’, ‘En riesgo es el salario mínimo’, ‘El garantizado es el bonus’], correct: 1, exp: ‘El salario garantizado es el fijo; el salario en riesgo es la parte variable sujeta a resultados.’ },
-{ q: ‘¿Cómo se determina el punto medio de una banda salarial?’, a: [‘Por el convenio’, ‘Por el valor de mercado del puesto, obtenido de encuestas salariales del sector’, ‘Por la antigüedad’, ‘Por el rendimiento’], correct: 1, exp: ‘El punto medio refleja el valor de mercado del puesto según encuestas salariales del sector.’ },
-{ q: ‘¿Qué es la transparencia salarial activa?’, a: [‘Publicar todos los salarios en la web’, ‘Comunicar proactivamente los criterios y rangos salariales a los empleados’, ‘Que todo el mundo gane lo mismo’, ‘Solo el registro salarial’], correct: 1, exp: ‘La transparencia activa comunica criterios, rangos y políticas salariales para generar confianza.’ },
-{ q: ‘¿Qué es la tasa de retención relacionada con retribución?’, a: [‘Número de empleados’, ‘Porcentaje de empleados que permanecen porque la retribución es percibida como justa y competitiva’, ‘El coste de sustitución’, ‘La tasa de absentismo’], correct: 1, exp: ‘Una retribución percibida como justa y competitiva mejora directamente la tasa de retención.’ },
-{ q: ‘¿Qué es el análisis de equidad retributiva?’, a: [‘Revisar nóminas’, ‘Estudio para detectar diferencias salariales injustificadas entre puestos y colectivos’, ‘Calcular el SMI’, ‘Revisar el convenio’], correct: 1, exp: ‘El análisis de equidad detecta diferencias salariales no justificadas por el puesto, experiencia o rendimiento.’ },
-{ q: ‘¿Qué es la retribución vinculada a competencias?’, a: [‘Pagar según titulación’, ‘Sistema que aumenta el salario cuando el empleado adquiere nuevas competencias valoradas por la empresa’, ‘Solo el plan de formación’, ‘Los bonus por ventas’], correct: 1, exp: ‘La retribución por competencias premia la adquisición de habilidades estratégicas para la organización.’ },
-],
-/* Level 3 */
-[
-{ q: ‘¿Qué es la retribución ejecutiva y qué elementos la componen?’, a: [‘Solo el salario base’, ‘Salario fijo + bonus anual + LTIP + beneficios diferenciales + cláusulas de salida’, ‘El convenio de directivos’, ‘Solo las stock options’], correct: 1, exp: ‘La retribución ejecutiva incluye fijo, bonus, planes de largo plazo, beneficios y cláusulas de salida.’ },
-{ q: ‘¿Qué son las stock options?’, a: [‘Acciones regaladas’, ‘Derecho a comprar acciones de la empresa a un precio prefijado en el futuro’, ‘Participación en beneficios’, ‘Un tipo de bonus’], correct: 1, exp: ‘Las stock options dan derecho a adquirir acciones a precio prefijado, alineando intereses con la empresa.’ },
-{ q: ‘¿Qué es un phantom stock plan?’, a: [‘Un seguro de vida’, ‘Plan de retribución que simula la posesión de acciones sin transferir propiedad real’, ‘Un plan de pensiones’, ‘Un tipo de comisión’], correct: 1, exp: ‘El phantom stock paga en efectivo el equivalente a la revalorización de un número virtual de acciones.’ },
-{ q: ‘¿Cómo afecta la fiscalidad a la política retributiva?’, a: [‘No afecta’, ‘Determina qué elementos son más eficientes fiscalmente para empresa y empleado’, ‘Solo afecta al IRPF’, ‘Solo a los bonus’], correct: 1, exp: ‘La fiscalidad condiciona el diseño: retribución flexible, especie exenta y beneficios optimizan la carga fiscal.’ },
-{ q: ‘¿Qué es el claw-back en retribución variable?’, a: [‘Un tipo de bonus’, ‘Cláusula que permite recuperar retribución variable ya pagada si se detectan irregularidades’, ‘El salario mínimo garantizado’, ‘Un plan de pensiones’], correct: 1, exp: ‘El claw-back recupera bonus ya pagados si se detectan fraudes, reexpresiones o incumplimientos.’ },
-{ q: ‘¿Qué es el deferred bonus?’, a: [‘Un bonus pagado por adelantado’, ‘Bonus cuyo pago se aplaza en el tiempo para incentivar retención y alinear intereses a largo plazo’, ‘El SMI diferido’, ‘Las comisiones pendientes’], correct: 1, exp: ‘El bonus diferido se paga en tramos futuros para retener al empleado y alinear intereses a largo plazo.’ },
-{ q: ‘¿Cómo se diseña un plan de incentivos comerciales efectivo?’, a: [‘Solo con comisiones lineales’, ‘Objetivos SMART, mix fijo/variable equilibrado, aceleradores y techo motivador’, ‘Solo con cuotas de ventas’, ‘Sin límite de ganancias siempre’], correct: 1, exp: ‘Un buen plan comercial combina objetivos SMART, mix equilibrado, aceleradores y elementos motivadores.’ },
-{ q: ‘¿Qué es el análisis de regresión en retribución?’, a: [‘Un cálculo de nóminas’, ‘Técnica estadística para identificar relaciones entre salario y variables como antigüedad, puesto y desempeño’, ‘Un método de selección’, ‘El cálculo del bonus’], correct: 1, exp: ‘La regresión salarial detecta diferencias no explicadas por factores objetivos, útil para análisis de equidad.’ },
-{ q: ‘¿Qué es el índice de compresión salarial?’, a: [‘La diferencia entre el SMI y el convenio’, ‘Situación en que las diferencias salariales entre niveles son demasiado pequeñas para ser motivadoras’, ‘El coste de empresa’, ‘La brecha salarial’], correct: 1, exp: ‘La compresión salarial ocurre cuando las diferencias entre niveles son tan pequeñas que desmotivan.’ },
-{ q: ‘¿Qué es el Total Cost of Workforce?’, a: [‘El salario medio’, ‘Coste total del capital humano incluyendo salarios, SS, beneficios, formación, absentismo y rotación’, ‘Solo las nóminas’, ‘El presupuesto de RRHH’], correct: 1, exp: ‘El Total Cost of Workforce es el coste integral de las personas: salarios, SS, beneficios, absentismo y rotación.’ },
-{ q: ‘¿Qué es el principio de igualdad retributiva en la normativa española?’, a: [‘Pagar igual a todos’, ‘Obligación legal de pagar lo mismo por trabajo de igual valor, independientemente del sexo’, ‘Solo el SMI’, ‘El convenio colectivo’], correct: 1, exp: ‘La ley española obliga a igual retribución por trabajo de igual valor, sin discriminación por sexo.’ },
-{ q: ‘¿Qué es el audit retributivo?’, a: [‘Revisar nóminas’, ‘Análisis sistemático de la estructura salarial para detectar inequidades y proponer mejoras’, ‘El informe anual’, ‘El registro salarial’], correct: 1, exp: ‘La auditoría retributiva analiza la estructura salarial para detectar inequidades y asegurar el cumplimiento legal.’ },
-{ q: ‘¿Cómo afecta el teletrabajo a la política retributiva?’, a: [‘No afecta’, ‘Genera debate sobre compensación por gastos, equidad entre presenciales y remotos y flexibilidad salarial’, ‘Solo cambia el horario’, ‘Reduce automáticamente el salario’], correct: 1, exp: ‘El teletrabajo requiere revisar compensación de gastos, equidad y nuevos modelos de retribución flexible.’ },
-{ q: ‘¿Qué es la sostenibilidad de la política retributiva?’, a: [‘Pagar lo mínimo posible’, ‘Capacidad de mantener la política salarial en el tiempo siendo justa, competitiva y financieramente viable’, ‘Solo cumplir la ley’, ‘No subir salarios’], correct: 1, exp: ‘Una política retributiva sostenible equilibra competitividad, equidad y viabilidad financiera a largo plazo.’ },
-{ q: ‘¿Qué papel tiene el comité de retribuciones en grandes empresas?’, a: [‘Gestiona las nóminas’, ‘Órgano de gobierno que supervisa y aprueba la política de retribución de directivos y ejecutivos’, ‘Solo el convenio colectivo’, ‘El departamento de contabilidad’], correct: 1, exp: ‘El comité de retribuciones garantiza la transparencia y gobernanza de la retribución ejecutiva.’ },
-],
-],
+  <!-- ══ SKIP LINK (Accessibility) ══ -->
 
-/** MODULE 3 – PRL y Formación */
-3: [
-/* Level 0 */
-[
-{ q: ‘¿Qué significa PRL?’, a: [‘Plan de Recursos Laborales’, ‘Prevención de Riesgos Laborales’, ‘Programa de Retribución Laboral’, ‘Plan de Relaciones Laborales’], correct: 1, exp: ‘PRL es la Prevención de Riesgos Laborales: conjunto de actividades para evitar daños en el trabajo.’ },
-{ q: ‘¿Cuál es la ley principal que regula la PRL en España?’, a: [‘ET (Estatuto de los Trabajadores)’, ‘Ley 31/1995 de Prevención de Riesgos Laborales’, ‘Ley Orgánica 3/2018’, ‘Ley de Seguridad Social’], correct: 1, exp: ‘La Ley 31/1995 de PRL establece el marco normativo de la prevención en España.’ },
-{ q: ‘¿Qué es la evaluación de riesgos?’, a: [‘La evaluación de desempeño’, ‘Proceso para identificar peligros, valorar riesgos y planificar medidas preventivas’, ‘La auditoría de RRHH’, ‘El informe médico’], correct: 1, exp: ‘La evaluación de riesgos identifica peligros y valora su probabilidad e impacto para prevenirlos.’ },
-{ q: ‘¿Quién tiene la obligación de garantizar la seguridad en el trabajo?’, a: [‘El trabajador’, ‘El empresario’, ‘El sindicato’, ‘La mutua’], correct: 1, exp: ‘El empresario es el responsable principal de garantizar la seguridad y salud de los trabajadores.’ },
-{ q: ‘¿Qué es un EPI?’, a: [‘Un tipo de contrato’, ‘Equipo de Protección Individual para proteger al trabajador de riesgos residuales’, ‘Un software de RRHH’, ‘Un registro de accidentes’], correct: 1, exp: ‘Los EPIs (casco, guantes, gafas, etc.) son el último recurso de protección individual ante riesgos residuales.’ },
-{ q: ‘¿Qué es el plan de prevención de una empresa?’, a: [‘El plan de formación’, ‘Documento que integra la actividad preventiva en la gestión general de la empresa’, ‘El reglamento interno’, ‘El manual de calidad’], correct: 1, exp: ‘El plan de prevención integra la PRL en la estructura, organización y procesos de la empresa.’ },
-{ q: ‘¿Qué es un accidente de trabajo?’, a: [‘Cualquier lesión’, ‘Lesión corporal sufrida por el trabajador a consecuencia del trabajo por cuenta ajena’, ‘Una enfermedad crónica’, ‘Una baja voluntaria’], correct: 1, exp: ‘El accidente de trabajo es la lesión producida en el trabajo o en el trayecto (accidente in itinere).’ },
-{ q: ‘¿Qué es la enfermedad profesional?’, a: [‘Cualquier enfermedad’, ‘Enfermedad contraída por el trabajo con agentes del cuadro legal de enfermedades profesionales’, ‘Una baja larga’, ‘Una lesión deportiva’], correct: 1, exp: ‘La enfermedad profesional está causada por agentes del entorno laboral y recogida en el cuadro legal.’ },
-{ q: ‘¿Qué es el delegado de prevención?’, a: [‘El jefe de RRHH’, ‘Representante de los trabajadores con funciones específicas en materia de PRL’, ‘El médico de empresa’, ‘El inspector de trabajo’], correct: 1, exp: ‘El delegado de prevención representa a los trabajadores y colabora en la vigilancia de la PRL.’ },
-{ q: ‘¿Qué es la vigilancia de la salud?’, a: [‘El seguro médico’, ‘Seguimiento médico periódico para detectar daños derivados del trabajo’, ‘El parte de accidente’, ‘La evaluación de riesgos’], correct: 1, exp: ‘La vigilancia de la salud incluye reconocimientos médicos para detectar daños vinculados al trabajo.’ },
-{ q: ‘¿Qué es el Comité de Seguridad y Salud?’, a: [‘Un sindicato’, ‘Órgano paritario de participación en PRL entre empresa y representantes de trabajadores’, ‘El servicio de prevención’, ‘La mutua de accidentes’], correct: 1, exp: ‘El Comité de Seguridad y Salud es paritario: reúne representantes de empresa y trabajadores.’ },
-{ q: ‘¿Qué es el servicio de prevención?’, a: [‘La mutua’, ‘Conjunto de medios humanos y materiales para llevar a cabo la actividad preventiva’, ‘El médico de empresa’, ‘El sindicato’], correct: 1, exp: ‘El servicio de prevención (propio, ajeno o mancomunado) desarrolla las actividades preventivas.’ },
-{ q: ‘¿Qué son las medidas correctoras en PRL?’, a: [‘Multas a los trabajadores’, ‘Acciones para eliminar o reducir riesgos identificados en la evaluación’, ‘Los EPIs’, ‘El plan de emergencia’], correct: 1, exp: ‘Las medidas correctoras eliminan o minimizan los riesgos detectados en la evaluación.’ },
-{ q: ‘¿Qué es el plan de emergencia?’, a: [‘El plan de vacaciones’, ‘Documento que establece las actuaciones ante situaciones de emergencia en la empresa’, ‘El plan de formación’, ‘El reglamento interno’], correct: 1, exp: ‘El plan de emergencia define procedimientos para actuar ante incendios, evacuaciones u otras emergencias.’ },
-{ q: ‘¿Qué información debe recibir el trabajador en materia de PRL?’, a: [‘Solo el manual de bienvenida’, ‘Riesgos del puesto, medidas preventivas, medidas de emergencia y cómo actuar’, ‘Solo el plan de evacuación’, ‘Solo los EPIs’], correct: 1, exp: ‘El trabajador debe recibir información sobre riesgos, medidas preventivas y procedimientos de emergencia.’ },
-],
-/* Level 1 */
-[
-{ q: ‘¿Qué son los factores de riesgo ergonómico?’, a: [‘El ruido’, ‘Posturas, movimientos repetitivos, fuerzas y diseño inadecuado del puesto’, ‘La temperatura’, ‘Los productos químicos’], correct: 1, exp: ‘Los riesgos ergonómicos incluyen posturas forzadas, movimientos repetitivos y manipulación de cargas.’ },
-{ q: ‘¿Qué es el riesgo psicosocial?’, a: [‘El estrés térmico’, ‘Riesgos derivados de la organización del trabajo: estrés, acoso, burnout, etc.’, ‘Los riesgos químicos’, ‘Los accidentes físicos’], correct: 1, exp: ‘Los riesgos psicosociales incluyen estrés laboral, acoso, burnout y conflictos organizacionales.’ },
-{ q: ‘¿Qué es el burnout?’, a: [‘Un accidente’, ‘Síndrome de agotamiento emocional, despersonalización y baja realización derivado del trabajo’, ‘Una enfermedad infecciosa’, ‘El absentismo’], correct: 1, exp: ‘El burnout o síndrome de desgaste profesional incluye agotamiento, cinismo y pérdida de eficacia.’ },
-{ q: ‘¿Qué es la manipulación manual de cargas?’, a: [‘Uso de maquinaria’, ‘Cualquier operación de transporte o sujeción de cargas por parte del trabajador’, ‘El uso de EPIs’, ‘La ergonomía de oficina’], correct: 1, exp: ‘La manipulación manual de cargas incluye levantar, transportar, empujar y tirar de objetos.’ },
-{ q: ‘¿Qué es la coordinación de actividades empresariales (CAE)?’, a: [‘Una reunión de directivos’, ‘Deber de coordinar la PRL cuando varias empresas comparten un mismo centro de trabajo’, ‘El convenio colectivo’, ‘El plan de emergencia’], correct: 1, exp: ‘La CAE obliga a coordinar la prevención cuando concurren varias empresas en el mismo lugar de trabajo.’ },
-{ q: ‘¿Qué es la formación en PRL?’, a: [‘Un curso opcional’, ‘Formación obligatoria y específica sobre riesgos y medidas preventivas del puesto de trabajo’, ‘La vigilancia de la salud’, ‘El plan de emergencia’], correct: 1, exp: ‘La formación en PRL es obligatoria, específica para el puesto y debe impartirse dentro del horario laboral.’ },
-{ q: ‘¿Cuándo debe actualizarse la evaluación de riesgos?’, a: [‘Nunca’, ‘Ante cambios en condiciones de trabajo, daños a la salud o nuevas tecnologías’, ‘Solo cada 5 años’, ‘Solo tras un accidente’], correct: 1, exp: ‘La evaluación de riesgos se revisa ante cambios, daños detectados o cuando los controles no sean eficaces.’ },
-{ q: ‘¿Qué es el índice de incidencia de accidentes?’, a: [‘El coste de los accidentes’, ‘(Nº accidentes / Nº trabajadores expuestos) × 1.000’, ‘El número total de bajas’, ‘El absentismo’], correct: 1, exp: ‘El índice de incidencia = (nº accidentes / trabajadores expuestos) × 1.000, para comparar entre empresas.’ },
-{ q: ‘¿Qué es la investigación de accidentes?’, a: [‘La denuncia policial’, ‘Análisis de causas del accidente para evitar su repetición’, ‘El parte médico’, ‘La sanción al trabajador’], correct: 1, exp: ‘La investigación de accidentes identifica causas básicas e inmediatas para adoptar medidas correctoras.’ },
-{ q: ‘¿Qué es la aptitud médica para el puesto?’, a: [‘El diagnóstico del médico’, ‘Declaración del servicio de salud laboral sobre si el trabajador puede desempeñar el puesto sin riesgo’, ‘El parte de baja’, ‘El reconocimiento voluntario’], correct: 1, exp: ‘La declaración de aptitud indica si el trabajador puede o no desempeñar el puesto de forma segura.’ },
-{ q: ‘¿Qué es el protocolo de acoso laboral?’, a: [‘El reglamento de convivencia’, ‘Procedimiento interno para detectar, prevenir y actuar ante situaciones de acoso’, ‘El convenio colectivo’, ‘El plan de igualdad’], correct: 1, exp: ‘El protocolo de acoso establece cómo actuar ante conductas de acoso laboral o sexual.’ },
-{ q: ‘¿Qué es la señalización de seguridad?’, a: [‘La publicidad de la empresa’, ‘Sistema visual de señales para informar sobre riesgos, prohibiciones y vías de evacuación’, ‘El plan de emergencia’, ‘Los EPIs’], correct: 1, exp: ‘La señalización incluye carteles de prohibición, advertencia, obligación, emergencia e información.’ },
-{ q: ‘¿Qué tipos de accidentes incluye el “accidente in itinere”?’, a: [‘Los accidentes en el trabajo’, ‘Los ocurridos en el trayecto habitual de casa al trabajo y viceversa’, ‘Los accidentes durante el descanso’, ‘Los accidentes en viajes de empresa’], correct: 1, exp: ‘El accidente in itinere ocurre en el trayecto directo entre domicilio y trabajo.’ },
-{ q: ‘¿Qué es el plan de igualdad en relación a PRL?’, a: [‘Un plan de retribución’, ‘Incluye medidas de conciliación y prevención del acoso para eliminar discriminaciones’, ‘El convenio colectivo’, ‘El plan de formación’], correct: 1, exp: ‘El plan de igualdad integra medidas preventivas frente al acoso y la discriminación laboral.’ },
-{ q: ‘¿Qué es la cultura preventiva?’, a: [‘Usar EPIs’, ‘Conjunto de valores, actitudes y comportamientos que hacen de la seguridad una prioridad compartida’, ‘Evitar accidentes solo por ley’, ‘El plan de PRL’], correct: 1, exp: ‘La cultura preventiva convierte la seguridad en un valor compartido por toda la organización.’ },
-],
-/* Level 2 */
-[
-{ q: ‘¿Qué es el modelo de formación basado en competencias?’, a: [‘Dar cursos genéricos’, ‘Diseñar formación a partir de las competencias necesarias para el puesto’, ‘El plan de carrera’, ‘La evaluación anual’], correct: 1, exp: ‘La formación por competencias parte de las competencias requeridas para diseñar itinerarios formativos.’ },
-{ q: ‘¿Qué son las comunidades de práctica?’, a: [‘Grupos de amigos’, ‘Grupos de personas que comparten interés y aprenden juntas en torno a una práctica común’, ‘Un tipo de formación online’, ‘Un evento de empresa’], correct: 1, exp: ‘Las comunidades de práctica fomentan el aprendizaje informal y el intercambio de conocimiento entre pares.’ },
-{ q: ‘¿Qué es el microlearning?’, a: [‘Un curso corto cualquiera’, ‘Formación en píldoras breves (3-10 min) centradas en un objetivo concreto’, ‘Un vídeo de YouTube’, ‘Una presentación de PowerPoint’], correct: 1, exp: ‘El microlearning ofrece contenidos breves, focalizados y accesibles para aprender en contexto.’ },
-{ q: ‘¿Qué es la gamificación en formación?’, a: [‘Jugar en el trabajo’, ‘Aplicar elementos de juego (puntos, retos, rankings) para motivar el aprendizaje’, ‘Un simulador de vuelo’, ‘Un juego de mesa’], correct: 1, exp: ‘La gamificación usa mecánicas de juego para aumentar la motivación y el compromiso en el aprendizaje.’ },
-{ q: ‘¿Qué es el e-learning?’, a: [‘Ver vídeos de YouTube’, ‘Formación online estructurada con objetivos, contenidos y evaluación accesible desde cualquier dispositivo’, ‘Un PDF de lectura’, ‘Una videoconferencia’], correct: 1, exp: ‘El e-learning es formación online estructurada, interactiva y con seguimiento de progreso.’ },
-{ q: ‘¿Qué es el social learning?’, a: [‘Aprender en redes sociales’, ‘Aprendizaje que se produce a través de la interacción y colaboración con otros’, ‘Un tipo de mentoring’, ‘El aprendizaje autodidacta’], correct: 1, exp: ‘El social learning se basa en aprender observando, compartiendo y colaborando con otros.’ },
-{ q: ‘¿Qué es el aprendizaje experiencial?’, a: [‘Leer libros’, ‘Aprendizaje basado en la experiencia directa: hacer, reflexionar, conceptualizar y aplicar’, ‘Ver vídeos formativos’, ‘Asistir a conferencias’], correct: 1, exp: ‘El aprendizaje experiencial (Kolb) sigue el ciclo: experiencia concreta → reflexión → conceptualización → aplicación.’ },
-{ q: ‘¿Qué es el modelo 70-20-10 en formación?’, a: [‘70% online, 20% presencial, 10% coaching’, ‘70% aprendizaje en el puesto, 20% de otros, 10% formación formal’, ‘70% teoría, 20% práctica, 10% evaluación’, ‘Un sistema de nóminas’], correct: 1, exp: ‘El 70-20-10 indica que el 70% del aprendizaje es en el trabajo, el 20% con otros y el 10% formal.’ },
-{ q: ‘¿Qué es la transferencia del aprendizaje?’, a: [‘Compartir apuntes’, ‘Capacidad de aplicar en el trabajo lo aprendido en la formación’, ‘La evaluación de la formación’, ‘El certificado obtenido’], correct: 1, exp: ‘La transferencia del aprendizaje mide si lo aprendido se aplica y genera cambios reales en el desempeño.’ },
-{ q: ‘¿Qué son los itinerarios formativos?’, a: [‘El catálogo de cursos’, ‘Secuencia estructurada de acciones formativas para desarrollar competencias a lo largo del tiempo’, ‘El plan de carrera’, ‘El LMS’], correct: 1, exp: ‘Los itinerarios formativos encadenan acciones formativas para desarrollar competencias de forma progresiva.’ },
-{ q: ‘¿Qué es la formación in company?’, a: [‘Formación online’, ‘Formación diseñada e impartida específicamente para la empresa en sus propias instalaciones’, ‘Formación universitaria’, ‘Un máster externo’], correct: 1, exp: ‘La formación in company se adapta a las necesidades específicas de la empresa y se imparte internamente.’ },
-{ q: ‘¿Qué papel tiene FUNDAE en la formación en España?’, a: [‘Es una universidad’, ‘Gestiona el sistema de formación profesional para el empleo, incluida la formación bonificada’, ‘Es un sindicato’, ‘Es una mutua’], correct: 1, exp: ‘FUNDAE gestiona la formación para el empleo y permite a las empresas bonificar cursos con las cuotas de SS.’ },
-{ q: ‘¿Qué es la formación bonificada?’, a: [‘Formación gratuita del Estado’, ‘Sistema que permite a las empresas financiar formación con créditos de la Seguridad Social’, ‘Becas de estudio’, ‘Formación subvencionada por sindicatos’], correct: 1, exp: ‘La formación bonificada usa el crédito de formación de las empresas (cuotas SS) para financiar cursos.’ },
-{ q: ‘¿Qué es el mapa de competencias?’, a: [‘El organigrama’, ‘Representación visual de las competencias necesarias en la organización y su nivel de desarrollo’, ‘El catálogo de cursos’, ‘El plan de carrera’], correct: 1, exp: ‘El mapa de competencias visualiza las habilidades clave de la organización y el nivel requerido en cada puesto.’ },
-{ q: ‘¿Cómo se mide el impacto de la formación en el negocio?’, a: [‘Con encuestas de satisfacción’, ‘Comparando indicadores de rendimiento antes y después de la formación y calculando el ROI’, ‘Contando asistentes’, ‘Solo con evaluaciones de conocimiento’], correct: 1, exp: ‘El impacto se mide comparando KPIs antes y después y calculando el ROI de la inversión formativa.’ },
-],
-/* Level 3 */
-[
-{ q: ‘¿Qué es la gestión integrada de PRL, calidad y medioambiente?’, a: [‘Tres sistemas independientes’, ‘Integración de los sistemas de gestión de PRL (ISO 45001), calidad (ISO 9001) y medioambiente (ISO 14001)’, ‘Un sistema de nóminas’, ‘El plan de prevención únicamente’], correct: 1, exp: ‘La gestión integrada alinea PRL, calidad y medioambiente en un único sistema de gestión eficiente.’ },
-{ q: ‘¿Qué es la ISO 45001?’, a: [‘Norma de calidad’, ‘Norma internacional de sistemas de gestión de la seguridad y salud en el trabajo’, ‘Norma medioambiental’, ‘Norma de RRHH’], correct: 1, exp: ‘ISO 45001 es la norma internacional que certifica los sistemas de gestión de la seguridad y salud laboral.’ },
-{ q: ‘¿Qué es la psicología de la seguridad?’, a: [‘Psicología clínica’, ‘Aplicación de principios psicológicos para entender y mejorar comportamientos seguros en el trabajo’, ‘La vigilancia de la salud’, ‘El reconocimiento médico’], correct: 1, exp: ‘La psicología de la seguridad estudia actitudes y comportamientos para diseñar intervenciones preventivas.’ },
-{ q: ‘¿Qué es el análisis funcional de la tarea (AFT) en PRL?’, a: [‘Un test de personalidad’, ‘Descomposición sistemática de una tarea para identificar riesgos en cada paso’, ‘El plan de emergencia’, ‘La evaluación de desempeño’], correct: 1, exp: ‘El AFT descompone la tarea paso a paso para identificar y controlar riesgos en cada operación.’ },
-{ q: ‘¿Qué es el método FINE para la evaluación de riesgos?’, a: [‘Un software de RRHH’, ‘Método que pondera Probabilidad, Exposición y Consecuencias para calcular el grado de peligrosidad’, ‘Una norma ISO’, ‘Un tipo de EPI’], correct: 1, exp: ‘FINE = Probabilidad × Exposición × Consecuencias; permite priorizar riesgos numéricamente.’ },
-{ q: ‘¿Qué es el síndrome del edificio enfermo?’, a: [‘Un accidente’, ‘Conjunto de síntomas asociados a la permanencia en edificios con mala calidad del aire interior’, ‘Una enfermedad viral’, ‘Un riesgo externo’], correct: 1, exp: ‘El síndrome del edificio enfermo causa síntomas (cefaleas, irritación) por mala calidad del aire interior.’ },
-{ q: ‘¿Qué es la gestión de ausencias desde la PRL?’, a: [‘Solo gestionar bajas’, ‘Estrategia que integra prevención, gestión y reincorporación para reducir el impacto del absentismo’, ‘El cálculo del absentismo’, ‘El parte médico’], correct: 1, exp: ‘La gestión integrada de ausencias abarca prevención, gestión activa y protocolos de reincorporación.’ },
-{ q: ‘¿Qué es el análisis de los costes de los accidentes?’, a: [‘El seguro de accidentes’, ‘Cuantificación de costes directos (médicos, sustitución) e indirectos (productividad, reputación)’, ‘La cuota de la mutua’, ‘El informe de PRL’], correct: 1, exp: ‘Los costes incluyen directos (asistencia, sustitución) e indirectos (pérdida de productividad, imagen).’ },
-{ q: ‘¿Qué es el liderazgo en seguridad?’, a: [‘Ser el técnico de PRL’, ‘Comportamientos y actitudes de los líderes que demuestran compromiso visible con la seguridad’, ‘Firmar el plan de PRL’, ‘Solo impartir formación’], correct: 1, exp: ‘El liderazgo en seguridad implica que los directivos modelen, apoyen y refuercen comportamientos seguros.’ },
-{ q: ‘¿Qué son los indicadores proactivos en PRL?’, a: [‘El número de accidentes’, ‘Métricas que miden actividades preventivas antes de que ocurran daños: formaciones, inspecciones, etc.’, ‘Las bajas por enfermedad’, ‘Las multas recibidas’], correct: 1, exp: ‘Los indicadores proactivos miden acciones preventivas: % inspecciones realizadas, horas de formación, etc.’ },
-{ q: ‘¿Qué es el aprendizaje organizacional en PRL?’, a: [‘Formar a todos en PRL’, ‘Proceso por el que la organización aprende de incidentes y accidentes para mejorar su sistema preventivo’, ‘El plan de emergencia’, ‘La cultura de seguridad’], correct: 1, exp: ‘El aprendizaje en PRL supone analizar incidentes y mejoras sistémicas para prevenir recurrencias.’ },
-{ q: ‘¿Cómo integrar el bienestar mental en la estrategia de PRL?’, a: [‘Solo con psicólogos externos’, ‘Incorporando evaluación de riesgos psicosociales, protocolos de acoso y programas de apoyo emocional’, ‘Solo con días libres extra’, ’Solo
+<a class="skip-link" href="#main-content">Zum Hauptinhalt springen</a>
+
+  <!-- ══ ACCESSIBILITY TOOLBAR ══ -->
+
+  <div id="a11y-bar" role="toolbar" aria-label="Barrierefreiheit-Werkzeuge">
+    <span class="a11y-label" aria-hidden="true">♿</span>
+    <button onclick="setFontSize('normal')" aria-label="Schriftgröße normal">A</button>
+    <button onclick="setFontSize('lg')"     aria-label="Schrift vergrößern">A+</button>
+    <button onclick="setFontSize('xl')"     aria-label="Schrift sehr groß">A++</button>
+    <button onclick="toggleTheme()"         aria-label="Dunkel-/Hellmodus wechseln">🌙</button>
+    <button onclick="toggleContrast()"      aria-label="Hohen Kontrast aktivieren">◑</button>
+    <button onclick="toggleLineHeight()"    aria-label="Zeilenabstand erhöhen">↕</button>
+    <button onclick="resetA11y()"           aria-label="Barrierefreiheits-Einstellungen zurücksetzen">✕</button>
+  </div>
+
+  <!-- ══ NAVIGATION ══ -->
+
+  <nav id="main-nav" role="navigation" aria-label="Hauptnavigation">
+    <div class="nav-inner">
+
+```
+  <!-- Logo -->
+  <button class="nav-logo" onclick="goHome()" aria-label="Upskill Academy – Zur Startseite">
+    <span class="logo-icon" aria-hidden="true">🎓</span>
+    <span>Upskill Academy</span>
+  </button>
+
+  <!-- Desktop Links -->
+  <div class="nav-links" role="menubar" aria-label="Hauptmenü">
+    <button class="nav-link active" role="menuitem" data-page="home"           onclick="showPage('home')"           data-i18n="navHome">Home</button>
+    <button class="nav-link"        role="menuitem" data-page="about-platform" onclick="showPage('about-platform')" data-i18n="navWhat">Was ist UA</button>
+    <button class="nav-link"        role="menuitem" data-page="topics"         onclick="showPage('topics')"         data-i18n="navTopics">Themen</button>
+    <button class="nav-link"        role="menuitem" data-page="certificate"    onclick="showPage('certificate')"    data-i18n="navCert">Zertifikat</button>
+    <button class="nav-link"        role="menuitem" data-page="about-me"       onclick="showPage('about-me')"       data-i18n="navAbout">Über mich</button>
+  </div>
+
+  <!-- Right Cluster -->
+  <div class="nav-right">
+    <!-- Language Switcher (Desktop) -->
+    <div class="lang-switcher-desktop" role="group" aria-label="Sprache wählen">
+      <button class="lang-btn active" id="btn-de" onclick="setLang('de')" aria-pressed="true"  aria-label="Deutsch">🇩🇪 DE</button>
+      <button class="lang-btn"        id="btn-en" onclick="setLang('en')" aria-pressed="false" aria-label="English">🇬🇧 EN</button>
+      <button class="lang-btn"        id="btn-es" onclick="setLang('es')" aria-pressed="false" aria-label="Español">🇪🇸 ES</button>
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="openAuth()" id="nav-auth-btn" data-i18n="navLogin">Anmelden</button>
+  </div>
+
+  <!-- Hamburger (Mobile only) -->
+  <button
+    class="ham"
+    id="ham-btn"
+    onclick="openDrawer()"
+    aria-label="Menü öffnen"
+    aria-expanded="false"
+    aria-controls="mobile-drawer"
+  >☰</button>
+</div>
+```
+
+  </nav>
+
+  <!-- ══ MOBILE DRAWER ══ -->
+
+  <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+  <nav
+    class="mobile-drawer"
+    id="mobile-drawer"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Mobilmenü"
+  >
+    <div class="drawer-header">
+      <button class="nav-logo" onclick="goHome();closeDrawer()" aria-label="Startseite">
+        <span class="logo-icon" aria-hidden="true">🎓</span>
+        <span>Upskill Academy</span>
+      </button>
+      <button class="drawer-close" onclick="closeDrawer()" aria-label="Menü schließen">✕</button>
+    </div>
+
+```
+<div class="drawer-links">
+  <button class="drawer-link active" data-page="home"           onclick="showPage('home');closeDrawer()"           data-i18n="navHome"><span aria-hidden="true">🏠</span> Home</button>
+  <button class="drawer-link"        data-page="about-platform" onclick="showPage('about-platform');closeDrawer()" data-i18n="navWhat"><span aria-hidden="true">ℹ️</span> Was ist UA</button>
+  <button class="drawer-link"        data-page="topics"         onclick="showPage('topics');closeDrawer()"         data-i18n="navTopics"><span aria-hidden="true">📚</span> Themen</button>
+  <button class="drawer-link"        data-page="certificate"    onclick="showPage('certificate');closeDrawer()"    data-i18n="navCert"><span aria-hidden="true">🎓</span> Zertifikat</button>
+  <button class="drawer-link"        data-page="about-me"       onclick="showPage('about-me');closeDrawer()"       data-i18n="navAbout"><span aria-hidden="true">👩‍💼</span> Über mich</button>
+  <div class="drawer-divider"></div>
+  <button class="drawer-link" id="drawer-auth-btn" onclick="openAuth();closeDrawer()" data-i18n="navLogin"><span aria-hidden="true">👤</span> Anmelden</button>
+</div>
+
+<!-- Language (last in drawer) -->
+<div class="drawer-divider"></div>
+<p class="drawer-lang-label" data-i18n="langLabel">Sprache / Language</p>
+<div class="drawer-langs" role="group" aria-label="Sprache wählen">
+  <button class="lang-btn active" id="d-btn-de" onclick="setLang('de')" aria-pressed="true"  aria-label="Deutsch">🇩🇪 DE</button>
+  <button class="lang-btn"        id="d-btn-en" onclick="setLang('en')" aria-pressed="false" aria-label="English">🇬🇧 EN</button>
+  <button class="lang-btn"        id="d-btn-es" onclick="setLang('es')" aria-pressed="false" aria-label="Español">🇪🇸 ES</button>
+</div>
+```
+
+  </nav>
+
+  <!-- ══════════════════════════════════════════
+       MAIN
+  ══════════════════════════════════════════ -->
+
+  <main id="main-content" tabindex="-1">
+
+```
+<!-- ── PAGE: HOME ── -->
+<div class="page active" id="page-home">
+  <header class="hero" role="banner">
+    <div class="hero-bg-img" role="img" aria-label="Moderne Büroumgebung – Symbolbild für Weiterbildung"></div>
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-content">
+      <span class="hero-eyebrow">✨ <span data-i18n="heroBadge">Interaktives Lernen</span></span>
+      <h1>Upskill<br /><em data-i18n="heroTitle">Academy</em></h1>
+      <div class="hero-desc" role="note">
+        <p data-i18n="heroDesc">
+          Die Upskill Academy App ist eine interaktive Lernplattform, die dir ermöglicht,
+          Fachwissen in administrativen Bereichen wie HR, Gehaltsabrechnung und mehr
+          spielerisch zu erlernen – auch direkt am Smartphone oder Tablet möglich.
+        </p>
+      </div>
+      <div class="hero-btns">
+        <button class="btn btn-white btn-lg" onclick="showPage('topics')" data-i18n="heroQuiz">🚀 Zum Quiz</button>
+        <button class="btn btn-outline btn-lg" onclick="showPage('about-platform')" data-i18n="heroMore">Mehr erfahren</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="section" aria-labelledby="feat-heading">
+    <div class="container">
+      <div class="sec-header">
+        <span class="sec-label" data-i18n="featLabel">Warum Upskill Academy?</span>
+        <h2 class="sec-title" id="feat-heading" data-i18n="featTitle">Lernen, das wirklich funktioniert</h2>
+        <p class="sec-sub" data-i18n="featSub">Entwickelt für Kursteilnehmer in Weiterbildungsprogrammen.</p>
+      </div>
+      <div class="feature-grid" role="list">
+        <article class="feature-card" role="listitem">
+          <div class="feature-icon icon-indigo" aria-hidden="true">⚡</div>
+          <h3 data-i18n="f1T">Sofortiges Feedback</h3>
+          <p data-i18n="f1P">Nach jeder Antwort siehst du direkt ob du richtig lagst – mit Erklärung.</p>
+        </article>
+        <article class="feature-card" role="listitem">
+          <div class="feature-icon icon-teal" aria-hidden="true">📱</div>
+          <h3 data-i18n="f2T">Lernen unterwegs</h3>
+          <p data-i18n="f2P">Optimiert für Smartphone und Tablet – kein Login zum Starten nötig.</p>
+        </article>
+        <article class="feature-card" role="listitem">
+          <div class="feature-icon icon-amber" aria-hidden="true">🎯</div>
+          <h3 data-i18n="f3T">Praxisnah & relevant</h3>
+          <p data-i18n="f3P">Echte Inhalte aus Weiterbildungskursen – kein theoretischer Ballast.</p>
+        </article>
+        <article class="feature-card" role="listitem">
+          <div class="feature-icon icon-green" aria-hidden="true">🏆</div>
+          <h3 data-i18n="f4T">Persönliche Urkunde</h3>
+          <p data-i18n="f4P">Beende ein Modul und erhalte dein Zertifikat zum Teilen oder Download.</p>
+        </article>
+      </div>
+
+      <div class="stats-bar" role="region" aria-label="Plattform-Statistiken">
+        <div class="stat-item"><div class="stat-num">75+</div><div class="stat-label" data-i18n="s1">Fragen · HR</div></div>
+        <div class="stat-item"><div class="stat-num">3</div><div class="stat-label" data-i18n="s2">Sprachen</div></div>
+        <div class="stat-item"><div class="stat-num">5</div><div class="stat-label" data-i18n="s3">Module</div></div>
+        <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label" data-i18n="s4">Gratis starten</div></div>
+      </div>
+    </div>
+  </section>
+</div><!-- /page-home -->
+
+<!-- ── PAGE: ABOUT PLATFORM ── -->
+<div class="page" id="page-about-platform">
+  <section class="section">
+    <div class="container-sm">
+      <div class="sec-header">
+        <span class="sec-label" data-i18n="apLabel">Die Plattform</span>
+        <h2 class="sec-title" data-i18n="apTitle">Was ist Upskill Academy?</h2>
+        <p class="sec-sub" data-i18n="apSub">Eine interaktive Lernapp für Weiterbildungskurse in HR, Gehaltsabrechnung und mehr.</p>
+      </div>
+      <div class="about-steps">
+        <div class="about-step"><div class="step-num" aria-hidden="true">1</div><div class="step-body"><h3 data-i18n="st1T">Quiz-basiertes Lernen</h3><p data-i18n="st1P">Statt Skripte zu lesen, lernst du durch gezielte Fragen und Antworten.</p></div></div>
+        <div class="about-step"><div class="step-num" aria-hidden="true">2</div><div class="step-body"><h3 data-i18n="st2T">Sofortiges Feedback</h3><p data-i18n="st2P">Du siehst nach jeder Antwort warum sie richtig oder falsch war.</p></div></div>
+        <div class="about-step"><div class="step-num" aria-hidden="true">3</div><div class="step-body"><h3 data-i18n="st3T">Stufensystem</h3><p data-i18n="st3P">Von Grundlagen bis Expertenlevel – du steigst im Rang auf.</p></div></div>
+        <div class="about-step"><div class="step-num" aria-hidden="true">4</div><div class="step-body"><h3 data-i18n="st4T">Drei Sprachen</h3><p data-i18n="st4P">Deutsch, Englisch und Spanisch – lerne in deiner oder einer Fremdsprache.</p></div></div>
+        <div class="about-step"><div class="step-num" aria-hidden="true">5</div><div class="step-body"><h3 data-i18n="st5T">Barrierefreies Lernen</h3><p data-i18n="st5P">Screenreader, Tastaturnavigation, Dunkel-Modus, Schriftgrößen – für alle.</p></div></div>
+      </div>
+      <h2 class="sec-title" style="margin-top:3rem;" data-i18n="advTitle">Deine Vorteile</h2>
+      <div class="feature-grid" style="margin-top:1.5rem;">
+        <div class="feature-card"><div class="feature-icon icon-indigo">🧩</div><h3 data-i18n="av1T">Interaktiv</h3><p data-i18n="av1P">Aktives Lernen statt passivem Lesen.</p></div>
+        <div class="feature-card"><div class="feature-icon icon-teal">🏢</div><h3 data-i18n="av2T">Praxisnah</h3><p data-i18n="av2P">Echte Kursinhalte wie beim CEP Norte.</p></div>
+        <div class="feature-card"><div class="feature-icon icon-amber">⚡</div><h3 data-i18n="av3T">Sofortig</h3><p data-i18n="av3P">Ideal zur Prüfungsvorbereitung.</p></div>
+      </div>
+    </div>
+  </section>
+</div><!-- /page-about-platform -->
+
+<!-- ── PAGE: TOPICS ── -->
+<div class="page" id="page-topics">
+  <section class="section">
+    <div class="container">
+      <div class="sec-header">
+        <span class="sec-label" data-i18n="topLabel">Lernbereiche</span>
+        <h2 class="sec-title" data-i18n="topTitle">Wähle dein Thema</h2>
+        <p class="sec-sub" data-i18n="topSub">Jedes Thema führt dich durch Module und Quizzes – 15 Fragen pro Level.</p>
+      </div>
+      <div class="topic-grid" id="topic-grid" role="list">
+        <!-- Dynamisch befüllt via JS (renderTopics) -->
+      </div>
+    </div>
+  </section>
+</div><!-- /page-topics -->
+
+<!-- ── PAGE: QUIZ SELECT ── -->
+<div class="page" id="page-quiz-select">
+  <section class="section-sm">
+    <div class="container">
+      <button class="back-btn" onclick="showPage('topics')" aria-label="Zurück zu Themen">
+        ← <span data-i18n="backTop">Zurück zu Themen</span>
+      </button>
+      <div class="sec-header" style="text-align:left;margin-bottom:1.25rem;">
+        <span class="sec-label" id="module-label-select">HR – Human Resources</span>
+        <h2 class="sec-title" data-i18n="qsTitle">Wähle dein Level</h2>
+      </div>
+      <div class="rank-ladder" id="rank-ladder" role="list" aria-label="Dein Lernfortschritt"></div>
+      <div class="level-grid"  id="level-grid"  role="list"></div>
+    </div>
+  </section>
+</div><!-- /page-quiz-select -->
+
+<!-- ── PAGE: QUIZ ── -->
+<div class="page" id="page-quiz">
+  <section class="section-sm">
+    <div class="container">
+      <div class="quiz-wrap">
+        <button class="back-btn" onclick="showPage('quiz-select')" aria-label="Quiz abbrechen und zu Modulen zurück">
+          ← <span data-i18n="backMod">Zurück zu Leveln</span>
+        </button>
+
+        <!-- Top bar -->
+        <div class="quiz-topbar">
+          <span class="quiz-title" id="quiz-title" aria-live="polite"></span>
+          <div class="quiz-pills">
+            <span class="pill" id="q-progress-pill" aria-live="polite" aria-label="Fragenfortschritt">
+              <span data-i18n="qPill">Frage</span> <span id="q-cur">1</span>/<span id="q-tot">15</span>
+            </span>
+            <span class="pill pill-teal">⭐ <span id="q-score">0</span></span>
+          </div>
+        </div>
+
+        <!-- Progress bar -->
+        <div
+          class="prog-bar"
+          role="progressbar"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+          aria-label="Quiz-Fortschritt in Prozent"
+        >
+          <div class="prog-fill" id="prog-fill" style="width:0%"></div>
+        </div>
+
+        <!-- Question card -->
+        <div class="question-card" role="group" aria-labelledby="q-num q-text">
+          <div class="q-num" id="q-num" aria-live="polite"></div>
+          <p class="q-text" id="q-text" aria-live="polite"></p>
+        </div>
+
+        <!-- Answers -->
+        <div class="answers" id="answers" role="group" aria-label="Antwortmöglichkeiten"></div>
+
+        <!-- Feedback / Explanation -->
+        <div
+          class="explanation"
+          id="explanation"
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+          style="display:none;"
+        ></div>
+
+        <!-- Error message (no answer selected) -->
+        <div
+          class="error-msg"
+          id="error-msg"
+          role="alert"
+          aria-live="assertive"
+          style="display:none;"
+          data-i18n="errNoAnswer"
+        >Bitte wähle eine Antwort aus.</div>
+
+        <!-- Navigation -->
+        <div class="nav-btns">
+          <button class="btn btn-primary" id="next-btn" style="display:none;" onclick="nextQ()" aria-label="Zur nächsten Frage"></button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- /page-quiz -->
+
+<!-- ── PAGE: RESULT ── -->
+<div class="page" id="page-result">
+  <section class="section-sm">
+    <div class="container">
+      <div class="result-wrap" role="main" aria-label="Quizergebnis">
+
+        <span class="result-medal" id="res-medal" role="img" aria-label="Ergebnis-Medaille">🥇</span>
+        <h2 class="result-title" id="res-title" aria-live="polite"></h2>
+        <p class="result-rank-lbl" id="res-rank" aria-live="polite"></p>
+
+        <!-- Score ring -->
+        <div class="score-ring" id="score-ring" role="img" aria-label="Ergebnis-Diagramm">
+          <div class="score-num" id="score-num" aria-live="polite">0<small>/15</small></div>
+        </div>
+
+        <!-- Rating label -->
+        <div class="rating-badge" id="rating-badge" role="status" aria-live="polite"></div>
+
+        <!-- Stats -->
+        <div class="stats-row" role="list">
+          <div class="stat-box" role="listitem"><div class="stat-v" id="s-cor">0</div><div class="stat-l" id="lbl-cor">Richtig</div></div>
+          <div class="stat-box" role="listitem"><div class="stat-v" id="s-wr">0</div><div class="stat-l"  id="lbl-wr">Falsch</div></div>
+          <div class="stat-box" role="listitem"><div class="stat-v" id="s-pct">0%</div><div class="stat-l" id="lbl-pct">Quote</div></div>
+        </div>
+
+        <!-- Rank up -->
+        <div id="rank-up-banner" class="rank-up-banner" style="display:none;" role="alert" aria-live="assertive"></div>
+
+        <!-- Share -->
+        <div class="share-strip">
+          <h3 data-i18n="shareT">🎉 Ergebnis teilen</h3>
+          <div class="share-btns">
+            <button class="share-btn share-wa" onclick="shareWA()"  aria-label="Ergebnis auf WhatsApp teilen">📱 WhatsApp</button>
+            <button class="share-btn share-li" onclick="shareLI()"  aria-label="Ergebnis auf LinkedIn teilen">💼 LinkedIn</button>
+            <button class="share-btn share-cp" onclick="copyLink()" aria-label="Link kopieren"><span data-i18n="shareCopy">📋 Kopieren</span></button>
+          </div>
+        </div>
+
+        <!-- Certificate download (login required) -->
+        <div id="cert-name-wrap" class="name-input-wrap" style="display:none;">
+          <label id="lbl-cert-name" for="cert-name" data-i18n="lblCertName">📝 Name für die Urkunde:</label>
+          <input
+            class="name-input"
+            id="cert-name"
+            type="text"
+            maxlength="60"
+            autocomplete="name"
+            placeholder="Vollständiger Name..."
+            aria-required="true"
+          />
+        </div>
+        <div id="cert-login-hint" class="name-input-wrap">
+          <p style="font-size:0.875rem;color:var(--text-muted);" data-i18n="certHint">
+            🔒 <strong>Registriere dich</strong>, um deine Urkunde als PDF herunterzuladen.
+          </p>
+          <button class="btn btn-primary btn-sm" style="margin-top:0.625rem;" onclick="openAuth()" data-i18n="certRegBtn">Jetzt registrieren</button>
+        </div>
+
+        <!-- Buttons -->
+        <div class="result-btns">
+          <button class="btn btn-ghost"    onclick="retryLevel()"            data-i18n="btnRetry">🔄 Nochmal</button>
+          <button class="btn btn-cert"     id="btn-dl" onclick="downloadCert()" style="display:none;" data-i18n="btnDL">📜 Urkunde herunterladen</button>
+          <button class="btn btn-primary"  onclick="showPage('quiz-select')" data-i18n="btnOvr">🏛️ Übersicht</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- /page-result -->
+
+<!-- ── PAGE: CERTIFICATE ── -->
+<div class="page" id="page-certificate">
+  <section class="section">
+    <div class="container-sm">
+      <div class="sec-header">
+        <span class="sec-label" data-i18n="certLabel">Abschluss</span>
+        <h2 class="sec-title" data-i18n="certTitle">Dein Zertifikat</h2>
+        <p class="sec-sub" data-i18n="certSub">Zertifikate abgestuft nach deiner Leistung.</p>
+      </div>
+      <div class="cert-tiers" role="list">
+        <article class="cert-tier-card" role="listitem"><div class="ct-medal" aria-hidden="true">📜</div><h3 data-i18n="ct0T">Teilnahme</h3><p data-i18n="ct0P">Unter 50%</p></article>
+        <article class="cert-tier-card" role="listitem"><div class="ct-medal" aria-hidden="true">🥉</div><h3 data-i18n="ct1T">Bestanden</h3><p data-i18n="ct1P">50–74%</p></article>
+        <article class="cert-tier-card" role="listitem"><div class="ct-medal" aria-hidden="true">🥈</div><h3 data-i18n="ct2T">Mit Auszeichnung</h3><p data-i18n="ct2P">75–99%</p></article>
+        <article class="cert-tier-card" role="listitem"><div class="ct-medal" aria-hidden="true">🏆</div><h3 data-i18n="ct3T">Höchstauszeichnung</h3><p data-i18n="ct3P">100% – Perfekt!</p></article>
+      </div>
+      <div class="premium-box" role="complementary" aria-label="Premium-Funktion">
+        <h3>⭐ <span data-i18n="premH">Premium Download</span></h3>
+        <p data-i18n="premP">Teilen ist kostenlos. Der PDF-Download ist nach kostenloser Registrierung verfügbar.</p>
+        <button class="btn btn-primary" onclick="openAuth()" data-i18n="premBtn">Jetzt registrieren</button>
+      </div>
+    </div>
+  </section>
+</div><!-- /page-certificate -->
+
+<!-- ── PAGE: ABOUT ME ── -->
+<div class="page" id="page-about-me">
+  <section class="section">
+    <div class="container-sm">
+      <div class="sec-header">
+        <span class="sec-label" data-i18n="amLabel">Gründerin</span>
+        <h2 class="sec-title">Sara Manoochehri</h2>
+      </div>
+      <div class="am-grid">
+        <div class="am-av-wrap">
+          <div class="am-av" role="img" aria-label="Porträt Sara Manoochehri">👩‍💼</div>
+          <div class="am-tags">
+            <span class="tag">🇩🇪 Deutschland</span>
+            <span class="tag">🇮🇷 Iran</span>
+            <span class="tag">🏝️ Teneriffa</span>
+          </div>
+        </div>
+        <div>
+          <p class="am-text" data-i18n="amBio">
+            Ich bin gebürtige Iranerin, aufgewachsen in Deutschland – und lebe heute auf Teneriffa.
+            Diese Mischung aus Kulturen und Sprachen hat mich immer begleitet.
+          </p>
+          <blockquote class="am-quote" data-i18n="amQuote">
+            „Ich habe einen Weiterbildungskurs im Bereich HR gemacht. Für die Prüfung musste ich viel
+            Material in kurzer Zeit lernen – und das auf Spanisch. Ich dachte mir: Wie cool wäre es,
+            wenn ich das am Handy lernen könnte und dabei direkt zu den Themen abgefragt werde.
+            Und hier sind wir nun."
+          </blockquote>
+          <p class="am-text" data-i18n="amMiss">
+            Upskill Academy macht Lernen einfacher, zugänglicher und angenehmer. Langfristig möchte
+            ich die Plattform Kurscentern wie dem CEP Norte anbieten.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- /page-about-me -->
+
+<!-- ── PAGE: DASHBOARD ── -->
+<div class="page" id="page-dashboard">
+  <section class="section-sm">
+    <div class="container">
+      <div class="sec-header" style="text-align:left;">
+        <span class="sec-label" data-i18n="dashLabel">Mein Bereich</span>
+        <h2 class="sec-title" data-i18n="dashTitle">Mein Lernfortschritt</h2>
+      </div>
+      <div class="dash-grid">
+        <aside class="dash-sidebar" aria-label="Nutzerprofil">
+          <div class="user-av" id="dash-av" aria-hidden="true">S</div>
+          <div class="dash-name"  id="dash-name">Sara M.</div>
+          <div class="dash-email" id="dash-email">sara@example.com</div>
+          <div class="dash-stat-row">
+            <div class="dash-mini"><div class="val" id="d-quizzes">0</div><div class="lbl" data-i18n="dashQ">Quizzes</div></div>
+            <div class="dash-mini"><div class="val" id="d-certs">0</div><div class="lbl"   data-i18n="dashC">Urkunden</div></div>
+          </div>
+          <div class="xp-row">
+            <span class="xp-lbl" id="xp-lv">Level 1</span>
+            <div class="xp-bar" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" aria-label="Erfahrungspunkte">
+              <div class="xp-fill" id="xp-fill" style="width:30%"></div>
+            </div>
+            <span class="xp-lbl" id="xp-pts">30 XP</span>
+          </div>
+          <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:0.875rem;" onclick="logout()" data-i18n="btnLogout">Abmelden</button>
+        </aside>
+        <div>
+          <div class="dash-card">
+            <h3>🎓 <span data-i18n="dashMyCerts">Meine Urkunden</span></h3>
+            <div id="cert-list"><p style="color:var(--text-muted);font-size:0.875rem;" data-i18n="noCerts">Noch keine Urkunden. Starte ein Quiz!</p></div>
+          </div>
+          <div class="dash-card">
+            <h3>🏅 <span data-i18n="dashAchiev">Errungenschaften</span></h3>
+            <div class="ach-grid" id="ach-grid"></div>
+          </div>
+          <div class="dash-card">
+            <h3>📈 <span data-i18n="dashProg">Lernfortschritt HR</span></h3>
+            <div id="prog-overview"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- /page-dashboard -->
+
+<!-- ── PAGE: LEGAL ── -->
+<div class="page" id="page-legal">
+  <section class="section">
+    <div class="container-sm">
+      <div class="sec-header">
+        <span class="sec-label" data-i18n="legalLabel">Rechtliches</span>
+        <h2 class="sec-title" data-i18n="legalTitle">AGB & Datenschutz</h2>
+      </div>
+      <div class="legal-tabs" role="tablist" aria-label="Rechtliche Dokumente">
+        <button class="legal-tab active" role="tab" aria-selected="true"  onclick="showLegal('imp')"  data-i18n="tabImp">Impressum</button>
+        <button class="legal-tab"        role="tab" aria-selected="false" onclick="showLegal('dsde')" data-i18n="tabDSde">Datenschutz (DE)</button>
+        <button class="legal-tab"        role="tab" aria-selected="false" onclick="showLegal('dses')" data-i18n="tabDSes">Privacidad (ES)</button>
+      </div>
+      <div id="legal-imp" class="legal-content" role="tabpanel">
+        <h3>Impressum</h3>
+        <p>Sara Manoochehri · Teneriffa, Spanien<br />E-Mail: <a href="mailto:info@upskill-academy.com">info@upskill-academy.com</a></p>
+        <h3>Haftungsausschluss</h3>
+        <p>Diese Plattform dient ausschließlich zu Bildungszwecken.</p>
+      </div>
+      <div id="legal-dsde" class="legal-content" style="display:none;" role="tabpanel">
+        <h3>Datenschutzerklärung</h3>
+        <p><strong>Verantwortliche:</strong> Sara Manoochehri, Teneriffa, Spanien.</p>
+        <h3>Datenverarbeitung</h3>
+        <p>Lernfortschritt wird lokal im Browser (localStorage) gespeichert.</p>
+        <h3>Cookies & Tracking</h3>
+        <ul><li>Keine Marketing-Cookies</li><li>Kein Drittanbieter-Tracking</li></ul>
+        <h3>Deine Rechte</h3>
+        <p>Auskunft, Berichtigung, Löschung: <a href="mailto:info@upskill-academy.com">info@upskill-academy.com</a></p>
+      </div>
+      <div id="legal-dses" class="legal-content" style="display:none;" role="tabpanel">
+        <h3>Política de Privacidad</h3>
+        <p><strong>Responsable:</strong> Sara Manoochehri, Tenerife, España.</p>
+        <h3>Tratamiento de datos</h3>
+        <p>El progreso se guarda localmente (localStorage).</p>
+        <h3>Cookies y seguimiento</h3>
+        <ul><li>Sin cookies de marketing</li><li>Sin seguimiento de terceros</li></ul>
+        <h3>Tus derechos</h3>
+        <p>Acceso, rectificación, supresión: <a href="mailto:info@upskill-academy.com">info@upskill-academy.com</a></p>
+      </div>
+    </div>
+  </section>
+</div><!-- /page-legal -->
+```
+
+  </main><!-- /main-content -->
+
+  <!-- ══ FOOTER ══ -->
+
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h2>🎓 Upskill Academy</h2>
+          <p data-i18n="footDesc">Interaktives Lernen für HR, Gehaltsabrechnung und mehr.</p>
+        </div>
+        <div class="footer-col">
+          <h3 data-i18n="footNav">Navigation</h3>
+          <ul>
+            <li><button onclick="showPage('home')"           data-i18n="navHome">Home</button></li>
+            <li><button onclick="showPage('about-platform')" data-i18n="navWhat">Was ist UA</button></li>
+            <li><button onclick="showPage('topics')"         data-i18n="navTopics">Themen</button></li>
+            <li><button onclick="showPage('certificate')"    data-i18n="navCert">Zertifikat</button></li>
+            <li><button onclick="showPage('about-me')"       data-i18n="navAbout">Über mich</button></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3 data-i18n="footLegal">AGB & Rechtliches</h3>
+          <ul>
+            <li><button onclick="showPage('legal');showLegal('imp')"  data-i18n="tabImp">Impressum</button></li>
+            <li><button onclick="showPage('legal');showLegal('dsde')" data-i18n="tabDSde">Datenschutz (DE)</button></li>
+            <li><button onclick="showPage('legal');showLegal('dses')" data-i18n="tabDSes">Privacidad (ES)</button></li>
+            <li><a href="mailto:info@upskill-academy.com">Kontakt</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© <span id="foot-year"></span> Sara Manoochehri · Upskill Academy · <span data-i18n="footRights">Alle Rechte vorbehalten</span></p>
+        <div class="footer-links">
+          <button onclick="showPage('legal');showLegal('imp')"  data-i18n="tabImp">Impressum</button>
+          <button onclick="showPage('legal');showLegal('dsde')" data-i18n="tabDSde">Datenschutz</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══ AUTH MODAL ══ -->
+
+  <div class="modal-overlay" id="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-heading">
+    <div class="modal">
+      <button class="modal-close" onclick="closeAuth()" aria-label="Modal schließen">✕</button>
+      <div class="modal-logo">
+        <div class="logo-big" aria-hidden="true">🎓</div>
+        <h2 id="auth-heading">Upskill Academy</h2>
+        <p data-i18n="authSub">Fortschritt speichern & Urkunden herunterladen</p>
+      </div>
+      <div class="modal-tabs" role="tablist" aria-label="Anmelden oder Registrieren">
+        <button class="modal-tab active" role="tab" aria-selected="true"  onclick="switchTab('login')"    data-i18n="tabLogin">Anmelden</button>
+        <button class="modal-tab"        role="tab" aria-selected="false" onclick="switchTab('register')" data-i18n="tabReg">Registrieren</button>
+      </div>
+
+```
+  <!-- Login Form -->
+  <form id="form-login" class="modal-form" novalidate onsubmit="doLogin(event)">
+    <div class="form-group">
+      <label for="li-email" data-i18n="lEmail">E-Mail</label>
+      <input type="email" id="li-email" autocomplete="email" placeholder="name@example.com" required aria-required="true" />
+    </div>
+    <div class="form-group">
+      <label for="li-pw" data-i18n="lPW">Passwort</label>
+      <input type="password" id="li-pw" autocomplete="current-password" placeholder="••••••••" required aria-required="true" />
+    </div>
+    <button type="submit" class="btn btn-primary" style="width:100%;" data-i18n="doLogin">Anmelden</button>
+    <div class="modal-divider" data-i18n="orWith">oder</div>
+    <button type="button" class="btn-social" onclick="showToast('Google-Login kommt bald!')"><span style="font-size:1.25rem;">🔵</span> Google</button>
+  </form>
+
+  <!-- Register Form -->
+  <form id="form-register" class="modal-form" novalidate onsubmit="doRegister(event)" style="display:none;">
+    <div class="form-group">
+      <label for="rg-name" data-i18n="lName">Name</label>
+      <input type="text" id="rg-name" autocomplete="name" placeholder="Sara Manoochehri" required aria-required="true" />
+    </div>
+    <div class="form-group">
+      <label for="rg-email" data-i18n="lEmail">E-Mail</label>
+      <input type="email" id="rg-email" autocomplete="email" placeholder="name@example.com" required aria-required="true" />
+    </div>
+    <div class="form-group">
+      <label for="rg-pw" data-i18n="lPW">Passwort</label>
+      <input type="password" id="rg-pw" autocomplete="new-password" placeholder="Min. 8 Zeichen" required minlength="8" aria-required="true" aria-describedby="pw-hint" />
+      <span class="form-note" id="pw-hint" data-i18n="pwNote">Mindestens 8 Zeichen.</span>
+    </div>
+    <button type="submit" class="btn btn-primary" style="width:100%;" data-i18n="doReg">Konto erstellen</button>
+    <p class="form-note" style="text-align:center;" data-i18n="regTerms">Mit der Registrierung stimmst du unserer Datenschutzerklärung zu.</p>
+  </form>
+</div>
+```
+
+  </div>
+
+  <!-- ══ LIVE REGION (Toast) ══ -->
+
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ══ SCRIPT (ganz unten, vor </body>) ══ -->
+
+  <script src="script.js"></script>
+
+</body>
+</html>
