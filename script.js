@@ -1,140 +1,101 @@
 // =============================
-// FULL QUIZ WEBSITE CONTROLLER
+// QUIZ FIX FÜR BESTEHENDES HTML
 // =============================
 
-// =============================
-// QUIZ DATEN (Kategorien)
-// =============================
-
-const quizzes = {
-    html: [
-        {
-            question: "Was ist HTML?",
-            a: "Programmiersprache",
-            b: "Auszeichnungssprache",
-            c: "Datenbank",
-            d: "Betriebssystem",
-            correct: "b"
-        },
-        {
-            question: "Was bedeutet HTML?",
-            a: "HyperText Markup Language",
-            b: "HighText Machine Language",
-            c: "Home Tool Markup Language",
-            d: "Hyper Transfer Machine Language",
-            correct: "a"
-        }
-    ],
-    css: [
-        {
-            question: "Was macht CSS?",
-            a: "Struktur",
-            b: "Design",
-            c: "Server",
-            d: "Datenbank",
-            correct: "b"
-        }
-    ],
-    js: [
-        {
-            question: "Was ist JavaScript?",
-            a: "Styling",
-            b: "Markup",
-            c: "Programmiersprache",
-            d: "Datenbank",
-            correct: "c"
-        }
-    ]
-};
+// Fragen (kannst du später erweitern)
+const quizData = [
+    {
+        question: "Was ist HTML?",
+        a: "Programmiersprache",
+        b: "Auszeichnungssprache",
+        c: "Datenbank",
+        d: "Betriebssystem",
+        correct: "b"
+    },
+    {
+        question: "Was macht CSS?",
+        a: "Struktur",
+        b: "Design",
+        c: "Logik",
+        d: "Server",
+        correct: "b"
+    },
+    {
+        question: "Was ist JavaScript?",
+        a: "Markup",
+        b: "Styling",
+        c: "Programmiersprache",
+        d: "Datenbank",
+        correct: "c"
+    }
+];
 
 // =============================
-// ELEMENTE
+// ELEMENTE (MUSS ZU DEINEM HTML PASSEN)
 // =============================
-
-const home = document.getElementById("home");
-const category = document.getElementById("category");
-const quiz = document.getElementById("quiz");
-const result = document.getElementById("result");
-
-const startBtn = document.getElementById("start-btn");
 
 const questionEl = document.getElementById("question");
 
 const answerEls = document.querySelectorAll(".answer");
+
 const a_text = document.getElementById("a_text");
 const b_text = document.getElementById("b_text");
 const c_text = document.getElementById("c_text");
 const d_text = document.getElementById("d_text");
 
-const nextBtn = document.getElementById("next-btn");
-const restartBtn = document.getElementById("restart-btn");
+const submitBtn = document.getElementById("submit");
 
-const scoreText = document.getElementById("score");
+// Ergebnis Bereich (falls vorhanden)
+const quizContainer = document.getElementById("quiz");
+const resultContainer = document.getElementById("result");
 
 // =============================
 // STATE
 // =============================
 
-let currentCategory = "";
-let currentQuizIndex = 0;
+let currentQuiz = 0;
 let score = 0;
-let currentData = [];
 
 // =============================
-// NAVIGATION
+// INIT
 // =============================
 
-function showScreen(screen) {
-    home.style.display = "none";
-    category.style.display = "none";
-    quiz.style.display = "none";
-    result.style.display = "none";
-
-    screen.style.display = "block";
-}
-
-// Startseite
-startBtn.addEventListener("click", () => {
-    showScreen(category);
-});
-
-// Kategorie Auswahl
-function selectCategory(cat) {
-    currentCategory = cat;
-    currentData = quizzes[cat];
-    currentQuizIndex = 0;
-    score = 0;
-
-    showScreen(quiz);
-    loadQuiz();
-}
+loadQuiz();
 
 // =============================
-// QUIZ LOGIK
+// QUIZ LADEN
 // =============================
 
 function loadQuiz() {
     deselectAnswers();
 
-    const q = currentData[currentQuizIndex];
+    const currentData = quizData[currentQuiz];
 
-    questionEl.innerText = q.question;
-    a_text.innerText = q.a;
-    b_text.innerText = q.b;
-    c_text.innerText = q.c;
-    d_text.innerText = q.d;
+    questionEl.innerText = currentData.question;
+    a_text.innerText = currentData.a;
+    b_text.innerText = currentData.b;
+    c_text.innerText = currentData.c;
+    d_text.innerText = currentData.d;
 }
+
+// =============================
+// DESELECT
+// =============================
 
 function deselectAnswers() {
-    answerEls.forEach(a => a.checked = false);
+    answerEls.forEach(el => el.checked = false);
 }
 
-function getSelected() {
-    let answer;
+// =============================
+// AUSGEWÄHLTE ANTWORT
+// =============================
 
-    answerEls.forEach(a => {
-        if (a.checked) {
-            answer = a.id;
+function getSelected() {
+    let answer = undefined;
+
+    answerEls.forEach(el => {
+        if (el.checked) {
+            answer = el.id;
         }
     });
 
@@ -142,21 +103,21 @@ function getSelected() {
 }
 
 // =============================
-// NEXT BUTTON
+// SUBMIT LOGIK
 // =============================
 
-nextBtn.addEventListener("click", () => {
+submitBtn.addEventListener("click", () => {
     const answer = getSelected();
 
     if (!answer) return;
 
-    if (answer === currentData[currentQuizIndex].correct) {
+    if (answer === quizData[currentQuiz].correct) {
         score++;
     }
 
-    currentQuizIndex++;
+    currentQuiz++;
 
-    if (currentQuizIndex < currentData.length) {
+    if (currentQuiz < quizData.length) {
         loadQuiz();
     } else {
         showResult();
@@ -168,14 +129,17 @@ nextBtn.addEventListener("click", () => {
 // =============================
 
 function showResult() {
-    showScreen(result);
-    scoreText.innerText = `${score} / ${currentData.length}`;
+    if (quizContainer) quizContainer.style.display = "none";
+
+    if (resultContainer) {
+        resultContainer.style.display = "block";
+        resultContainer.innerHTML = `
+            <h2>Ergebnis</h2>
+            <p>Du hast ${score} von ${quizData.length} richtig</p>
+            <button onclick="location.reload()">Neustart</button>
+        `;
+    } else {
+        alert(`Du hast ${score} von ${quizData.length} richtig`);
+        location.reload();
+    }
 }
-
-// =============================
-// RESTART
-// =============================
-
-restartBtn.addEventListener("click", () => {
-    showScreen(home);
-});
