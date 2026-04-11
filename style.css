@@ -1411,7 +1411,7 @@ transition: all .2s;
 
 /* ── FOOTER ── */
 footer {
-background: var(–gray-900);
+background: var(–-gray-900);
 color: rgba(255,255,255,.7);
 padding: 48px 0 32px;
 margin-top: 80px;
