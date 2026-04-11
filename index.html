@@ -9,13 +9,39 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --gold:#C9A84C;--gold-light:#E8C97A;--gold-dark:#8B6914;
-  --navy:#0D1B2A;--navy-mid:#1A2E45;--navy-light:#243B55;
-  --silver:#B0BEC5;--cream:#F5F0E8;--green:#2ECC71;--red:#E74C3C;
+  --primary:#4A90E2;
+  --primary-dark:#1F2A44;
+  --accent:#6C63FF;
+
+  --background:#F7F9FC;
+  --card:#FFFFFF;
+
+  --text:#111827;
+  --text-light:#6B7280;
+
+  --green:#2ECC71;
+  --red:#E74C3C;
+
+  --border:#E5E7EB;
 }
-*{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;overflow-x:hidden;}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--background);
+  color:var(--text);
+  min-height:100vh;
+  overflow-x:hidden;
+}
 
 /* ── NAV ── */
 nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(13,27,42,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,168,76,.15);padding:0 20px;}
