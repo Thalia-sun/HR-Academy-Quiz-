@@ -5,9 +5,205 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Upskill Academy</title>
-<link rel="stylesheet" href="style.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#C9A84C;--gold-light:#E8C97A;--gold-dark:#8B6914;
+  --navy:#0D1B2A;--navy-mid:#1A2E45;--navy-light:#243B55;
+  --silver:#B0BEC5;--cream:#F5F0E8;--green:#2ECC71;--red:#E74C3C;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--cream);min-height:100vh;overflow-x:hidden;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(13,27,42,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,168,76,.15);padding:0 20px;}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px;}
+.nav-logo{font-family:‘Playfair Display’,serif;font-size:18px;font-weight:900;background:linear-gradient(135deg,var(–gold-light),var(–gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;cursor:pointer;white-space:nowrap;}
+.nav-links{display:flex;gap:4px;align-items:center;flex-wrap:wrap;}
+.nav-link{background:none;border:none;color:var(–silver);font-family:‘DM Sans’,sans-serif;font-size:13px;font-weight:500;padding:6px 10px;border-radius:8px;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.nav-link:hover,.nav-link.active{color:var(–gold);background:rgba(201,168,76,.08);}
+.nav-lang{display:flex;gap:4px;margin-left:12px;border-left:1px solid rgba(201,168,76,.2);padding-left:12px;}
+.lang-btn{background:none;border:1px solid transparent;color:var(–silver);font-family:‘DM Sans’,sans-serif;font-size:12px;font-weight:600;padding:4px 8px;border-radius:8px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:4px;}
+.lang-btn:hover,.lang-btn.active{border-color:var(–gold);color:var(–gold);background:rgba(201,168,76,.08);}
+.ham{display:none;background:none;border:none;color:var(–silver);font-size:22px;cursor:pointer;padding:4px;}
+
+/* ── PAGES ── */
+.page{display:none;padding-top:60px;min-height:100vh;}
+.page.active{display:block;}
+.container{max-width:1000px;margin:0 auto;padding:40px 20px;}
+.container-sm{max-width:720px;margin:0 auto;padding:40px 20px;}
+
+/* ── HERO ── */
+.hero{min-height:calc(100vh - 60px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;position:relative;overflow:hidden;}
+.hero::before{content:’’;position:fixed;inset:0;background:radial-gradient(ellipse at 30% 30%,rgba(201,168,76,.08) 0%,transparent 55%),radial-gradient(ellipse at 70% 70%,rgba(36,59,85,.5) 0%,transparent 55%);pointer-events:none;z-index:0;}
+.hero>*{position:relative;z-index:1;}
+.hero-badge{display:inline-block;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);border-radius:20px;padding:6px 16px;font-size:12px;font-weight:600;color:var(–gold);letter-spacing:1px;text-transform:uppercase;margin-bottom:24px;animation:fadeUp .6s ease both;}
+.hero h1{font-family:‘Playfair Display’,serif;font-size:clamp(36px,7vw,72px);font-weight:900;background:linear-gradient(135deg,var(–gold-light),var(–gold),var(–gold-dark));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.05;margin-bottom:20px;animation:fadeUp .6s .1s ease both;}
+.hero-sub{font-size:clamp(15px,2.5vw,20px);color:var(–silver);font-weight:300;max-width:560px;line-height:1.6;margin-bottom:40px;animation:fadeUp .6s .2s ease both;}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;animation:fadeUp .6s .3s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+
+/* ── BUTTONS ── */
+.btn{font-family:‘DM Sans’,sans-serif;font-size:14px;font-weight:600;padding:14px 28px;border-radius:12px;border:none;cursor:pointer;transition:all .25s;letter-spacing:.5px;}
+.btn-primary{background:linear-gradient(135deg,var(–gold),var(–gold-dark));color:var(–navy);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(201,168,76,.35);}
+.btn-secondary{background:transparent;border:1.5px solid rgba(201,168,76,.4);color:var(–gold);}
+.btn-secondary:hover{background:rgba(201,168,76,.08);transform:translateY(-2px);}
+.btn-ghost{background:transparent;border:1.5px solid rgba(176,190,197,.3);color:var(–silver);}
+.btn-ghost:hover{border-color:var(–silver);color:var(–cream);}
+.btn-cert{background:linear-gradient(135deg,#2ECC71,#27AE60);color:#fff;}
+.btn-cert:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(46,204,113,.35);}
+.btn-sm{padding:9px 18px;font-size:13px;}
+
+/* ── SECTION TITLES ── */
+.section-label{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(–gold);margin-bottom:10px;}
+.section-title{font-family:‘Playfair Display’,serif;font-size:clamp(24px,4vw,40px);font-weight:900;color:var(–cream);margin-bottom:14px;line-height:1.2;}
+.section-sub{color:var(–silver);font-size:15px;font-weight:300;line-height:1.7;max-width:600px;}
+.divider{width:60px;height:3px;background:linear-gradient(90deg,var(–gold),var(–gold-dark));border-radius:2px;margin:16px 0 32px;}
+
+/* ── CARDS ── */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:32px;}
+.card{background:var(–navy-mid);border:1px solid rgba(201,168,76,.15);border-radius:18px;padding:28px 24px;transition:all .3s;position:relative;overflow:hidden;}
+.card::before{content:’’;position:absolute;inset:0;background:linear-gradient(135deg,rgba(201,168,76,.04),transparent);opacity:0;transition:opacity .3s;}
+.card:hover{transform:translateY(-4px);border-color:rgba(201,168,76,.4);box-shadow:0 12px 40px rgba(201,168,76,.1);}
+.card:hover::before{opacity:1;}
+.card-icon{font-size:36px;margin-bottom:14px;}
+.card-title{font-family:‘Playfair Display’,serif;font-size:18px;font-weight:700;color:var(–cream);margin-bottom:8px;}
+.card-text{font-size:13px;color:var(–silver);line-height:1.6;font-weight:300;}
+.card-badge{display:inline-block;margin-top:12px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:rgba(201,168,76,.15);color:var(–gold);border:1px solid rgba(201,168,76,.3);}
+.card-badge.soon{background:rgba(176,190,197,.1);color:var(–silver);border-color:rgba(176,190,197,.2);}
+
+/* ── TOPIC CARDS ── */
+.topic-card{background:var(–navy-mid);border:1px solid rgba(201,168,76,.2);border-radius:18px;padding:32px;cursor:pointer;transition:all .3s;position:relative;overflow:hidden;text-align:center;}
+.topic-card:hover{transform:translateY(-5px);border-color:var(–gold);box-shadow:0 16px 48px rgba(201,168,76,.15);}
+.topic-card.locked{opacity:.5;cursor:not-allowed;}
+.topic-card.locked:hover{transform:none;box-shadow:none;border-color:rgba(201,168,76,.2);}
+.topic-icon{font-size:48px;margin-bottom:16px;display:block;animation:float 3s ease-in-out infinite;}
+.topic-name{font-family:‘Playfair Display’,serif;font-size:22px;font-weight:700;color:var(–cream);margin-bottom:8px;}
+.topic-desc{font-size:13px;color:var(–silver);line-height:1.5;}
+.topic-modules{font-size:12px;color:var(–gold);margin-top:10px;font-weight:600;}
+
+/* ── ABOUT ── */
+.about-wrap{display:grid;grid-template-columns:1fr 2fr;gap:48px;align-items:start;}
+.about-avatar{width:100%;max-width:220px;aspect-ratio:1;border-radius:50%;background:linear-gradient(135deg,var(–navy-mid),var(–navy-light));border:3px solid rgba(201,168,76,.3);display:flex;align-items:center;justify-content:center;font-size:80px;margin:0 auto;}
+.about-quote{background:rgba(201,168,76,.06);border-left:4px solid var(–gold);border-radius:0 12px 12px 0;padding:20px 24px;font-size:15px;line-height:1.7;color:var(–cream);font-style:italic;margin:24px 0;}
+.tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px;}
+.tag{background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.25);border-radius:20px;padding:5px 14px;font-size:12px;color:var(–gold);font-weight:600;}
+
+/* ── CERT ── */
+.cert-tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:32px 0;}
+.cert-tier-card{background:var(–navy-mid);border-radius:14px;padding:24px 20px;text-align:center;border:1px solid rgba(201,168,76,.15);}
+.cert-tier-card .medal{font-size:40px;margin-bottom:12px;}
+.cert-tier-card h4{font-family:‘Playfair Display’,serif;font-size:15px;color:var(–cream);margin-bottom:6px;}
+.cert-tier-card p{font-size:12px;color:var(–silver);}
+.premium-box{background:linear-gradient(135deg,rgba(201,168,76,.1),rgba(201,168,76,.03));border:1px solid rgba(201,168,76,.3);border-radius:18px;padding:32px;text-align:center;margin-top:32px;}
+.premium-box h3{font-family:‘Playfair Display’,serif;font-size:22px;color:var(–gold);margin-bottom:10px;}
+.premium-box p{color:var(–silver);font-size:14px;margin-bottom:20px;}
+
+/* ── QUIZ ── */
+.quiz-wrap{max-width:800px;margin:0 auto;}
+.quiz-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;}
+.quiz-title{font-family:‘Playfair Display’,serif;font-size:20px;color:var(–gold);}
+.pill{background:var(–navy-mid);border:1px solid rgba(201,168,76,.3);border-radius:20px;padding:6px 14px;font-size:13px;font-weight:500;color:var(–cream);}
+.pill span{color:var(–gold);}
+.progress-bar{width:100%;height:6px;background:var(–navy-mid);border-radius:3px;margin-bottom:28px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(–gold-dark),var(–gold));border-radius:3px;transition:width .5s cubic-bezier(.4,0,.2,1);}
+.question-card{background:var(–navy-mid);border:1px solid rgba(201,168,76,.15);border-radius:20px;padding:32px;margin-bottom:18px;}
+.q-number{font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(–gold);margin-bottom:12px;}
+.q-text{font-size:clamp(15px,2.5vw,18px);font-weight:500;line-height:1.55;color:var(–cream);}
+.answers{display:grid;gap:10px;margin-bottom:20px;}
+.answer-btn{background:var(–navy-mid);border:1.5px solid rgba(176,190,197,.2);border-radius:14px;padding:16px 20px;text-align:left;cursor:pointer;font-family:‘DM Sans’,sans-serif;font-size:14px;color:var(–cream);transition:all .25s;position:relative;overflow:hidden;line-height:1.4;}
+.answer-btn::before{content:’’;position:absolute;left:0;top:0;bottom:0;width:4px;background:transparent;transition:background .25s;}
+.answer-btn:hover:not(:disabled){border-color:var(–gold);background:rgba(201,168,76,.06);transform:translateX(4px);}
+.answer-btn:hover:not(:disabled)::before{background:var(–gold);}
+.answer-btn:disabled{cursor:default;}
+.answer-btn.correct{border-color:var(–green);background:rgba(46,204,113,.08);}
+.answer-btn.correct::before{background:var(–green);}
+.answer-btn.wrong{border-color:var(–red);background:rgba(231,76,60,.08);}
+.answer-btn.wrong::before{background:var(–red);}
+.answer-btn.missed{border-color:var(–green);border-style:dashed;opacity:.7;}
+.answer-letter{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:rgba(176,190,197,.1);font-size:11px;font-weight:700;color:var(–silver);margin-right:10px;flex-shrink:0;vertical-align:middle;}
+.answer-btn.correct .answer-letter{background:rgba(46,204,113,.2);color:var(–green);}
+.answer-btn.wrong .answer-letter{background:rgba(231,76,60,.2);color:var(–red);}
+.explanation{background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.2);border-left:4px solid var(–gold);border-radius:0 12px 12px 0;padding:14px 18px;font-size:13px;line-height:1.6;color:#D4C5A9;margin-bottom:18px;display:none;animation:fadeIn .3s ease;}
+.explanation strong{color:var(–gold);}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+.nav-btns{display:flex;gap:10px;justify-content:flex-end;}
+
+/* ── RESULT ── */
+.result-wrap{text-align:center;padding:40px 20px;}
+.medal-big{font-size:90px;display:block;margin-bottom:14px;animation:pop .6s cubic-bezier(.175,.885,.32,1.275);}
+@keyframes pop{0%{transform:scale(0) rotate(-15deg);opacity:0;}100%{transform:scale(1);opacity:1;}}
+.result-h{font-family:‘Playfair Display’,serif;font-size:clamp(24px,4vw,38px);font-weight:900;background:linear-gradient(135deg,var(–gold-light),var(–gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;}
+.score-ring{width:130px;height:130px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:20px auto;position:relative;}
+.score-ring::before{content:’’;position:absolute;inset:11px;border-radius:50%;background:var(–navy);}
+.score-num{position:relative;z-index:1;font-family:‘Playfair Display’,serif;font-size:32px;font-weight:900;color:var(–gold);}
+.score-num small{font-size:14px;color:var(–silver);font-family:‘DM Sans’,sans-serif;}
+.stats-row{display:flex;justify-content:center;gap:16px;margin:20px 0 28px;flex-wrap:wrap;}
+.stat-box{background:var(–navy-mid);border:1px solid rgba(201,168,76,.2);border-radius:14px;padding:16px 20px;min-width:100px;}
+.stat-v{font-family:‘Playfair Display’,serif;font-size:26px;font-weight:700;}
+.stat-l{font-size:11px;color:var(–silver);margin-top:3px;}
+.name-input-wrap{background:var(–navy-mid);border:1px solid rgba(201,168,76,.2);border-radius:14px;padding:20px;margin:0 auto 20px;max-width:440px;text-align:left;}
+.name-input-wrap label{display:block;font-size:12px;color:var(–silver);margin-bottom:8px;letter-spacing:.5px;}
+.name-input{width:100%;background:var(–navy);border:1.5px solid rgba(201,168,76,.3);border-radius:10px;padding:12px 14px;font-family:‘DM Sans’,sans-serif;font-size:15px;color:var(–cream);outline:none;transition:border-color .25s;}
+.name-input:focus{border-color:var(–gold);}
+.name-input::placeholder{color:rgba(176,190,197,.4);}
+.result-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:10px;}
+
+/* ── LEGAL ── */
+.legal-content h3{font-family:‘Playfair Display’,serif;font-size:20px;color:var(–gold);margin:28px 0 10px;}
+.legal-content p,.legal-content li{font-size:14px;color:var(–silver);line-height:1.8;}
+.legal-content ul{padding-left:20px;margin:8px 0;}
+.legal-content a{color:var(–gold);}
+.legal-tabs{display:flex;gap:8px;margin-bottom:28px;flex-wrap:wrap;}
+.legal-tab{background:var(–navy-mid);border:1px solid rgba(201,168,76,.2);border-radius:10px;padding:8px 18px;cursor:pointer;font-size:13px;color:var(–silver);transition:all .2s;}
+.legal-tab.active{border-color:var(–gold);color:var(–gold);background:rgba(201,168,76,.08);}
+
+/* ── INFO ROWS ── */
+.info-row{display:flex;align-items:flex-start;gap:16px;padding:18px 0;border-bottom:1px solid rgba(201,168,76,.08);}
+.info-row:last-child{border-bottom:none;}
+.info-icon{font-size:28px;flex-shrink:0;margin-top:2px;}
+.info-text h4{font-size:15px;font-weight:600;color:var(–cream);margin-bottom:4px;}
+.info-text p{font-size:13px;color:var(–silver);line-height:1.6;}
+
+/* ── RANK LADDER ── */
+.rank-ladder{display:flex;justify-content:center;gap:6px;margin:24px 0 8px;flex-wrap:wrap;}
+.rank-step{display:flex;flex-direction:column;align-items:center;gap:3px;opacity:.3;transition:all .4s;}
+.rank-step.unlocked{opacity:1;}.rank-step.current{opacity:1;transform:scale(1.1);}
+.rank-step .rs-icon{font-size:20px;}.rank-step .rs-lbl{font-size:8px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(–silver);}
+.rank-step.current .rs-lbl{color:var(–gold);}
+.rank-conn{width:18px;height:2px;background:var(–navy-light);margin-top:16px;}.rank-conn.filled{background:var(–gold);}
+
+/* ── BACK BTN ── */
+.back-btn{background:none;border:none;color:var(–silver);font-family:‘DM Sans’,sans-serif;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:8px 0;margin-bottom:20px;transition:color .2s;}
+.back-btn:hover{color:var(–gold);}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(–navy-mid);border:1px solid rgba(201,168,76,.4);border-radius:12px;padding:12px 22px;font-size:14px;color:var(–cream);z-index:999;transition:transform .4s cubic-bezier(.175,.885,.32,1.275);white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ── CONFETTI ── */
+.confetti-piece{position:fixed;pointer-events:none;z-index:1000;animation:fall linear forwards;}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0);opacity:1;}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}
+
+/* ── COPYRIGHT ── */
+.copyright{text-align:center;padding:20px;font-size:11px;color:rgba(176,190,197,.4);letter-spacing:.5px;}
+
+/* ── MOBILE NAV ── */
+.mobile-menu{display:none;position:fixed;top:60px;left:0;right:0;background:rgba(13,27,42,.98);border-bottom:1px solid rgba(201,168,76,.15);z-index:199;padding:12px 20px;flex-direction:column;gap:4px;}
+.mobile-menu.open{display:flex;}
+.mobile-menu .nav-link{text-align:left;padding:10px 14px;}
+
+@media(max-width:700px){
+.nav-links{display:none;}.ham{display:block;}
+.about-wrap{grid-template-columns:1fr;}
+.about-avatar{max-width:140px;}
+.hero h1{font-size:clamp(32px,10vw,52px);}
+}
+</style>
 
 </head>
 <body>
@@ -15,836 +211,836 @@
 <!-- ══ NAV ══ -->
 
 <nav>
-  <div class="nav-inner">
-    <span class="nav-logo" onclick="showPage('home')">🎓 Upskill Academy</span>
-    <div class="nav-links" id="nav-links">
-      <button class="nav-link active" data-page="home" onclick="showPage('home')" data-i18n="navHome">Home</button>
-      <button class="nav-link" data-page="about-platform" onclick="showPage('about-platform')" data-i18n="navWhat">Was ist UA</button>
-      <button class="nav-link" data-page="topics" onclick="showPage('topics')" data-i18n="navTopics">Themen</button>
-      <button class="nav-link" data-page="certificate" onclick="showPage('certificate')" data-i18n="navCert">Zertifikat</button>
-      <button class="nav-link" data-page="about-me" onclick="showPage('about-me')" data-i18n="navAbout">Über mich</button>
-      <button class="nav-link" data-page="legal" onclick="showPage('legal')" data-i18n="navLegal">Rechtliches</button>
-      <div class="nav-lang">
-        <button class="lang-btn active" id="btn-de" onclick="setLang('de')"><span>🇩🇪</span> DE</button>
-        <button class="lang-btn" id="btn-en" onclick="setLang('en')"><span>🇬🇧</span> EN</button>
-        <button class="lang-btn" id="btn-es" onclick="setLang('es')"><span>🇪🇸</span> ES</button>
-      </div>
-    </div>
-    <button class="ham" onclick="toggleMobile()">☰</button>
-  </div>
+  <div class="nav-inner">
+    <span class="nav-logo" onclick="showPage('home')">🎓 Upskill Academy</span>
+    <div class="nav-links" id="nav-links">
+      <button class="nav-link active" data-page="home" onclick="showPage('home')" data-i18n="navHome">Home</button>
+      <button class="nav-link" data-page="about-platform" onclick="showPage('about-platform')" data-i18n="navWhat">Was ist UA</button>
+      <button class="nav-link" data-page="topics" onclick="showPage('topics')" data-i18n="navTopics">Themen</button>
+      <button class="nav-link" data-page="certificate" onclick="showPage('certificate')" data-i18n="navCert">Zertifikat</button>
+      <button class="nav-link" data-page="about-me" onclick="showPage('about-me')" data-i18n="navAbout">Über mich</button>
+      <button class="nav-link" data-page="legal" onclick="showPage('legal')" data-i18n="navLegal">Rechtliches</button>
+      <div class="nav-lang">
+        <button class="lang-btn active" id="btn-de" onclick="setLang('de')"><span>🇩🇪</span> DE</button>
+        <button class="lang-btn" id="btn-en" onclick="setLang('en')"><span>🇬🇧</span> EN</button>
+        <button class="lang-btn" id="btn-es" onclick="setLang('es')"><span>🇪🇸</span> ES</button>
+      </div>
+    </div>
+    <button class="ham" onclick="toggleMobile()">☰</button>
+  </div>
 </nav>
 <div class="mobile-menu" id="mobile-menu">
-  <button class="nav-link" onclick="showPage('home');toggleMobile()" data-i18n="navHome">Home</button>
-  <button class="nav-link" onclick="showPage('about-platform');toggleMobile()" data-i18n="navWhat">Was ist UA</button>
-  <button class="nav-link" onclick="showPage('topics');toggleMobile()" data-i18n="navTopics">Themen</button>
-  <button class="nav-link" onclick="showPage('certificate');toggleMobile()" data-i18n="navCert">Zertifikat</button>
-  <button class="nav-link" onclick="showPage('about-me');toggleMobile()" data-i18n="navAbout">Über mich</button>
-  <button class="nav-link" onclick="showPage('legal');toggleMobile()" data-i18n="navLegal">Rechtliches</button>
-  <div style="display:flex;gap:6px;padding:8px 14px;">
-    <button class="lang-btn active" id="m-btn-de" onclick="setLang('de')">🇩🇪 DE</button>
-    <button class="lang-btn" id="m-btn-en" onclick="setLang('en')">🇬🇧 EN</button>
-    <button class="lang-btn" id="m-btn-es" onclick="setLang('es')">🇪🇸 ES</button>
-  </div>
+  <button class="nav-link" onclick="showPage('home');toggleMobile()" data-i18n="navHome">Home</button>
+  <button class="nav-link" onclick="showPage('about-platform');toggleMobile()" data-i18n="navWhat">Was ist UA</button>
+  <button class="nav-link" onclick="showPage('topics');toggleMobile()" data-i18n="navTopics">Themen</button>
+  <button class="nav-link" onclick="showPage('certificate');toggleMobile()" data-i18n="navCert">Zertifikat</button>
+  <button class="nav-link" onclick="showPage('about-me');toggleMobile()" data-i18n="navAbout">Über mich</button>
+  <button class="nav-link" onclick="showPage('legal');toggleMobile()" data-i18n="navLegal">Rechtliches</button>
+  <div style="display:flex;gap:6px;padding:8px 14px;">
+    <button class="lang-btn active" id="m-btn-de" onclick="setLang('de')">🇩🇪 DE</button>
+    <button class="lang-btn" id="m-btn-en" onclick="setLang('en')">🇬🇧 EN</button>
+    <button class="lang-btn" id="m-btn-es" onclick="setLang('es')">🇪🇸 ES</button>
+  </div>
 </div>
 
 <!-- ══════════════════════════════════════════
-     PAGE: HOME
+     PAGE: HOME
 ══════════════════════════════════════════ -->
 
 <div class="page active" id="page-home">
-  <div class="hero">
-    <span class="hero-badge" data-i18n="heroBadge">Interaktives Lernen</span>
-    <h1>Upskill<br>Academy</h1>
-    <p class="hero-sub" data-i18n="heroSub">Lerne HR und Gehaltsabrechnung interaktiv – mit Quizzes, sofortigem Feedback und persönlichen Zertifikaten.</p>
-    <div class="hero-btns">
-      <button class="btn btn-primary" onclick="showPage('topics')" data-i18n="heroStart">Lernen starten</button>
-      <button class="btn btn-secondary" onclick="showPage('about-platform')" data-i18n="heroExplore">Mehr erfahren</button>
-    </div>
-  </div>
-  <div class="container" style="padding-top:0;">
-    <div class="card-grid">
-      <div class="card"><div class="card-icon">⚡</div><h3 class="card-title" data-i18n="feat1Title">Sofortiges Feedback</h3><p class="card-text" data-i18n="feat1Text">Nach jeder Antwort siehst du direkt, ob du richtig lagst – mit ausführlicher Erklärung.</p></div>
-      <div class="card"><div class="card-icon">📱</div><h3 class="card-title" data-i18n="feat2Title">Lernen am Handy</h3><p class="card-text" data-i18n="feat2Text">Entwickelt für unterwegs. Lerne wann und wo du möchtest – kein Login nötig.</p></div>
-      <div class="card"><div class="card-icon">🎓</div><h3 class="card-title" data-i18n="feat3Title">Persönliche Urkunde</h3><p class="card-text" data-i18n="feat3Text">Beende ein Modul und lade dein persönliches Zertifikat als PDF herunter.</p></div>
-    </div>
-  </div>
-  <div class="copyright">© Copyright by Sara Manoochehri</div>
+  <div class="hero">
+    <span class="hero-badge" data-i18n="heroBadge">Interaktives Lernen</span>
+    <h1>Upskill<br>Academy</h1>
+    <p class="hero-sub" data-i18n="heroSub">Lerne HR und Gehaltsabrechnung interaktiv – mit Quizzes, sofortigem Feedback und persönlichen Zertifikaten.</p>
+    <div class="hero-btns">
+      <button class="btn btn-primary" onclick="showPage('topics')" data-i18n="heroStart">Lernen starten</button>
+      <button class="btn btn-secondary" onclick="showPage('about-platform')" data-i18n="heroExplore">Mehr erfahren</button>
+    </div>
+  </div>
+  <div class="container" style="padding-top:0;">
+    <div class="card-grid">
+      <div class="card"><div class="card-icon">⚡</div><h3 class="card-title" data-i18n="feat1Title">Sofortiges Feedback</h3><p class="card-text" data-i18n="feat1Text">Nach jeder Antwort siehst du direkt, ob du richtig lagst – mit ausführlicher Erklärung.</p></div>
+      <div class="card"><div class="card-icon">📱</div><h3 class="card-title" data-i18n="feat2Title">Lernen am Handy</h3><p class="card-text" data-i18n="feat2Text">Entwickelt für unterwegs. Lerne wann und wo du möchtest – kein Login nötig.</p></div>
+      <div class="card"><div class="card-icon">🎓</div><h3 class="card-title" data-i18n="feat3Title">Persönliche Urkunde</h3><p class="card-text" data-i18n="feat3Text">Beende ein Modul und lade dein persönliches Zertifikat als PDF herunter.</p></div>
+    </div>
+  </div>
+  <div class="copyright">© Copyright by Sara Manoochehri</div>
 </div>
 
 <!-- ══════════════════════════════════════════
-     PAGE: ABOUT PLATFORM
+     PAGE: ABOUT PLATFORM
 ══════════════════════════════════════════ -->
 
 <div class="page" id="page-about-platform">
-  <div class="container-sm">
-    <div class="section-label" data-i18n="apLabel">Die Plattform</div>
-    <h2 class="section-title" data-i18n="apTitle">Was ist die Upskill Academy?</h2>
-    <div class="divider"></div>
-    <p class="section-sub" data-i18n="apIntro">Die Upskill Academy ist eine interaktive Lernplattform, die dir ermöglicht, Fachwissen in HR und Gehaltsabrechnung spielerisch und effektiv zu erlernen – direkt am Smartphone.</p>
+  <div class="container-sm">
+    <div class="section-label" data-i18n="apLabel">Die Plattform</div>
+    <h2 class="section-title" data-i18n="apTitle">Was ist die Upskill Academy?</h2>
+    <div class="divider"></div>
+    <p class="section-sub" data-i18n="apIntro">Die Upskill Academy ist eine interaktive Lernplattform, die dir ermöglicht, Fachwissen in HR und Gehaltsabrechnung spielerisch und effektiv zu erlernen – direkt am Smartphone.</p>
 
 ```
 <div style="margin-top:36px;">
-  <div class="info-row"><span class="info-icon">🎮</span><div class="info-text"><h4 data-i18n="how1T">Quiz-basiertes Lernen</h4><p data-i18n="how1P">Statt stundenlang Skripte zu lesen, lernst du durch Fragen und Antworten. Jede Frage trainiert dein Wissen gezielt.</p></div></div>
-  <div class="info-row"><span class="info-icon">💡</span><div class="info-text"><h4 data-i18n="how2T">Sofortiges Feedback</h4><p data-i18n="how2P">Du siehst nach jeder Antwort ob du richtig lagst – plus eine Erklärung, damit du wirklich verstehst warum.</p></div></div>
-  <div class="info-row"><span class="info-icon">📈</span><div class="info-text"><h4 data-i18n="how3T">Stufensystem & Fortschritt</h4><p data-i18n="how3P">Von Grundlagen bis Expertenlevel – du steigst im Rang auf, je mehr du lernst und beantwortest.</p></div></div>
-  <div class="info-row"><span class="info-icon">🌍</span><div class="info-text"><h4 data-i18n="how4T">Drei Sprachen</h4><p data-i18n="how4P">Deutsch, Englisch und Spanisch – lerne in deiner Sprache oder übe gleich in der Fremdsprache.</p></div></div>
+  <div class="info-row"><span class="info-icon">🎮</span><div class="info-text"><h4 data-i18n="how1T">Quiz-basiertes Lernen</h4><p data-i18n="how1P">Statt stundenlang Skripte zu lesen, lernst du durch Fragen und Antworten. Jede Frage trainiert dein Wissen gezielt.</p></div></div>
+  <div class="info-row"><span class="info-icon">💡</span><div class="info-text"><h4 data-i18n="how2T">Sofortiges Feedback</h4><p data-i18n="how2P">Du siehst nach jeder Antwort ob du richtig lagst – plus eine Erklärung, damit du wirklich verstehst warum.</p></div></div>
+  <div class="info-row"><span class="info-icon">📈</span><div class="info-text"><h4 data-i18n="how3T">Stufensystem & Fortschritt</h4><p data-i18n="how3P">Von Grundlagen bis Expertenlevel – du steigst im Rang auf, je mehr du lernst und beantwortest.</p></div></div>
+  <div class="info-row"><span class="info-icon">🌍</span><div class="info-text"><h4 data-i18n="how4T">Drei Sprachen</h4><p data-i18n="how4P">Deutsch, Englisch und Spanisch – lerne in deiner Sprache oder übe gleich in der Fremdsprache.</p></div></div>
 </div>
 
 <h2 class="section-title" style="margin-top:48px;" data-i18n="advantagesTitle">Deine Vorteile</h2>
 <div class="divider"></div>
 <div class="card-grid">
-  <div class="card"><div class="card-icon">🧩</div><h3 class="card-title" data-i18n="adv1T">Interaktiv</h3><p class="card-text" data-i18n="adv1P">Passives Lesen wird zu aktivem Denken. Du wirst abgefragt, nicht nur berieselt.</p></div>
-  <div class="card"><div class="card-icon">🏢</div><h3 class="card-title" data-i18n="adv2T">Praxisnah</h3><p class="card-text" data-i18n="adv2P">Alle Inhalte stammen aus echten Lernmaterialien und Kursen – kein theoretischer Ballast.</p></div>
-  <div class="card"><div class="card-icon">⚡</div><h3 class="card-title" data-i18n="adv3T">Sofortiges Feedback</h3><p class="card-text" data-i18n="adv3P">Keine Wartezeit, kein Korrigieren. Du weißt sofort, was du weißt – und was nicht.</p></div>
+  <div class="card"><div class="card-icon">🧩</div><h3 class="card-title" data-i18n="adv1T">Interaktiv</h3><p class="card-text" data-i18n="adv1P">Passives Lesen wird zu aktivem Denken. Du wirst abgefragt, nicht nur berieselt.</p></div>
+  <div class="card"><div class="card-icon">🏢</div><h3 class="card-title" data-i18n="adv2T">Praxisnah</h3><p class="card-text" data-i18n="adv2P">Alle Inhalte stammen aus echten Lernmaterialien und Kursen – kein theoretischer Ballast.</p></div>
+  <div class="card"><div class="card-icon">⚡</div><h3 class="card-title" data-i18n="adv3T">Sofortiges Feedback</h3><p class="card-text" data-i18n="adv3P">Keine Wartezeit, kein Korrigieren. Du weißt sofort, was du weißt – und was nicht.</p></div>
 </div>
 ```
 
-  </div>
-  <div class="copyright">© Copyright by Sara Manoochehri</div>
+  </div>
+  <div class="copyright">© Copyright by Sara Manoochehri</div>
 </div>
 
 <!-- ══════════════════════════════════════════
-     PAGE: TOPICS
+     PAGE: TOPICS
 ══════════════════════════════════════════ -->
 
 <div class="page" id="page-topics">
-  <div class="container">
-    <div class="section-label" data-i18n="topicsLabel">Lernbereiche</div>
-    <h2 class="section-title" data-i18n="topicsTitle">Wähle dein Thema</h2>
-    <div class="divider"></div>
-    <p class="section-sub" data-i18n="topicsSub">Jedes Thema führt dich durch Module und Quizzes – von den Grundlagen bis zum Experten.</p>
-    <div class="card-grid" style="margin-top:32px;">
-      <div class="topic-card" onclick="showPage('quiz-select')">
-        <span class="topic-icon">👥</span>
-        <div class="topic-name" data-i18n="topic1Name">HR – Human Resources</div>
-        <div class="topic-desc" data-i18n="topic1Desc">Strategische Personalführung, Wettbewerbsvorteil, Planung & Struktur</div>
-        <div class="topic-modules" data-i18n="topic1Modules">4 Module · 40 Fragen</div>
-      </div>
-      <div class="topic-card locked">
-        <span class="topic-icon">💰</span>
-        <div class="topic-name" data-i18n="topic2Name">Gehaltsabrechnung</div>
-        <div class="topic-desc" data-i18n="topic2Desc">Lohnarten, Abzüge, Sozialversicherung, Steuerrecht</div>
-        <div class="topic-modules" data-i18n="comingSoon">Demnächst verfügbar</div>
-        <div style="margin-top:12px;"><span class="card-badge soon" data-i18n="comingSoon">Demnächst</span></div>
-      </div>
-      <div class="topic-card locked">
-        <span class="topic-icon">📊</span>
-        <div class="topic-name" data-i18n="topic3Name">Buchhaltung</div>
-        <div class="topic-desc" data-i18n="topic3Desc">Grundlagen Buchhaltung, Bilanz, Gewinn & Verlust</div>
-        <div class="topic-modules" data-i18n="comingSoon">Demnächst verfügbar</div>
-        <div style="margin-top:12px;"><span class="card-badge soon" data-i18n="comingSoon">Demnächst</span></div>
-      </div>
-      <div class="topic-card locked">
-        <span class="topic-icon">📣</span>
-        <div class="topic-name" data-i18n="topic4Name">Marketing</div>
-        <div class="topic-desc" data-i18n="topic4Desc">Grundlagen Marketing, Strategien, digitale Kanäle</div>
-        <div class="topic-modules" data-i18n="comingSoon">Demnächst verfügbar</div>
-        <div style="margin-top:12px;"><span class="card-badge soon" data-i18n="comingSoon">Demnächst</span></div>
-      </div>
-      <div class="topic-card locked">
-        <span class="topic-icon">💼</span>
-        <div class="topic-name" data-i18n="topic5Name">Office Skills</div>
-        <div class="topic-desc" data-i18n="topic5Desc">Excel, Kommunikation, Projektmanagement, Organisation</div>
-        <div class="topic-modules" data-i18n="comingSoon">Demnächst verfügbar</div>
-        <div style="margin-top:12px;"><span class="card-badge soon" data-i18n="comingSoon">Demnächst</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="copyright">© Copyright by Sara Manoochehri</div>
+  <div class="container">
+    <div class="section-label" data-i18n="topicsLabel">Lernbereiche</div>
+    <h2 class="section-title" data-i18n="topicsTitle">Wähle dein Thema</h2>
+    <div class="divider"></div>
+    <p class="section-sub" data-i18n="topicsSub">Jedes Thema führt dich durch Module und Quizzes – von den Grundlagen bis zum Experten.</p>
+    <div class="card-grid" style="margin-top:32px;">
+      <div class="topic-card" onclick="showPage('quiz-select')">
+        <span class="topic-icon">👥</span>
+        <div class="topic-name" data-i18n="topic1Name">HR – Human Resources</div>
+        <div class="topic-desc" data-i18n="topic1Desc">Strategische Personalführung, Wettbewerbsvorteil, Planung & Struktur</div>
+        <div class="topic-modules" data-i18n="topic1Modules">4 Module · 40 Fragen</div>
+      </div>
+      <div class="topic-card locked">
+        <span class="topic-icon">💰</span>
+        <div class="topic-name" data-i18n="topic2Name">Gehaltsabrechnung</div>
+        <div class="topic-desc" data-i18n="topic2Desc">Lohnarten, Abzüge, Sozialversicherung, Steuerrecht</div>
+        <div class="topic-modules" data-i18n="comingSoon">Demnächst verfügbar</div>
+        <div style="margin-top:12px;"><span class="card-badge soon" data-i18n="comingSoon">Demnächst</span></div>
+      </div>
+      <div class="topic-card locked">
+        <span class="topic-icon">📊</span>
+        <div class="topic-name" data-i18n="topic3Name">Buchhaltung</div>
+        <div class="topic-desc" data-i18n="topic3Desc">Grundlagen Buchhaltung, Bilanz, Gewinn & Verlust</div>
+        <div class="topic-modules" data-i18n="comingSoon">Demnächst verfügbar</div>
+        <div style="margin-top:12px;"><span class="card-badge soon" data-i18n="comingSoon">Demnächst</span></div>
+      </div>
+      <div class="topic-card locked">
+        <span class="topic-icon">📣</span>
+        <div class="topic-name" data-i18n="topic4Name">Marketing</div>
+        <div class="topic-desc" data-i18n="topic4Desc">Grundlagen Marketing, Strategien, digitale Kanäle</div>
+        <div class="topic-modules" data-i18n="comingSoon">Demnächst verfügbar</div>
+        <div style="margin-top:12px;"><span class="card-badge soon" data-i18n="comingSoon">Demnächst</span></div>
+      </div>
+      <div class="topic-card locked">
+        <span class="topic-icon">💼</span>
+        <div class="topic-name" data-i18n="topic5Name">Office Skills</div>
+        <div class="topic-desc" data-i18n="topic5Desc">Excel, Kommunikation, Projektmanagement, Organisation</div>
+        <div class="topic-modules" data-i18n="comingSoon">Demnächst verfügbar</div>
+        <div style="margin-top:12px;"><span class="card-badge soon" data-i18n="comingSoon">Demnächst</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="copyright">© Copyright by Sara Manoochehri</div>
 </div>
 
 <!-- ══════════════════════════════════════════
-     PAGE: QUIZ SELECT
+     PAGE: QUIZ SELECT
 ══════════════════════════════════════════ -->
 
 <div class="page" id="page-quiz-select">
-  <div class="container">
-    <button class="back-btn" onclick="showPage('topics')">← <span data-i18n="backTopics">Zurück zu Themen</span></button>
-    <div class="section-label">HR – Human Resources</div>
-    <h2 class="section-title" data-i18n="qsTitle">Wähle dein Modul</h2>
-    <div class="divider"></div>
-    <div class="rank-ladder" id="rank-ladder"></div>
-    <div class="card-grid" id="level-grid" style="margin-top:24px;"></div>
-  </div>
-  <div class="copyright">© Copyright by Sara Manoochehri</div>
+  <div class="container">
+    <button class="back-btn" onclick="showPage('topics')">← <span data-i18n="backTopics">Zurück zu Themen</span></button>
+    <div class="section-label">HR – Human Resources</div>
+    <h2 class="section-title" data-i18n="qsTitle">Wähle dein Modul</h2>
+    <div class="divider"></div>
+    <div class="rank-ladder" id="rank-ladder"></div>
+    <div class="card-grid" id="level-grid" style="margin-top:24px;"></div>
+  </div>
+  <div class="copyright">© Copyright by Sara Manoochehri</div>
 </div>
 
 <!-- ══════════════════════════════════════════
-     PAGE: QUIZ
+     PAGE: QUIZ
 ══════════════════════════════════════════ -->
 
 <div class="page" id="page-quiz">
-  <div class="container">
-    <div class="quiz-wrap">
-      <button class="back-btn" onclick="showPage('quiz-select')">← <span data-i18n="backModules">Zurück zu Modulen</span></button>
-      <div class="quiz-header">
-        <span class="quiz-title" id="quiz-level-title"></span>
-        <div style="display:flex;gap:10px;">
-          <div class="pill"><span data-i18n="qPill">Frage</span> <span id="q-current">1</span>/<span id="q-total">10</span></div>
-          <div class="pill">⭐ <span id="q-score">0</span></div>
-        </div>
-      </div>
-      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-      <div class="question-card">
-        <div class="q-number" id="q-number"></div>
-        <div class="q-text" id="q-text"></div>
-      </div>
-      <div class="answers" id="answers-container"></div>
-      <div class="explanation" id="explanation"></div>
-      <div class="nav-btns">
-        <button class="btn btn-primary" id="next-btn" style="display:none" onclick="nextQuestion()"></button>
-      </div>
-    </div>
-  </div>
+  <div class="container">
+    <div class="quiz-wrap">
+      <button class="back-btn" onclick="showPage('quiz-select')">← <span data-i18n="backModules">Zurück zu Modulen</span></button>
+      <div class="quiz-header">
+        <span class="quiz-title" id="quiz-level-title"></span>
+        <div style="display:flex;gap:10px;">
+          <div class="pill"><span data-i18n="qPill">Frage</span> <span id="q-current">1</span>/<span id="q-total">10</span></div>
+          <div class="pill">⭐ <span id="q-score">0</span></div>
+        </div>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      <div class="question-card">
+        <div class="q-number" id="q-number"></div>
+        <div class="q-text" id="q-text"></div>
+      </div>
+      <div class="answers" id="answers-container"></div>
+      <div class="explanation" id="explanation"></div>
+      <div class="nav-btns">
+        <button class="btn btn-primary" id="next-btn" style="display:none" onclick="nextQuestion()"></button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- ══════════════════════════════════════════
-     PAGE: RESULT
+     PAGE: RESULT
 ══════════════════════════════════════════ -->
 
 <div class="page" id="page-result">
-  <div class="container-sm">
-    <div class="result-wrap">
-      <span class="medal-big" id="result-medal">🥇</span>
-      <h2 class="result-h" id="result-title"></h2>
-      <p id="result-rank" style="color:var(--silver);margin-bottom:10px;font-size:16px;"></p>
-      <div class="score-ring" id="score-ring">
-        <div class="score-num" id="score-number">0<small>/10</small></div>
-      </div>
-      <div class="stats-row">
-        <div class="stat-box"><div class="stat-v" id="stat-correct">0</div><div class="stat-l" id="lbl-correct">Richtig</div></div>
-        <div class="stat-box"><div class="stat-v" id="stat-wrong">0</div><div class="stat-l" id="lbl-wrong">Falsch</div></div>
-        <div class="stat-box"><div class="stat-v" id="stat-pct">0%</div><div class="stat-l" id="lbl-pct">Quote</div></div>
-      </div>
-      <div id="rank-up-banner" style="display:none;background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.05));border:1px solid rgba(201,168,76,.4);border-radius:14px;padding:18px 24px;margin-bottom:20px;"><p id="rank-up-text" style="color:var(--gold-light);font-size:14px;"></p></div>
-      <div class="name-input-wrap">
-        <label id="lbl-name-input">📝 Name für die Urkunde</label>
-        <input class="name-input" id="cert-name" type="text" maxlength="60"/>
-      </div>
-      <div class="result-btns">
-        <button class="btn btn-ghost" id="btn-retry" onclick="retryLevel()">🔄</button>
-        <button class="btn btn-cert" id="btn-download" onclick="downloadCert()">📜</button>
-        <button class="btn btn-secondary" id="btn-home-r" onclick="showPage('quiz-select')">🏛️</button>
-      </div>
-    </div>
-  </div>
-  <div class="copyright">© Copyright by Sara Manoochehri</div>
+  <div class="container-sm">
+    <div class="result-wrap">
+      <span class="medal-big" id="result-medal">🥇</span>
+      <h2 class="result-h" id="result-title"></h2>
+      <p id="result-rank" style="color:var(--silver);margin-bottom:10px;font-size:16px;"></p>
+      <div class="score-ring" id="score-ring">
+        <div class="score-num" id="score-number">0<small>/10</small></div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-box"><div class="stat-v" id="stat-correct">0</div><div class="stat-l" id="lbl-correct">Richtig</div></div>
+        <div class="stat-box"><div class="stat-v" id="stat-wrong">0</div><div class="stat-l" id="lbl-wrong">Falsch</div></div>
+        <div class="stat-box"><div class="stat-v" id="stat-pct">0%</div><div class="stat-l" id="lbl-pct">Quote</div></div>
+      </div>
+      <div id="rank-up-banner" style="display:none;background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.05));border:1px solid rgba(201,168,76,.4);border-radius:14px;padding:18px 24px;margin-bottom:20px;"><p id="rank-up-text" style="color:var(--gold-light);font-size:14px;"></p></div>
+      <div class="name-input-wrap">
+        <label id="lbl-name-input">📝 Name für die Urkunde</label>
+        <input class="name-input" id="cert-name" type="text" maxlength="60"/>
+      </div>
+      <div class="result-btns">
+        <button class="btn btn-ghost" id="btn-retry" onclick="retryLevel()">🔄</button>
+        <button class="btn btn-cert" id="btn-download" onclick="downloadCert()">📜</button>
+        <button class="btn btn-secondary" id="btn-home-r" onclick="showPage('quiz-select')">🏛️</button>
+      </div>
+    </div>
+  </div>
+  <div class="copyright">© Copyright by Sara Manoochehri</div>
 </div>
 
 <!-- ══════════════════════════════════════════
-     PAGE: CERTIFICATE
+     PAGE: CERTIFICATE
 ══════════════════════════════════════════ -->
 
 <div class="page" id="page-certificate">
-  <div class="container-sm">
-    <div class="section-label" data-i18n="certPageLabel">Abschluss</div>
-    <h2 class="section-title" data-i18n="certPageTitle">Dein Zertifikat</h2>
-    <div class="divider"></div>
-    <p class="section-sub" data-i18n="certPageSub">Nach dem Abschluss eines Moduls erhältst du ein persönliches Zertifikat als PDF – abgestuft nach deiner Leistung.</p>
-    <div class="cert-tiers">
-      <div class="cert-tier-card"><div class="medal">📜</div><h4 data-i18n="ct0T">Teilnahme</h4><p data-i18n="ct0P">Unter 50% – Du warst dabei!</p></div>
-      <div class="cert-tier-card"><div class="medal">🥉</div><h4 data-i18n="ct1T">Bestanden</h4><p data-i18n="ct1P">50–74% – Solide Leistung</p></div>
-      <div class="cert-tier-card"><div class="medal">🥈</div><h4 data-i18n="ct2T">Mit Auszeichnung</h4><p data-i18n="ct2P">75–99% – Sehr gut!</p></div>
-      <div class="cert-tier-card"><div class="medal">🏆</div><h4 data-i18n="ct3T">Höchstauszeichnung</h4><p data-i18n="ct3P">100% – Perfekt!</p></div>
-    </div>
-    <div class="premium-box">
-      <h3>⭐ Premium Feature</h3>
-      <p data-i18n="premiumText">Das Zertifikat steht nach Abschluss eines Moduls kostenlos zum Download bereit. Zukünftig werden verifizierte Zertifikate mit Bezahlfunktion verfügbar sein.</p>
-      <button class="btn btn-primary" onclick="showPage('topics')" data-i18n="premiumBtn">Jetzt ein Modul starten</button>
-    </div>
-  </div>
-  <div class="copyright">© Copyright by Sara Manoochehri</div>
+  <div class="container-sm">
+    <div class="section-label" data-i18n="certPageLabel">Abschluss</div>
+    <h2 class="section-title" data-i18n="certPageTitle">Dein Zertifikat</h2>
+    <div class="divider"></div>
+    <p class="section-sub" data-i18n="certPageSub">Nach dem Abschluss eines Moduls erhältst du ein persönliches Zertifikat als PDF – abgestuft nach deiner Leistung.</p>
+    <div class="cert-tiers">
+      <div class="cert-tier-card"><div class="medal">📜</div><h4 data-i18n="ct0T">Teilnahme</h4><p data-i18n="ct0P">Unter 50% – Du warst dabei!</p></div>
+      <div class="cert-tier-card"><div class="medal">🥉</div><h4 data-i18n="ct1T">Bestanden</h4><p data-i18n="ct1P">50–74% – Solide Leistung</p></div>
+      <div class="cert-tier-card"><div class="medal">🥈</div><h4 data-i18n="ct2T">Mit Auszeichnung</h4><p data-i18n="ct2P">75–99% – Sehr gut!</p></div>
+      <div class="cert-tier-card"><div class="medal">🏆</div><h4 data-i18n="ct3T">Höchstauszeichnung</h4><p data-i18n="ct3P">100% – Perfekt!</p></div>
+    </div>
+    <div class="premium-box">
+      <h3>⭐ Premium Feature</h3>
+      <p data-i18n="premiumText">Das Zertifikat steht nach Abschluss eines Moduls kostenlos zum Download bereit. Zukünftig werden verifizierte Zertifikate mit Bezahlfunktion verfügbar sein.</p>
+      <button class="btn btn-primary" onclick="showPage('topics')" data-i18n="premiumBtn">Jetzt ein Modul starten</button>
+    </div>
+  </div>
+  <div class="copyright">© Copyright by Sara Manoochehri</div>
 </div>
 
 <!-- ══════════════════════════════════════════
-     PAGE: ABOUT ME
+     PAGE: ABOUT ME
 ══════════════════════════════════════════ -->
 
 <div class="page" id="page-about-me">
-  <div class="container-sm">
-    <div class="section-label" data-i18n="amLabel">Gründerin</div>
-    <h2 class="section-title">Sara Manoochehri</h2>
-    <div class="divider"></div>
-    <div class="about-wrap">
-      <div>
-        <div class="about-avatar">👩‍💼</div>
-        <div class="tag-row" style="justify-content:center;margin-top:16px;">
-          <span class="tag">🇩🇪 Deutschland</span>
-          <span class="tag">🇮🇷 Iran</span>
-          <span class="tag">🏝️ Teneriffa</span>
-        </div>
-      </div>
-      <div>
-        <p style="font-size:15px;color:var(--silver);line-height:1.8;margin-bottom:20px;" data-i18n="amBio">Ich bin gebürtige Iranerin, aufgewachsen in Deutschland – und lebe heute auf Teneriffa. Diese Mischung aus Kulturen und Sprachen hat mich immer begleitet und meine Art zu lernen geprägt.</p>
-        <div class="about-quote" data-i18n="amQuote">„Ich habe einen Weiterbildungskurs im Bereich HR gemacht. Für die Prüfung musste ich viel Material in kurzer Zeit lernen – und das auf Spanisch. Ich dachte mir: Wie cool wäre es, wenn ich das am Handy lernen könnte und dabei direkt zu den Themen abgefragt werde. Und hier sind wir nun."</div>
-        <p style="font-size:15px;color:var(--silver);line-height:1.8;" data-i18n="amMission">Die Upskill Academy ist meine Antwort darauf: Lernen einfacher, zugänglicher und ehrlich gesagt auch einfach angenehmer machen. Kein Bullshit, kein Overengineering – einfach lernen, was du brauchst, wann du es brauchst.</p>
-      </div>
-    </div>
-  </div>
-  <div class="copyright">© Copyright by Sara Manoochehri</div>
+  <div class="container-sm">
+    <div class="section-label" data-i18n="amLabel">Gründerin</div>
+    <h2 class="section-title">Sara Manoochehri</h2>
+    <div class="divider"></div>
+    <div class="about-wrap">
+      <div>
+        <div class="about-avatar">👩‍💼</div>
+        <div class="tag-row" style="justify-content:center;margin-top:16px;">
+          <span class="tag">🇩🇪 Deutschland</span>
+          <span class="tag">🇮🇷 Iran</span>
+          <span class="tag">🏝️ Teneriffa</span>
+        </div>
+      </div>
+      <div>
+        <p style="font-size:15px;color:var(--silver);line-height:1.8;margin-bottom:20px;" data-i18n="amBio">Ich bin gebürtige Iranerin, aufgewachsen in Deutschland – und lebe heute auf Teneriffa. Diese Mischung aus Kulturen und Sprachen hat mich immer begleitet und meine Art zu lernen geprägt.</p>
+        <div class="about-quote" data-i18n="amQuote">„Ich habe einen Weiterbildungskurs im Bereich HR gemacht. Für die Prüfung musste ich viel Material in kurzer Zeit lernen – und das auf Spanisch. Ich dachte mir: Wie cool wäre es, wenn ich das am Handy lernen könnte und dabei direkt zu den Themen abgefragt werde. Und hier sind wir nun."</div>
+        <p style="font-size:15px;color:var(--silver);line-height:1.8;" data-i18n="amMission">Die Upskill Academy ist meine Antwort darauf: Lernen einfacher, zugänglicher und ehrlich gesagt auch einfach angenehmer machen. Kein Bullshit, kein Overengineering – einfach lernen, was du brauchst, wann du es brauchst.</p>
+      </div>
+    </div>
+  </div>
+  <div class="copyright">© Copyright by Sara Manoochehri</div>
 </div>
 
 <!-- ══════════════════════════════════════════
-     PAGE: LEGAL
+     PAGE: LEGAL
 ══════════════════════════════════════════ -->
 
 <div class="page" id="page-legal">
-  <div class="container-sm">
-    <div class="section-label" data-i18n="legalLabel">Rechtliches</div>
-    <h2 class="section-title" data-i18n="legalTitle">Impressum & Datenschutz</h2>
-    <div class="divider"></div>
-    <div class="legal-tabs">
-      <button class="legal-tab active" onclick="showLegalTab('impressum')" data-i18n="tabImpr">Impressum</button>
-      <button class="legal-tab" onclick="showLegalTab('datenschutz-de')" data-i18n="tabDSde">Datenschutz (DE)</button>
-      <button class="legal-tab" onclick="showLegalTab('datenschutz-es')" data-i18n="tabDSes">Privacidad (ES)</button>
-    </div>
-    <div id="legal-impressum" class="legal-content">
-      <h3 data-i18n="imprH">Impressum</h3>
-      <p data-i18n="imprName"><strong>Angaben gemäß § 5 TMG</strong></p>
-      <p>Sara Manoochehri<br>Teneriffa, Spanien<br>E-Mail: <a href="mailto:info@upskill-academy.com">info@upskill-academy.com</a></p>
-      <h3 data-i18n="imprDisclH">Haftungsausschluss</h3>
-      <p data-i18n="imprDiscl">Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann keine Gewähr übernommen werden. Diese Plattform dient ausschließlich zu Bildungszwecken.</p>
-    </div>
-    <div id="legal-datenschutz-de" class="legal-content" style="display:none;">
-      <h3>Datenschutzerklärung</h3>
-      <p><strong>1. Verantwortliche Stelle</strong><br>Sara Manoochehri, Teneriffa, Spanien.</p>
-      <h3>Datenverarbeitung</h3>
-      <p>Diese Webseite speichert keine personenbezogenen Daten auf einem Server. Lernfortschritt und Einstellungen werden ausschließlich lokal in deinem Browser (localStorage) gespeichert und verlassen dein Gerät nicht.</p>
-      <h3>Cookies & Tracking</h3>
-      <ul><li>Es werden keine Marketing-Cookies verwendet.</li><li>Es findet kein Tracking durch Drittanbieter statt.</li><li>Es werden keine Analyse-Tools wie Google Analytics eingesetzt.</li></ul>
-      <h3>Deine Rechte</h3>
-      <p>Du hast das Recht auf Auskunft, Berichtigung und Löschung deiner Daten. Da keine Serverdaten gespeichert werden, kannst du deine lokalen Daten jederzeit über die Browsereinstellungen löschen.</p>
-    </div>
-    <div id="legal-datenschutz-es" class="legal-content" style="display:none;">
-      <h3>Política de Privacidad</h3>
-      <p><strong>1. Responsable</strong><br>Sara Manoochehri, Tenerife, España.</p>
-      <h3>Tratamiento de datos</h3>
-      <p>Este sitio web no almacena datos personales en ningún servidor. El progreso de aprendizaje y la configuración se guardan exclusivamente de forma local en tu navegador (localStorage) y no abandonan tu dispositivo.</p>
-      <h3>Cookies y seguimiento</h3>
-      <ul><li>No se utilizan cookies de marketing.</li><li>No se realiza seguimiento por parte de terceros.</li><li>No se utilizan herramientas de análisis como Google Analytics.</li></ul>
-      <h3>Tus derechos</h3>
-      <p>Tienes derecho de acceso, rectificación y supresión de tus datos. Como no se almacenan datos en el servidor, puedes eliminar tus datos locales en cualquier momento desde la configuración del navegador.</p>
-    </div>
-  </div>
-  <div class="copyright">© Copyright by Sara Manoochehri</div>
+  <div class="container-sm">
+    <div class="section-label" data-i18n="legalLabel">Rechtliches</div>
+    <h2 class="section-title" data-i18n="legalTitle">Impressum & Datenschutz</h2>
+    <div class="divider"></div>
+    <div class="legal-tabs">
+      <button class="legal-tab active" onclick="showLegalTab('impressum')" data-i18n="tabImpr">Impressum</button>
+      <button class="legal-tab" onclick="showLegalTab('datenschutz-de')" data-i18n="tabDSde">Datenschutz (DE)</button>
+      <button class="legal-tab" onclick="showLegalTab('datenschutz-es')" data-i18n="tabDSes">Privacidad (ES)</button>
+    </div>
+    <div id="legal-impressum" class="legal-content">
+      <h3 data-i18n="imprH">Impressum</h3>
+      <p data-i18n="imprName"><strong>Angaben gemäß § 5 TMG</strong></p>
+      <p>Sara Manoochehri<br>Teneriffa, Spanien<br>E-Mail: <a href="mailto:info@upskill-academy.com">info@upskill-academy.com</a></p>
+      <h3 data-i18n="imprDisclH">Haftungsausschluss</h3>
+      <p data-i18n="imprDiscl">Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann keine Gewähr übernommen werden. Diese Plattform dient ausschließlich zu Bildungszwecken.</p>
+    </div>
+    <div id="legal-datenschutz-de" class="legal-content" style="display:none;">
+      <h3>Datenschutzerklärung</h3>
+      <p><strong>1. Verantwortliche Stelle</strong><br>Sara Manoochehri, Teneriffa, Spanien.</p>
+      <h3>Datenverarbeitung</h3>
+      <p>Diese Webseite speichert keine personenbezogenen Daten auf einem Server. Lernfortschritt und Einstellungen werden ausschließlich lokal in deinem Browser (localStorage) gespeichert und verlassen dein Gerät nicht.</p>
+      <h3>Cookies & Tracking</h3>
+      <ul><li>Es werden keine Marketing-Cookies verwendet.</li><li>Es findet kein Tracking durch Drittanbieter statt.</li><li>Es werden keine Analyse-Tools wie Google Analytics eingesetzt.</li></ul>
+      <h3>Deine Rechte</h3>
+      <p>Du hast das Recht auf Auskunft, Berichtigung und Löschung deiner Daten. Da keine Serverdaten gespeichert werden, kannst du deine lokalen Daten jederzeit über die Browsereinstellungen löschen.</p>
+    </div>
+    <div id="legal-datenschutz-es" class="legal-content" style="display:none;">
+      <h3>Política de Privacidad</h3>
+      <p><strong>1. Responsable</strong><br>Sara Manoochehri, Tenerife, España.</p>
+      <h3>Tratamiento de datos</h3>
+      <p>Este sitio web no almacena datos personales en ningún servidor. El progreso de aprendizaje y la configuración se guardan exclusivamente de forma local en tu navegador (localStorage) y no abandonan tu dispositivo.</p>
+      <h3>Cookies y seguimiento</h3>
+      <ul><li>No se utilizan cookies de marketing.</li><li>No se realiza seguimiento por parte de terceros.</li><li>No se utilizan herramientas de análisis como Google Analytics.</li></ul>
+      <h3>Tus derechos</h3>
+      <p>Tienes derecho de acceso, rectificación y supresión de tus datos. Como no se almacenan datos en el servidor, puedes eliminar tus datos locales en cualquier momento desde la configuración del navegador.</p>
+    </div>
+  </div>
+  <div class="copyright">© Copyright by Sara Manoochehri</div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <!-- ══════════════════════════════════════════
-     JAVASCRIPT
+     JAVASCRIPT
 ══════════════════════════════════════════ -->
 
 <script>
 // ── i18n ──────────────────────────────────────
 const I18N = {
-  de:{
-    navHome:'Home',navWhat:'Was ist UA',navTopics:'Themen',navCert:'Zertifikat',navAbout:'Über mich',navLegal:'Rechtliches',
-    heroBadge:'Interaktives Lernen',heroSub:'Lerne HR und Gehaltsabrechnung interaktiv – mit Quizzes, sofortigem Feedback und persönlichen Zertifikaten.',heroStart:'Lernen starten',heroExplore:'Mehr erfahren',
-    feat1Title:'Sofortiges Feedback',feat1Text:'Nach jeder Antwort siehst du direkt, ob du richtig lagst – mit ausführlicher Erklärung.',feat2Title:'Lernen am Handy',feat2Text:'Entwickelt für unterwegs. Lerne wann und wo du möchtest – kein Login nötig.',feat3Title:'Persönliche Urkunde',feat3Text:'Beende ein Modul und lade dein persönliches Zertifikat als PDF herunter.',
-    apLabel:'Die Plattform',apTitle:'Was ist die Upskill Academy?',apIntro:'Die Upskill Academy ist eine interaktive Lernplattform, die dir ermöglicht, Fachwissen in HR und Gehaltsabrechnung spielerisch zu erlernen – direkt am Smartphone.',
-    how1T:'Quiz-basiertes Lernen',how1P:'Statt stundenlang Skripte zu lesen, lernst du durch Fragen und Antworten.',how2T:'Sofortiges Feedback',how2P:'Du siehst nach jeder Antwort ob du richtig lagst – plus eine Erklärung.',how3T:'Stufensystem & Fortschritt',how3P:'Von Grundlagen bis Expertenlevel – du steigst im Rang auf.',how4T:'Drei Sprachen',how4P:'Deutsch, Englisch und Spanisch – lerne in deiner Sprache oder übe in der Fremdsprache.',
-    advantagesTitle:'Deine Vorteile',adv1T:'Interaktiv',adv1P:'Passives Lesen wird zu aktivem Denken.',adv2T:'Praxisnah',adv2P:'Alle Inhalte stammen aus echten Lernmaterialien.',adv3T:'Sofortiges Feedback',adv3P:'Keine Wartezeit – du weißt sofort, was du weißt.',
-    topicsLabel:'Lernbereiche',topicsTitle:'Wähle dein Thema',topicsSub:'Jedes Thema führt dich durch Module und Quizzes – von den Grundlagen bis zum Experten.',
-    topic1Name:'HR – Human Resources',topic1Desc:'Strategische Personalführung, Wettbewerbsvorteil, Planung & Struktur',topic1Modules:'4 Module · 40 Fragen',
-    topic2Name:'Gehaltsabrechnung',topic2Desc:'Lohnarten, Abzüge, Sozialversicherung, Steuerrecht',topic3Name:'Buchhaltung',topic3Desc:'Grundlagen Buchhaltung, Bilanz, Gewinn & Verlust',topic4Name:'Marketing',topic4Desc:'Grundlagen Marketing, Strategien, digitale Kanäle',topic5Name:'Office Skills',topic5Desc:'Excel, Kommunikation, Projektmanagement, Organisation',comingSoon:'Demnächst',
-    backTopics:'Zurück zu Themen',qsTitle:'Wähle dein Modul',backModules:'Zurück zu Modulen',qPill:'Frage',
-    certPageLabel:'Abschluss',certPageTitle:'Dein Zertifikat',certPageSub:'Nach dem Abschluss eines Moduls erhältst du ein persönliches Zertifikat als PDF – abgestuft nach deiner Leistung.',
-    ct0T:'Teilnahme',ct0P:'Unter 50% – Du warst dabei!',ct1T:'Bestanden',ct1P:'50–74% – Solide Leistung',ct2T:'Mit Auszeichnung',ct2P:'75–99% – Sehr gut!',ct3T:'Höchstauszeichnung',ct3P:'100% – Perfekt!',
-    premiumText:'Das Zertifikat steht nach Abschluss eines Moduls kostenlos zum Download bereit. Zukünftig werden verifizierte Zertifikate mit Bezahlfunktion verfügbar sein.',premiumBtn:'Jetzt ein Modul starten',
-    amLabel:'Gründerin',amBio:'Ich bin gebürtige Iranerin, aufgewachsen in Deutschland – und lebe heute auf Teneriffa. Diese Mischung aus Kulturen und Sprachen hat mich immer begleitet.',amQuote:'„Ich habe einen Weiterbildungskurs im Bereich HR gemacht. Für die Prüfung musste ich viel Material in kurzer Zeit lernen – und das auf Spanisch. Ich dachte mir: Wie cool wäre es, wenn ich das am Handy lernen könnte und dabei direkt zu den Themen abgefragt werde. Und hier sind wir nun."',amMission:'Die Upskill Academy ist meine Antwort darauf: Lernen einfacher, zugänglicher und angenehmer machen.',
-    legalLabel:'Rechtliches',legalTitle:'Impressum & Datenschutz',tabImpr:'Impressum',tabDSde:'Datenschutz (DE)',tabDSes:'Privacidad (ES)',imprH:'Impressum',imprName:'Angaben gemäß § 5 TMG',imprDisclH:'Haftungsausschluss',imprDiscl:'Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Diese Plattform dient ausschließlich zu Bildungszwecken.',
-    lbl_correct:'Richtig',lbl_wrong:'Falsch',lbl_pct:'Quote',lbl_name:'📝 Dein Name für die Urkunde:',name_ph:'Vollständiger Name...',btn_retry:'🔄 Nochmal',btn_dl:'📜 Urkunde herunterladen',btn_home:'🏛️ Übersicht',
-    q_label:'FRAGE',q_of:'von',q_next:'Weiter →',q_correct:'✅ Richtig!',q_wrong:'❌ Falsch.',
-    ranks:['Praktikant','HR-Assistent','Sachbearbeiter','HR-Specialist','HR-Analyst','HR Business Partner','HR-Manager'],
-    difficulties:['Leicht','Mittel','Schwer','Experte'],
-    levelNames:['Grundlagen','Wettbewerbsvorteil','Planung & Struktur','HR-Manager Level'],
-    levelDesc:['Einstieg in die strategische HR-Direktion.','Verstehe, wie HR einen Wettbewerbsvorteil schafft.','Strategische Personalplanung und Struktur.','Der ultimative Test – beweise dein HR-Wissen!'],
-    rankUp:'🎉 Rang-Aufstieg! Du bist jetzt:',rankLabel:'Du bist jetzt:',
-    bestMedal:'Beste Medaille:',questionsInfo:'10 Fragen ·',prevLevel:'Vorheriges Level abschließen',lockedToast:'🔒 Schließe zuerst das vorherige Level ab!',noNameToast:'✏️ Bitte gib deinen Namen ein!',dlToast:'📜 Urkunde heruntergeladen!',
-    resultTitles:['Versuch es nochmal 💪','Bestanden! 👍','Sehr gut! 👏','Hervorragend! 🎉'],
-    certTiers:[
-      {min:0,max:49,title:'Teilnahmeurkunde',medal:'📜',desc:'Für die aktive Teilnahme.'},
-      {min:50,max:74,title:'Urkunde – Bestanden',medal:'🥉',desc:'Mindestens 50% korrekt.'},
-      {min:75,max:99,title:'Urkunde – Mit Auszeichnung',medal:'🥈',desc:'Mindestens 75% korrekt.'},
-      {min:100,max:100,title:'Urkunde – Höchstauszeichnung',medal:'🏆',desc:'100% – Perfekt!'},
-    ],
-    certHereby:'hat erfolgreich am Quiz',certCompleted:'der Upskill Academy teilgenommen und',certScored:'der Fragen korrekt beantwortet.',certSigned:'Ausgestellt von',certDate:'Datum',certModule:'HR – Strategische Personalführung',
-  },
-  en:{
-    navHome:'Home',navWhat:'About UA',navTopics:'Topics',navCert:'Certificate',navAbout:'About me',navLegal:'Legal',
-    heroBadge:'Interactive Learning',heroSub:'Learn HR and Payroll interactively – with quizzes, instant feedback and personal certificates.',heroStart:'Start learning',heroExplore:'Learn more',
-    feat1Title:'Instant Feedback',feat1Text:'After every answer you see immediately if you were right – with a full explanation.',feat2Title:'Learn on your Phone',feat2Text:'Built for on-the-go. Learn whenever and wherever you want – no login required.',feat3Title:'Personal Certificate',feat3Text:'Complete a module and download your personal certificate as a PDF.',
-    apLabel:'The Platform',apTitle:'What is Upskill Academy?',apIntro:'Upskill Academy is an interactive learning platform that lets you master HR and payroll knowledge in a fun and effective way – right on your smartphone.',
-    how1T:'Quiz-based Learning',how1P:'Instead of reading scripts for hours, you learn through questions and answers.',how2T:'Instant Feedback',how2P:'After every answer you see whether you were right – plus an explanation.',how3T:'Level System & Progress',how3P:'From basics to expert level – you rank up the more you learn.',how4T:'Three Languages',how4P:'German, English and Spanish – learn in your language or practise a foreign one.',
-    advantagesTitle:'Your Benefits',adv1T:'Interactive',adv1P:'Passive reading becomes active thinking.',adv2T:'Practical',adv2P:'All content comes from real learning materials.',adv3T:'Instant Feedback',adv3P:'No waiting – you know immediately what you know.',
-    topicsLabel:'Learning Areas',topicsTitle:'Choose your Topic',topicsSub:'Each topic guides you through modules and quizzes – from basics to expert.',
-    topic1Name:'HR – Human Resources',topic1Desc:'Strategic HR management, competitive advantage, planning & structure',topic1Modules:'4 modules · 40 questions',
-    topic2Name:'Payroll',topic2Desc:'Wage types, deductions, social security, tax law',topic3Name:'Accounting',topic3Desc:'Accounting basics, balance sheet, profit & loss',topic4Name:'Marketing',topic4Desc:'Marketing basics, strategies, digital channels',topic5Name:'Office Skills',topic5Desc:'Excel, communication, project management, organisation',comingSoon:'Coming soon',
-    backTopics:'Back to Topics',qsTitle:'Choose your Module',backModules:'Back to Modules',qPill:'Question',
-    certPageLabel:'Completion',certPageTitle:'Your Certificate',certPageSub:'After completing a module you receive a personal certificate as a PDF – graded by your performance.',
-    ct0T:'Participation',ct0P:'Under 50% – You took part!',ct1T:'Passed',ct1P:'50–74% – Solid performance',ct2T:'With Distinction',ct2P:'75–99% – Very good!',ct3T:'Highest Distinction',ct3P:'100% – Perfect!',
-    premiumText:'The certificate is available for free download after completing a module. Verified certificates with a payment option will be available in the future.',premiumBtn:'Start a module now',
-    amLabel:'Founder',amBio:'I was born in Iran, grew up in Germany – and now live in Tenerife. This mix of cultures and languages has always shaped the way I learn.',amQuote:'"I took a continuing education course in HR. For the exam I had to learn a lot of material in a short time – and in Spanish. I thought: how cool would it be to learn this on my phone and get quizzed on the topics? And here we are."',amMission:'Upskill Academy is my answer: making learning simpler, more accessible, and frankly more enjoyable.',
-    legalLabel:'Legal',legalTitle:'Legal Notice & Privacy',tabImpr:'Legal Notice',tabDSde:'Privacy (DE)',tabDSes:'Privacidad (ES)',imprH:'Legal Notice',imprName:'Information according to § 5 TMG',imprDisclH:'Disclaimer',imprDiscl:'The content of this site has been compiled with the greatest care. This platform is for educational purposes only.',
-    lbl_correct:'Correct',lbl_wrong:'Wrong',lbl_pct:'Score',lbl_name:'📝 Your name for the certificate:',name_ph:'Full name...',btn_retry:'🔄 Try again',btn_dl:'📜 Download Certificate',btn_home:'🏛️ Overview',
-    q_label:'QUESTION',q_of:'of',q_next:'Next →',q_correct:'✅ Correct!',q_wrong:'❌ Wrong.',
-    ranks:['Intern','HR Assistant','Administrator','HR Specialist','HR Analyst','HR Business Partner','HR Manager'],
-    difficulties:['Easy','Medium','Hard','Expert'],
-    levelNames:['Fundamentals','Competitive Advantage','Planning & Structure','HR Manager Level'],
-    levelDesc:['Introduction to strategic HR management.','How HR creates competitive advantage.','Strategic workforce planning and structure.','The ultimate test – prove your HR knowledge!'],
-    rankUp:'🎉 Rank up! You are now:',rankLabel:'You are now:',
-    bestMedal:'Best medal:',questionsInfo:'10 questions ·',prevLevel:'Complete the previous level first',lockedToast:'🔒 Complete the previous level first!',noNameToast:'✏️ Please enter your name!',dlToast:'📜 Certificate downloaded!',
-    resultTitles:['Try again 💪','Passed! 👍','Well done! 👏','Outstanding! 🎉'],
-    certTiers:[
-      {min:0,max:49,title:'Certificate of Participation',medal:'📜',desc:'For active participation.'},
-      {min:50,max:74,title:'Certificate – Passed',medal:'🥉',desc:'At least 50% correct.'},
-      {min:75,max:99,title:'Certificate – With Distinction',medal:'🥈',desc:'At least 75% correct.'},
-      {min:100,max:100,title:'Certificate – Highest Distinction',medal:'🏆',desc:'100% – Perfect!'},
-    ],
-    certHereby:'has successfully participated in the quiz',certCompleted:'of Upskill Academy and answered',certScored:'of the questions correctly.',certSigned:'Issued by',certDate:'Date',certModule:'HR – Strategic People Management',
-  },
-  es:{
-    navHome:'Inicio',navWhat:'Qué es UA',navTopics:'Temas',navCert:'Certificado',navAbout:'Sobre mí',navLegal:'Legal',
-    heroBadge:'Aprendizaje interactivo',heroSub:'Aprende RRHH y nóminas de forma interactiva – con quizzes, feedback inmediato y certificados personales.',heroStart:'Empezar a aprender',heroExplore:'Saber más',
-    feat1Title:'Feedback inmediato',feat1Text:'Tras cada respuesta ves si acertaste – con una explicación completa.',feat2Title:'Aprender en el móvil',feat2Text:'Diseñado para aprender en movimiento. Sin registro necesario.',feat3Title:'Certificado personal',feat3Text:'Completa un módulo y descarga tu certificado personal en PDF.',
-    apLabel:'La plataforma',apTitle:'¿Qué es Upskill Academy?',apIntro:'Upskill Academy es una plataforma de aprendizaje interactiva que te permite dominar RRHH y nóminas de forma eficaz – directamente en tu smartphone.',
-    how1T:'Aprendizaje por quiz',how1P:'En lugar de leer apuntes durante horas, aprendes a través de preguntas y respuestas.',how2T:'Feedback inmediato',how2P:'Tras cada respuesta sabes si acertaste – más una explicación.',how3T:'Sistema de niveles',how3P:'Desde principiante hasta experto – subes de rango cuanto más aprendes.',how4T:'Tres idiomas',how4P:'Alemán, inglés y español – aprende en tu idioma o practica el extranjero.',
-    advantagesTitle:'Tus ventajas',adv1T:'Interactivo',adv1P:'La lectura pasiva se convierte en pensamiento activo.',adv2T:'Práctico',adv2P:'Todos los contenidos provienen de material real de formación.',adv3T:'Feedback inmediato',adv3P:'Sin esperas – sabes de inmediato qué sabes y qué no.',
-    topicsLabel:'Áreas de aprendizaje',topicsTitle:'Elige tu tema',topicsSub:'Cada tema te guía por módulos y quizzes – de los fundamentos al nivel experto.',
-    topic1Name:'RRHH – Recursos Humanos',topic1Desc:'Dirección estratégica, ventaja competitiva, planificación y estructura',topic1Modules:'4 módulos · 40 preguntas',
-    topic2Name:'Nóminas',topic2Desc:'Tipos de salario, deducciones, seguridad social, fiscalidad',topic3Name:'Contabilidad',topic3Desc:'Fundamentos, balance, cuenta de resultados',topic4Name:'Marketing',topic4Desc:'Fundamentos, estrategias, canales digitales',topic5Name:'Habilidades de oficina',topic5Desc:'Excel, comunicación, gestión de proyectos, organización',comingSoon:'Próximamente',
-    backTopics:'Volver a temas',qsTitle:'Elige tu módulo',backModules:'Volver a módulos',qPill:'Pregunta',
-    certPageLabel:'Finalización',certPageTitle:'Tu Certificado',certPageSub:'Al completar un módulo recibes un certificado personal en PDF – graduado según tu rendimiento.',
-    ct0T:'Participación',ct0P:'Menos del 50% – ¡Participaste!',ct1T:'Aprobado',ct1P:'50–74% – Buen rendimiento',ct2T:'Con distinción',ct2P:'75–99% – ¡Muy bien!',ct3T:'Máxima distinción',ct3P:'100% – ¡Perfecto!',
-    premiumText:'El certificado está disponible gratis tras completar un módulo. En el futuro habrá certificados verificados con opción de pago.',premiumBtn:'Empezar un módulo ahora',
-    amLabel:'Fundadora',amBio:'Soy de origen iraní, crecí en Alemania y ahora vivo en Tenerife. Esta mezcla de culturas e idiomas siempre me ha acompañado.',amQuote:'"Hice un curso de formación en RRHH. Para el examen tenía que aprender mucho material en poco tiempo – y en español. Pensé: ¡qué genial sería poder aprender esto en el móvil y que me preguntaran directamente sobre los temas! Y aquí estamos."',amMission:'Upskill Academy es mi respuesta: hacer el aprendizaje más sencillo, más accesible y francamente más agradable.',
-    legalLabel:'Legal',legalTitle:'Aviso legal y privacidad',tabImpr:'Aviso legal',tabDSde:'Datenschutz (DE)',tabDSes:'Privacidad (ES)',imprH:'Aviso legal',imprName:'Información según § 5 TMG',imprDisclH:'Exención de responsabilidad',imprDiscl:'Los contenidos de este sitio han sido elaborados con el mayor cuidado. Esta plataforma es exclusivamente para fines educativos.',
-    lbl_correct:'Correctas',lbl_wrong:'Incorrectas',lbl_pct:'Porcentaje',lbl_name:'📝 Tu nombre para el diploma:',name_ph:'Nombre completo...',btn_retry:'🔄 Reintentar',btn_dl:'📜 Descargar Diploma',btn_home:'🏛️ Inicio',
-    q_label:'PREGUNTA',q_of:'de',q_next:'Siguiente →',q_correct:'✅ ¡Correcto!',q_wrong:'❌ Incorrecto.',
-    ranks:['Becario','Asistente RRHH','Administrativo','Especialista RRHH','Analista RRHH','HR Business Partner','HR Manager'],
-    difficulties:['Fácil','Medio','Difícil','Experto'],
-    levelNames:['Fundamentos','Ventaja Competitiva','Planificación & Estructura','Nivel HR Manager'],
-    levelDesc:['Introducción a la dirección estratégica de RRHH.','Cómo RRHH crea ventaja competitiva.','Planificación estratégica y estructura organizacional.','La prueba definitiva – ¡demuestra tu conocimiento!'],
-    rankUp:'🎉 ¡Subida de rango! Ahora eres:',rankLabel:'Ahora eres:',
-    bestMedal:'Mejor medalla:',questionsInfo:'10 preguntas ·',prevLevel:'Completa el nivel anterior',lockedToast:'🔒 ¡Completa primero el nivel anterior!',noNameToast:'✏️ ¡Por favor introduce tu nombre!',dlToast:'📜 ¡Diploma descargado!',
-    resultTitles:['¡Inténtalo de nuevo! 💪','¡Aprobado! 👍','¡Muy bien! 👏','¡Excelente! 🎉'],
-    certTiers:[
-      {min:0,max:49,title:'Certificado de Participación',medal:'📜',desc:'Por participación activa.'},
-      {min:50,max:74,title:'Certificado – Aprobado',medal:'🥉',desc:'Al menos 50% correcto.'},
-      {min:75,max:99,title:'Certificado – Con distinción',medal:'🥈',desc:'Al menos 75% correcto.'},
-      {min:100,max:100,title:'Certificado – Máxima distinción',medal:'🏆',desc:'100% – ¡Perfecto!'},
-    ],
-    certHereby:'ha participado exitosamente en el quiz',certCompleted:'de Upskill Academy y ha respondido',certScored:'de las preguntas correctamente.',certSigned:'Emitido por',certDate:'Fecha',certModule:'RRHH – Dirección Estratégica',
-  }
+  de:{
+    navHome:'Home',navWhat:'Was ist UA',navTopics:'Themen',navCert:'Zertifikat',navAbout:'Über mich',navLegal:'Rechtliches',
+    heroBadge:'Interaktives Lernen',heroSub:'Lerne HR und Gehaltsabrechnung interaktiv – mit Quizzes, sofortigem Feedback und persönlichen Zertifikaten.',heroStart:'Lernen starten',heroExplore:'Mehr erfahren',
+    feat1Title:'Sofortiges Feedback',feat1Text:'Nach jeder Antwort siehst du direkt, ob du richtig lagst – mit ausführlicher Erklärung.',feat2Title:'Lernen am Handy',feat2Text:'Entwickelt für unterwegs. Lerne wann und wo du möchtest – kein Login nötig.',feat3Title:'Persönliche Urkunde',feat3Text:'Beende ein Modul und lade dein persönliches Zertifikat als PDF herunter.',
+    apLabel:'Die Plattform',apTitle:'Was ist die Upskill Academy?',apIntro:'Die Upskill Academy ist eine interaktive Lernplattform, die dir ermöglicht, Fachwissen in HR und Gehaltsabrechnung spielerisch zu erlernen – direkt am Smartphone.',
+    how1T:'Quiz-basiertes Lernen',how1P:'Statt stundenlang Skripte zu lesen, lernst du durch Fragen und Antworten.',how2T:'Sofortiges Feedback',how2P:'Du siehst nach jeder Antwort ob du richtig lagst – plus eine Erklärung.',how3T:'Stufensystem & Fortschritt',how3P:'Von Grundlagen bis Expertenlevel – du steigst im Rang auf.',how4T:'Drei Sprachen',how4P:'Deutsch, Englisch und Spanisch – lerne in deiner Sprache oder übe in der Fremdsprache.',
+    advantagesTitle:'Deine Vorteile',adv1T:'Interaktiv',adv1P:'Passives Lesen wird zu aktivem Denken.',adv2T:'Praxisnah',adv2P:'Alle Inhalte stammen aus echten Lernmaterialien.',adv3T:'Sofortiges Feedback',adv3P:'Keine Wartezeit – du weißt sofort, was du weißt.',
+    topicsLabel:'Lernbereiche',topicsTitle:'Wähle dein Thema',topicsSub:'Jedes Thema führt dich durch Module und Quizzes – von den Grundlagen bis zum Experten.',
+    topic1Name:'HR – Human Resources',topic1Desc:'Strategische Personalführung, Wettbewerbsvorteil, Planung & Struktur',topic1Modules:'4 Module · 40 Fragen',
+    topic2Name:'Gehaltsabrechnung',topic2Desc:'Lohnarten, Abzüge, Sozialversicherung, Steuerrecht',topic3Name:'Buchhaltung',topic3Desc:'Grundlagen Buchhaltung, Bilanz, Gewinn & Verlust',topic4Name:'Marketing',topic4Desc:'Grundlagen Marketing, Strategien, digitale Kanäle',topic5Name:'Office Skills',topic5Desc:'Excel, Kommunikation, Projektmanagement, Organisation',comingSoon:'Demnächst',
+    backTopics:'Zurück zu Themen',qsTitle:'Wähle dein Modul',backModules:'Zurück zu Modulen',qPill:'Frage',
+    certPageLabel:'Abschluss',certPageTitle:'Dein Zertifikat',certPageSub:'Nach dem Abschluss eines Moduls erhältst du ein persönliches Zertifikat als PDF – abgestuft nach deiner Leistung.',
+    ct0T:'Teilnahme',ct0P:'Unter 50% – Du warst dabei!',ct1T:'Bestanden',ct1P:'50–74% – Solide Leistung',ct2T:'Mit Auszeichnung',ct2P:'75–99% – Sehr gut!',ct3T:'Höchstauszeichnung',ct3P:'100% – Perfekt!',
+    premiumText:'Das Zertifikat steht nach Abschluss eines Moduls kostenlos zum Download bereit. Zukünftig werden verifizierte Zertifikate mit Bezahlfunktion verfügbar sein.',premiumBtn:'Jetzt ein Modul starten',
+    amLabel:'Gründerin',amBio:'Ich bin gebürtige Iranerin, aufgewachsen in Deutschland – und lebe heute auf Teneriffa. Diese Mischung aus Kulturen und Sprachen hat mich immer begleitet.',amQuote:'„Ich habe einen Weiterbildungskurs im Bereich HR gemacht. Für die Prüfung musste ich viel Material in kurzer Zeit lernen – und das auf Spanisch. Ich dachte mir: Wie cool wäre es, wenn ich das am Handy lernen könnte und dabei direkt zu den Themen abgefragt werde. Und hier sind wir nun."',amMission:'Die Upskill Academy ist meine Antwort darauf: Lernen einfacher, zugänglicher und angenehmer machen.',
+    legalLabel:'Rechtliches',legalTitle:'Impressum & Datenschutz',tabImpr:'Impressum',tabDSde:'Datenschutz (DE)',tabDSes:'Privacidad (ES)',imprH:'Impressum',imprName:'Angaben gemäß § 5 TMG',imprDisclH:'Haftungsausschluss',imprDiscl:'Die Inhalte dieser Seite wurden mit größter Sorgfalt erstellt. Diese Plattform dient ausschließlich zu Bildungszwecken.',
+    lbl_correct:'Richtig',lbl_wrong:'Falsch',lbl_pct:'Quote',lbl_name:'📝 Dein Name für die Urkunde:',name_ph:'Vollständiger Name...',btn_retry:'🔄 Nochmal',btn_dl:'📜 Urkunde herunterladen',btn_home:'🏛️ Übersicht',
+    q_label:'FRAGE',q_of:'von',q_next:'Weiter →',q_correct:'✅ Richtig!',q_wrong:'❌ Falsch.',
+    ranks:['Praktikant','HR-Assistent','Sachbearbeiter','HR-Specialist','HR-Analyst','HR Business Partner','HR-Manager'],
+    difficulties:['Leicht','Mittel','Schwer','Experte'],
+    levelNames:['Grundlagen','Wettbewerbsvorteil','Planung & Struktur','HR-Manager Level'],
+    levelDesc:['Einstieg in die strategische HR-Direktion.','Verstehe, wie HR einen Wettbewerbsvorteil schafft.','Strategische Personalplanung und Struktur.','Der ultimative Test – beweise dein HR-Wissen!'],
+    rankUp:'🎉 Rang-Aufstieg! Du bist jetzt:',rankLabel:'Du bist jetzt:',
+    bestMedal:'Beste Medaille:',questionsInfo:'10 Fragen ·',prevLevel:'Vorheriges Level abschließen',lockedToast:'🔒 Schließe zuerst das vorherige Level ab!',noNameToast:'✏️ Bitte gib deinen Namen ein!',dlToast:'📜 Urkunde heruntergeladen!',
+    resultTitles:['Versuch es nochmal 💪','Bestanden! 👍','Sehr gut! 👏','Hervorragend! 🎉'],
+    certTiers:[
+      {min:0,max:49,title:'Teilnahmeurkunde',medal:'📜',desc:'Für die aktive Teilnahme.'},
+      {min:50,max:74,title:'Urkunde – Bestanden',medal:'🥉',desc:'Mindestens 50% korrekt.'},
+      {min:75,max:99,title:'Urkunde – Mit Auszeichnung',medal:'🥈',desc:'Mindestens 75% korrekt.'},
+      {min:100,max:100,title:'Urkunde – Höchstauszeichnung',medal:'🏆',desc:'100% – Perfekt!'},
+    ],
+    certHereby:'hat erfolgreich am Quiz',certCompleted:'der Upskill Academy teilgenommen und',certScored:'der Fragen korrekt beantwortet.',certSigned:'Ausgestellt von',certDate:'Datum',certModule:'HR – Strategische Personalführung',
+  },
+  en:{
+    navHome:'Home',navWhat:'About UA',navTopics:'Topics',navCert:'Certificate',navAbout:'About me',navLegal:'Legal',
+    heroBadge:'Interactive Learning',heroSub:'Learn HR and Payroll interactively – with quizzes, instant feedback and personal certificates.',heroStart:'Start learning',heroExplore:'Learn more',
+    feat1Title:'Instant Feedback',feat1Text:'After every answer you see immediately if you were right – with a full explanation.',feat2Title:'Learn on your Phone',feat2Text:'Built for on-the-go. Learn whenever and wherever you want – no login required.',feat3Title:'Personal Certificate',feat3Text:'Complete a module and download your personal certificate as a PDF.',
+    apLabel:'The Platform',apTitle:'What is Upskill Academy?',apIntro:'Upskill Academy is an interactive learning platform that lets you master HR and payroll knowledge in a fun and effective way – right on your smartphone.',
+    how1T:'Quiz-based Learning',how1P:'Instead of reading scripts for hours, you learn through questions and answers.',how2T:'Instant Feedback',how2P:'After every answer you see whether you were right – plus an explanation.',how3T:'Level System & Progress',how3P:'From basics to expert level – you rank up the more you learn.',how4T:'Three Languages',how4P:'German, English and Spanish – learn in your language or practise a foreign one.',
+    advantagesTitle:'Your Benefits',adv1T:'Interactive',adv1P:'Passive reading becomes active thinking.',adv2T:'Practical',adv2P:'All content comes from real learning materials.',adv3T:'Instant Feedback',adv3P:'No waiting – you know immediately what you know.',
+    topicsLabel:'Learning Areas',topicsTitle:'Choose your Topic',topicsSub:'Each topic guides you through modules and quizzes – from basics to expert.',
+    topic1Name:'HR – Human Resources',topic1Desc:'Strategic HR management, competitive advantage, planning & structure',topic1Modules:'4 modules · 40 questions',
+    topic2Name:'Payroll',topic2Desc:'Wage types, deductions, social security, tax law',topic3Name:'Accounting',topic3Desc:'Accounting basics, balance sheet, profit & loss',topic4Name:'Marketing',topic4Desc:'Marketing basics, strategies, digital channels',topic5Name:'Office Skills',topic5Desc:'Excel, communication, project management, organisation',comingSoon:'Coming soon',
+    backTopics:'Back to Topics',qsTitle:'Choose your Module',backModules:'Back to Modules',qPill:'Question',
+    certPageLabel:'Completion',certPageTitle:'Your Certificate',certPageSub:'After completing a module you receive a personal certificate as a PDF – graded by your performance.',
+    ct0T:'Participation',ct0P:'Under 50% – You took part!',ct1T:'Passed',ct1P:'50–74% – Solid performance',ct2T:'With Distinction',ct2P:'75–99% – Very good!',ct3T:'Highest Distinction',ct3P:'100% – Perfect!',
+    premiumText:'The certificate is available for free download after completing a module. Verified certificates with a payment option will be available in the future.',premiumBtn:'Start a module now',
+    amLabel:'Founder',amBio:'I was born in Iran, grew up in Germany – and now live in Tenerife. This mix of cultures and languages has always shaped the way I learn.',amQuote:'"I took a continuing education course in HR. For the exam I had to learn a lot of material in a short time – and in Spanish. I thought: how cool would it be to learn this on my phone and get quizzed on the topics? And here we are."',amMission:'Upskill Academy is my answer: making learning simpler, more accessible, and frankly more enjoyable.',
+    legalLabel:'Legal',legalTitle:'Legal Notice & Privacy',tabImpr:'Legal Notice',tabDSde:'Privacy (DE)',tabDSes:'Privacidad (ES)',imprH:'Legal Notice',imprName:'Information according to § 5 TMG',imprDisclH:'Disclaimer',imprDiscl:'The content of this site has been compiled with the greatest care. This platform is for educational purposes only.',
+    lbl_correct:'Correct',lbl_wrong:'Wrong',lbl_pct:'Score',lbl_name:'📝 Your name for the certificate:',name_ph:'Full name...',btn_retry:'🔄 Try again',btn_dl:'📜 Download Certificate',btn_home:'🏛️ Overview',
+    q_label:'QUESTION',q_of:'of',q_next:'Next →',q_correct:'✅ Correct!',q_wrong:'❌ Wrong.',
+    ranks:['Intern','HR Assistant','Administrator','HR Specialist','HR Analyst','HR Business Partner','HR Manager'],
+    difficulties:['Easy','Medium','Hard','Expert'],
+    levelNames:['Fundamentals','Competitive Advantage','Planning & Structure','HR Manager Level'],
+    levelDesc:['Introduction to strategic HR management.','How HR creates competitive advantage.','Strategic workforce planning and structure.','The ultimate test – prove your HR knowledge!'],
+    rankUp:'🎉 Rank up! You are now:',rankLabel:'You are now:',
+    bestMedal:'Best medal:',questionsInfo:'10 questions ·',prevLevel:'Complete the previous level first',lockedToast:'🔒 Complete the previous level first!',noNameToast:'✏️ Please enter your name!',dlToast:'📜 Certificate downloaded!',
+    resultTitles:['Try again 💪','Passed! 👍','Well done! 👏','Outstanding! 🎉'],
+    certTiers:[
+      {min:0,max:49,title:'Certificate of Participation',medal:'📜',desc:'For active participation.'},
+      {min:50,max:74,title:'Certificate – Passed',medal:'🥉',desc:'At least 50% correct.'},
+      {min:75,max:99,title:'Certificate – With Distinction',medal:'🥈',desc:'At least 75% correct.'},
+      {min:100,max:100,title:'Certificate – Highest Distinction',medal:'🏆',desc:'100% – Perfect!'},
+    ],
+    certHereby:'has successfully participated in the quiz',certCompleted:'of Upskill Academy and answered',certScored:'of the questions correctly.',certSigned:'Issued by',certDate:'Date',certModule:'HR – Strategic People Management',
+  },
+  es:{
+    navHome:'Inicio',navWhat:'Qué es UA',navTopics:'Temas',navCert:'Certificado',navAbout:'Sobre mí',navLegal:'Legal',
+    heroBadge:'Aprendizaje interactivo',heroSub:'Aprende RRHH y nóminas de forma interactiva – con quizzes, feedback inmediato y certificados personales.',heroStart:'Empezar a aprender',heroExplore:'Saber más',
+    feat1Title:'Feedback inmediato',feat1Text:'Tras cada respuesta ves si acertaste – con una explicación completa.',feat2Title:'Aprender en el móvil',feat2Text:'Diseñado para aprender en movimiento. Sin registro necesario.',feat3Title:'Certificado personal',feat3Text:'Completa un módulo y descarga tu certificado personal en PDF.',
+    apLabel:'La plataforma',apTitle:'¿Qué es Upskill Academy?',apIntro:'Upskill Academy es una plataforma de aprendizaje interactiva que te permite dominar RRHH y nóminas de forma eficaz – directamente en tu smartphone.',
+    how1T:'Aprendizaje por quiz',how1P:'En lugar de leer apuntes durante horas, aprendes a través de preguntas y respuestas.',how2T:'Feedback inmediato',how2P:'Tras cada respuesta sabes si acertaste – más una explicación.',how3T:'Sistema de niveles',how3P:'Desde principiante hasta experto – subes de rango cuanto más aprendes.',how4T:'Tres idiomas',how4P:'Alemán, inglés y español – aprende en tu idioma o practica el extranjero.',
+    advantagesTitle:'Tus ventajas',adv1T:'Interactivo',adv1P:'La lectura pasiva se convierte en pensamiento activo.',adv2T:'Práctico',adv2P:'Todos los contenidos provienen de material real de formación.',adv3T:'Feedback inmediato',adv3P:'Sin esperas – sabes de inmediato qué sabes y qué no.',
+    topicsLabel:'Áreas de aprendizaje',topicsTitle:'Elige tu tema',topicsSub:'Cada tema te guía por módulos y quizzes – de los fundamentos al nivel experto.',
+    topic1Name:'RRHH – Recursos Humanos',topic1Desc:'Dirección estratégica, ventaja competitiva, planificación y estructura',topic1Modules:'4 módulos · 40 preguntas',
+    topic2Name:'Nóminas',topic2Desc:'Tipos de salario, deducciones, seguridad social, fiscalidad',topic3Name:'Contabilidad',topic3Desc:'Fundamentos, balance, cuenta de resultados',topic4Name:'Marketing',topic4Desc:'Fundamentos, estrategias, canales digitales',topic5Name:'Habilidades de oficina',topic5Desc:'Excel, comunicación, gestión de proyectos, organización',comingSoon:'Próximamente',
+    backTopics:'Volver a temas',qsTitle:'Elige tu módulo',backModules:'Volver a módulos',qPill:'Pregunta',
+    certPageLabel:'Finalización',certPageTitle:'Tu Certificado',certPageSub:'Al completar un módulo recibes un certificado personal en PDF – graduado según tu rendimiento.',
+    ct0T:'Participación',ct0P:'Menos del 50% – ¡Participaste!',ct1T:'Aprobado',ct1P:'50–74% – Buen rendimiento',ct2T:'Con distinción',ct2P:'75–99% – ¡Muy bien!',ct3T:'Máxima distinción',ct3P:'100% – ¡Perfecto!',
+    premiumText:'El certificado está disponible gratis tras completar un módulo. En el futuro habrá certificados verificados con opción de pago.',premiumBtn:'Empezar un módulo ahora',
+    amLabel:'Fundadora',amBio:'Soy de origen iraní, crecí en Alemania y ahora vivo en Tenerife. Esta mezcla de culturas e idiomas siempre me ha acompañado.',amQuote:'"Hice un curso de formación en RRHH. Para el examen tenía que aprender mucho material en poco tiempo – y en español. Pensé: ¡qué genial sería poder aprender esto en el móvil y que me preguntaran directamente sobre los temas! Y aquí estamos."',amMission:'Upskill Academy es mi respuesta: hacer el aprendizaje más sencillo, más accesible y francamente más agradable.',
+    legalLabel:'Legal',legalTitle:'Aviso legal y privacidad',tabImpr:'Aviso legal',tabDSde:'Datenschutz (DE)',tabDSes:'Privacidad (ES)',imprH:'Aviso legal',imprName:'Información según § 5 TMG',imprDisclH:'Exención de responsabilidad',imprDiscl:'Los contenidos de este sitio han sido elaborados con el mayor cuidado. Esta plataforma es exclusivamente para fines educativos.',
+    lbl_correct:'Correctas',lbl_wrong:'Incorrectas',lbl_pct:'Porcentaje',lbl_name:'📝 Tu nombre para el diploma:',name_ph:'Nombre completo...',btn_retry:'🔄 Reintentar',btn_dl:'📜 Descargar Diploma',btn_home:'🏛️ Inicio',
+    q_label:'PREGUNTA',q_of:'de',q_next:'Siguiente →',q_correct:'✅ ¡Correcto!',q_wrong:'❌ Incorrecto.',
+    ranks:['Becario','Asistente RRHH','Administrativo','Especialista RRHH','Analista RRHH','HR Business Partner','HR Manager'],
+    difficulties:['Fácil','Medio','Difícil','Experto'],
+    levelNames:['Fundamentos','Ventaja Competitiva','Planificación & Estructura','Nivel HR Manager'],
+    levelDesc:['Introducción a la dirección estratégica de RRHH.','Cómo RRHH crea ventaja competitiva.','Planificación estratégica y estructura organizacional.','La prueba definitiva – ¡demuestra tu conocimiento!'],
+    rankUp:'🎉 ¡Subida de rango! Ahora eres:',rankLabel:'Ahora eres:',
+    bestMedal:'Mejor medalla:',questionsInfo:'10 preguntas ·',prevLevel:'Completa el nivel anterior',lockedToast:'🔒 ¡Completa primero el nivel anterior!',noNameToast:'✏️ ¡Por favor introduce tu nombre!',dlToast:'📜 ¡Diploma descargado!',
+    resultTitles:['¡Inténtalo de nuevo! 💪','¡Aprobado! 👍','¡Muy bien! 👏','¡Excelente! 🎉'],
+    certTiers:[
+      {min:0,max:49,title:'Certificado de Participación',medal:'📜',desc:'Por participación activa.'},
+      {min:50,max:74,title:'Certificado – Aprobado',medal:'🥉',desc:'Al menos 50% correcto.'},
+      {min:75,max:99,title:'Certificado – Con distinción',medal:'🥈',desc:'Al menos 75% correcto.'},
+      {min:100,max:100,title:'Certificado – Máxima distinción',medal:'🏆',desc:'100% – ¡Perfecto!'},
+    ],
+    certHereby:'ha participado exitosamente en el quiz',certCompleted:'de Upskill Academy y ha respondido',certScored:'de las preguntas correctamente.',certSigned:'Emitido por',certDate:'Fecha',certModule:'RRHH – Dirección Estratégica',
+  }
 };
 
 // ── QUESTIONS ─────────────────────────────────
 const QDB = {
-  de:[
-    [{q:'Was ist die Dirección Estratégica de RRHH?',a:['Ein rein administrativer Ansatz','Ein Ansatz, der HR in die Unternehmensstrategie integriert','Eine Abteilung, die nur Gehälter berechnet','Eine externe Beratungsstelle'],correct:1,exp:'Die Dirección Estratégica de RRHH integriert das Personalmanagement ins Zentrum der Unternehmensstrategie.'},
-     {q:'Woraus entsteht jede HR-Strategie?',a:['Aus dem Wunsch des Personalchefs','Aus der Unternehmensstrategie','Aus gesetzlichen Vorgaben','Aus Branchentrends'],correct:1,exp:'Jede HR-Strategie entspringt der Unternehmensstrategie.'},
-     {q:'In welcher Etappe ist HR reaktiv?',a:['Etapa 3','Etapa 2','Etapa 1','Etapa 4'],correct:2,exp:'Etapa 1 ist der reaktive Ansatz: nur Verträge und Gehaltslisten verwalten.'},
-     {q:'Was bedeutet „reaktiv" im HR-Kontext?',a:['Proaktiv auf Herausforderungen reagieren','Erst handeln wenn ein Problem aufgetreten ist','Daten analysieren','Personal strategisch planen'],correct:1,exp:'Reaktiv: nur handeln, wenn etwas schiefläuft.'},
-     {q:'Typisches Beispiel für HR in Etapa 1?',a:['People Analytics einsetzen','An der Strategie teilnehmen','Erst Ersatz suchen, wenn jemand kündigt','Klimabefragungen durchführen'],correct:2,exp:'In Etapa 1 beginnt HR erst dann mit der Suche, wenn der Mitarbeiter bereits weg ist.'},
-     {q:'Was ist Etapa 2 (Gestión de RRHH)?',a:['Weniger Aufgaben','Mehr spezialisierte Funktionen wie Auswahl und Schulung','Vollständige Integration','Vollständige Automatisierung'],correct:1,exp:'Etapa 2: neue Funktionen (Selektion, Training), aber noch keine strategische Teilnahme.'},
-     {q:'Was bedeutet Etapa 3?',a:['Nur administrativ','HR wird Schlüsselabteilung für die Unternehmenszukunft','Nur mit Gewerkschaften','Verantwortlich für Marketing'],correct:1,exp:'Etapa 3: HR wird proaktiv und analytisch, nimmt an der Unternehmensleitung teil.'},
-     {q:'Welche Technologien beschleunigen strategisches HR?',a:['Fax und Drucker','Digitalisierung, Homeoffice, Automatisierung und KI','Nur Social Media','Nur Cloud'],correct:1,exp:'Digitalisierung, Telearbeit, Automatisierung und KI sind die Haupttreiber.'},
-     {q:'Was ist People Analytics?',a:['HR-Software für Gehälter','Analyse von Personaldaten für datenbasierte Entscheidungen','Verfahren zur Rekrutierung','Methode für Teambuilding'],correct:1,exp:'People Analytics: Personaldaten analysieren wie Finanzen oder Marketing.'},
-     {q:'HR bei internationaler Expansion?',a:['Nur mehr Büromaterial','Profile mit Sprachkenntnissen und interkultureller Kompetenz','Alle entlassen','Nur Gehaltsstruktur anpassen'],correct:1,exp:'Bei internationaler Expansion: Sprachkenntnisse, interkulturelle Kompetenzen und Mobilitätspolitiken vorausplanen.'}],
-    [{q:'Was bedeutet Wettbewerbsvorteil im HR-Kontext?',a:['Niedrigere Gehälter','Durch Mitarbeiter dauerhaft besser als Konkurrenten sein','Mehr Werbung','Mehr Technologie'],correct:1,exp:'Wettbewerbsvorteil: durch Mitarbeiter dauerhaft besser als Konkurrenten.'},
-     {q:'Drei Bedingungen für Wettbewerbsvorteil?',a:['Billig, jung, flexibel','Schwer zu imitieren, wertschöpfend, nachhaltig','Nur hohe Bildung','Immer Überstunden'],correct:1,exp:'(1) schwer zu imitieren, (2) wertschöpfend organisiert, (3) nachhaltig.'},
-     {q:'Was bedeutet Upskilling?',a:['Entlassen und ersetzen','Bestehende Fähigkeiten verbessern für aktuellen Job','In völlig neuen Rol wechseln','Nur externe Schulungen'],correct:1,exp:'Upskilling: bestehende Kompetenzen verbessern.'},
-     {q:'Was bedeutet Reskilling?',a:['Gleicher Job mit neuen Werkzeugen','Neue Fähigkeiten für eine andere Rolle','Auf Rente vorbereiten','Führungskompetenz entwickeln'],correct:1,exp:'Reskilling: berufliche Neuausrichtung.'},
-     {q:'HR bei innovationsorientiertem Unternehmen?',a:['Strenge Kontrolle','Kreativität, Fehlertoleranz, Teamarbeit fördern','Kosten reduzieren','Hierarchien verstärken'],correct:1,exp:'Bei Innovation: diverse Teams, kreative Räume, Anerkennung neuer Ideen.'},
-     {q:'Was wenn HR keinen Wettbewerbsvorteil schafft?',a:['Internationaler Erfolg','Hohe Fluktuation, schlechtes Klima, Schwierigkeit Talente zu gewinnen','Mehr Motivation','Mehr Produktivität'],correct:1,exp:'Ohne strategisches HR: Fluktuation, schlechtes Klima, Talentmangel.'},
-     {q:'Warum sind Menschen schwerer zu kopieren als Maschinen?',a:['Menschen sind billiger','Kombination aus Talent, Kultur, Führung und Prozessen ist einzigartig','Es gibt keine Technologie','Gesetze verbieten es'],correct:1,exp:'Die einzigartige Kombination ist extrem schwer zu replizieren.'},
-     {q:'HR in kundenserviceorientiertem Unternehmen?',a:['Nur Technikspezialisten','Soziale Kompetenzen auswählen, Empathie schulen, kundenbezogene Anreize','Nur Gehaltspolitik','Nur Effizienz'],correct:1,exp:'Kundenservice: soziale Fähigkeiten, Empathie, Anreize an Kundenzufriedenheit.'},
-     {q:'Aufgabe von HR bezüglich Führung?',a:['Führungskräfte entfernen','In Kommunikation, Motivation, Konfliktmanagement schulen','Nur Gehaltserhöhungen beantragen','Ignorieren'],correct:1,exp:'HR schult Führungskräfte in Kommunikation und Konfliktlösung.'},
-     {q:'Was sind Vergütungs- und Anerkennungssysteme?',a:['Nur Grundgehalt','Gehälter, Anreize, Vorteile zur Gewinnung und Bindung von Talent','Nur Boni','Nur Strafmaßnahmen'],correct:1,exp:'Vergütung: Gehälter, Anreize und Sozialleistungen für Talentgewinnung und -bindung.'}],
-    [{q:'Was ist strategische Personalplanung?',a:['Nur auf Vakanzen reagieren','Vorausdenken welche Mitarbeiter das Unternehmen braucht','Alle gleich einsetzen','Nur externe Beratung'],correct:1,exp:'Strategische Planung: vorhersehen, vorbereiten, ausrichten.'},
-     {q:'Logische Reihenfolge der Personalplanung?',a:['HR → Unternehmen → Markt','Unternehmensstrategie → HR übersetzt → Plan entworfen','Mitarbeiter → HR → Unternehmen','Gesetz → HR → Unternehmen'],correct:1,exp:'Unternehmensstrategie → HR übersetzt in Talentbedarf → Aktionsplan.'},
-     {q:'Was analysiert HR beim internen Audit?',a:['Nur die Konkurrenz','Belegschaft, Kompetenzen, Klima, HR-Prozesse','Nur Finanzen','Nur Gehälter'],correct:1,exp:'Intern: Belegschaft, Kompetenzen, Klima, Effizienz der HR-Prozesse.'},
-     {q:'Was enthält ein DAFO für HR?',a:['Nur Stärken und Schwächen','Stärken, Schwächen, Chancen, Risiken','Nur externe Analyse','Nur Zufriedenheitsdaten'],correct:1,exp:'DAFO: alle vier Dimensionen für den HR-Bereich.'},
-     {q:'Unterschied quantitative vs. qualitative Personalplanung?',a:['Quantitativ = Gehälter; Qualitativ = Kompetenzen','Quantitativ = Wie viele? Qualitativ = Welche Profile?','Intern vs. extern','Kein Unterschied'],correct:1,exp:'Quantitativ: Anzahl. Qualitativ: Fähigkeiten und Profile.'},
-     {q:'Typische HR-KPIs?',a:['Aktienkurs','Fluktuationsrate, Absentismus, Schulungsstunden, Zufriedenheit','Nur Umsatz','Nur Kundenbewertungen'],correct:1,exp:'KPIs: Fluktuation, Absentismus, Vakanzdauer, Schulungsstunden, Zufriedenheitsindex.'},
-     {q:'Funktion von Selektion & Rekrutierung?',a:['Nur Gehaltsverhandlungen','Richtige Personen bringen: Profil → Stelle → Onboarding','Nur Schulungen','Nur gesetzliche Pflichten'],correct:1,exp:'Selektion: Profil, Ausschreibung, Interviews, Onboarding.'},
-     {q:'Was ist die Rolle des HR Business Partner?',a:['Externer Berater','RRHH-Person für einen Geschäftsbereich als interner Berater','Der CEO','Nur Schulungen'],correct:1,exp:'HRBP: HR-Spezialist, der einem Unternehmensbereich zugeordnet ist.'},
-     {q:'Was macht ein People Analyst?',a:['Teambuilding organisieren','Personaldaten analysieren für datenbasierte Entscheidungen','Tarifverträge verhandeln','Nur Ausschreibungen'],correct:1,exp:'People Analyst: HR-Daten analysieren für datenbasierte Entscheidungen.'},
-     {q:'HR-Struktur Großunternehmen vs. KMU?',a:['Großunternehmen hat weniger HR','Großunternehmen: spezialisiert; KMU: 1-3 Personen für alles','KMU immer ausgelagert','Kein Unterschied'],correct:1,exp:'Großunternehmen: vollständige HR-Abteilung. KMU: 1-3 Personen decken alles ab.'}],
-    [{q:'Was bedeutet HR als Transformationsagent?',a:['Nur Strukturen verwalten','Veränderungen anstoßen, begleiten, Widerstände reduzieren','Alle alten Mitarbeiter ersetzen','Nur externe Berater'],correct:1,exp:'Als Transformationsagent: Wandel initiieren und Mitarbeiter begleiten.'},
-     {q:'HR bei digitaler Transformation?',a:['Nur Software kaufen','Kompetenzlücken identifizieren, digitale Schulungen, Begleitung','Alle durch Roboter ersetzen','Nur IT koordinieren'],correct:1,exp:'Digitaltransformation: Kompetenzlücken identifizieren und digitale Schulungen gestalten.'},
-     {q:'Hauptziele der HR-Gestión?',a:['Nur Kosten senken','Richtige Personen gewinnen, entwickeln, halten, motivieren, sicheres Umfeld','Nur Gehälter','Nur Gesetze einhalten'],correct:1,exp:'6 Ziele: anziehen, entwickeln, halten, motivieren, sicheres Umfeld, ausrichten.'},
-     {q:'Strategische, taktische, operative Ziele?',a:['Alle identisch','Strategisch = langfristig; Taktisch = mittelfristig; Operativ = kurzfristig','Operativ ist langfristiger','Taktisch = über 5 Jahre'],correct:1,exp:'Strategisch (Jahre) → Taktisch (1-2 Jahre) → Operativ (Monate).'},
-     {q:'Was zeigt hohe freiwillige Fluktuation?',a:['Unternehmen ist attraktiv','Probleme mit Klima, Führung, Gehalt, Entwicklung','Mitarbeiter gehen in Rente','Unternehmen wächst'],correct:1,exp:'Hohe freiwillige Fluktuation deutet auf Probleme hin.'},
-     {q:'Bessere Selektion und Unternehmensresultate?',a:['Kein Zusammenhang','Bessere Selektion → besserer Service → zufriedene Kunden → mehr Umsatz','Nur höhere Gehälter','Werbung überflüssig'],correct:1,exp:'Kette: Bessere Selektion → Kundenerlebnis → Umsatz → Wettbewerbsvorteil.'},
-     {q:'Risiko ohne klare HR-Ziele?',a:['Alles besser','Aktionen ohne Nutzen, Geld ohne Rücklauf, Fehler wiederholen sich','Mitarbeiter selbstständiger','Kosten sinken'],correct:1,exp:'Ohne Ziele: sinnlose Aktionen, kein Rückfluss, wiederholende Fehler.'},
-     {q:'Funktion von Prävention von Arbeitsrisiken?',a:['Nur administrativ','Risiken bewerten, Prävention, Schulungen, Unfälle untersuchen','Nur Gehälter','Nur externe Audits'],correct:1,exp:'PRL: Risiken evaluieren, Prävention, Schulungen, Unfalluntersuchung.'},
-     {q:'Was umfasst Diversität & Inklusion?',a:['Nur Frauen einstellen','Gleichstellungspolitiken, Sensibilisierung, diskriminierungsfreie Prozesse','Nur Quoten','Nur nach Alter sortieren'],correct:1,exp:'D&I: Politiken, Sensibilisierung, diskriminierungsfreie Prozesse.'},
-     {q:'HR-Indikatoren interpretieren vs. betrachten?',a:['Nur Zahlen anschauen','Vergleichen, kritische Fragen stellen, Ursachen finden','Daten weitergeben','Nur jährlich messen'],correct:1,exp:'Interpretieren: vergleichen, hinterfragen, Ursachen suchen.'}]
-  ],
-  en:[
-    [{q:'What is Dirección Estratégica de RRHH?',a:['A purely administrative approach','An approach that integrates HR into the core of business strategy','A department that only calculates salaries','An external consultancy'],correct:1,exp:'Strategic HR integrates people management into the centre of business strategy.'},
-     {q:'What is every HR strategy derived from?',a:['The HR manager\'s wishes','The corporate strategy','Legal requirements','Industry trends'],correct:1,exp:'Every HR strategy derives from the corporate strategy.'},
-     {q:'In which stage is HR reactive?',a:['Stage 3','Stage 2','Stage 1','Stage 4'],correct:2,exp:'Stage 1 is the reactive approach: only managing contracts and payroll.'},
-     {q:'What does "reactive" mean in an HR context?',a:['Proactively responding to future challenges','Acting only when a problem has already occurred','Analysing data and making decisions','Strategically planning staff'],correct:1,exp:'Reactive means acting only when something goes wrong.'},
-     {q:'Typical example of HR in Stage 1?',a:['Using People Analytics','Participating in strategy','Only searching for a replacement when someone quits','Running climate surveys'],correct:2,exp:'In Stage 1, HR only starts looking for a replacement after the employee has left.'},
-     {q:'What is Stage 2 (HR Management) compared to Stage 1?',a:['Fewer tasks and more bureaucracy','More specialised functions like selection, training and motivation','Full integration into strategy','Full automation'],correct:1,exp:'Stage 2: new functions (selection, training, appraisal) but still no strategic participation.'},
-     {q:'What does Stage 3 mean?',a:['Purely administrative','HR becomes a key department for the company\'s future','Works only with unions','Responsible for marketing'],correct:1,exp:'Stage 3: HR becomes proactive and analytical, participating in company leadership.'},
-     {q:'Which technologies accelerate strategic HR?',a:['Fax and printers','Digitalisation, remote work, automation and AI','Only social media','Only cloud storage'],correct:1,exp:'Digitalisation, remote work, automation and AI are the main drivers.'},
-     {q:'What is People Analytics?',a:['HR software for payroll','Analysis of personnel data for data-based decisions','A recruitment process','A team-building method'],correct:1,exp:'People Analytics: analysing HR data like finance or marketing.'},
-     {q:'HR when a company expands internationally?',a:['Only buy more office supplies','Profiles with language skills, intercultural competences and mobility policies','Dismiss all employees','Only adjust salary structure'],correct:1,exp:'International expansion: plan ahead for language skills, intercultural competences and mobility policies.'}],
-    [{q:'What does competitive advantage mean in HR?',a:['Paying lower salaries than competitors','The company permanently outperforming competitors through its employees','More advertising','More technology'],correct:1,exp:'Competitive advantage: permanently better than competitors through employees.'},
-     {q:'Three conditions for competitive advantage?',a:['Cheap, young, flexible','Hard to imitate, value-creating, sustainable','Only high qualifications','Always overtime'],correct:1,exp:'(1) hard to imitate, (2) value-creating, (3) sustainable over time.'},
-     {q:'What does upskilling mean?',a:['Dismiss and replace','Improve existing skills for the current job','Move to a completely different role','Only external training'],correct:1,exp:'Upskilling: improving existing competences.'},
-     {q:'What does reskilling mean?',a:['Same job with new tools','Learning completely new skills to switch to a different role','Preparing for retirement','Developing leadership'],correct:1,exp:'Reskilling: professional reorientation.'},
-     {q:'HR in an innovation-oriented company?',a:['Strict control','Foster creativity, tolerance for failure and teamwork','Reduce costs','Reinforce hierarchies'],correct:1,exp:'Innovation focus: diverse teams, creative spaces, recognising new ideas.'},
-     {q:'What if HR creates no competitive advantage?',a:['International success','High turnover, poor climate, difficulty attracting talent','More motivation','More productivity'],correct:1,exp:'Without strategic HR: turnover, poor climate, talent shortage.'},
-     {q:'Why are people harder to copy than machines?',a:['People are cheaper','Combination of talent, culture, leadership and processes is unique','No technology exists','Laws forbid it'],correct:1,exp:'The unique combination is extremely hard to replicate.'},
-     {q:'HR in a customer-service-oriented company?',a:['Only hire technicians','Select people with social skills, train empathy, create customer-linked incentives','Only salary policy','Only efficiency'],correct:1,exp:'Customer focus: social skills, empathy, incentives tied to customer satisfaction.'},
-     {q:'HR\'s role regarding leadership?',a:['Remove leaders','Train leaders in communication, motivation and conflict management','Only request pay rises','Ignore them'],correct:1,exp:'HR trains leaders in communication and conflict resolution.'},
-     {q:'What are compensation and recognition systems?',a:['Only basic salary','Salaries, incentives and benefits to attract, retain and encourage desired behaviour','Only bonuses','Only disciplinary measures'],correct:1,exp:'Compensation: salaries, incentives and benefits for talent attraction and retention.'}],
-    [{q:'What is strategic workforce planning?',a:['Only reacting to vacancies','Anticipating what employees the company will need for future goals','Deploy everyone the same','Only external consulting'],correct:1,exp:'Strategic planning: anticipate, prepare and align.'},
-     {q:'Logical order in workforce planning?',a:['HR → Company → Market','Corporate strategy → HR translates → Plan is designed','Employees → HR → Company','Law → HR → Company'],correct:1,exp:'Corporate strategy → HR translates into talent needs → Action plan.'},
-     {q:'What does HR analyse in an internal audit?',a:['Only competitors','Current workforce, competences, climate and HR processes','Only finances','Only salaries'],correct:1,exp:'Internal audit: workforce, competences, climate, efficiency of HR processes.'},
-     {q:'What does a SWOT for HR contain?',a:['Only strengths and weaknesses','Strengths, Weaknesses, Opportunities and Threats','Only external analysis','Only satisfaction data'],correct:1,exp:'SWOT: all four dimensions for the HR area.'},
-     {q:'Difference between quantitative and qualitative workforce planning?',a:['Quantitative = salaries; Qualitative = competences','Quantitative = How many? Qualitative = What profiles?','Internal vs. external','No difference'],correct:1,exp:'Quantitative: numbers. Qualitative: skills and profiles.'},
-     {q:'Typical HR KPIs?',a:['Stock price','Turnover rate, absenteeism, training hours, satisfaction','Only revenue','Only customer ratings'],correct:1,exp:'KPIs: turnover, absenteeism, vacancy duration, training hours, satisfaction index.'},
-     {q:'Function of Selection & Recruitment?',a:['Only salary negotiations','Bringing the right people in: from profile to onboarding','Only external training','Only legal duties'],correct:1,exp:'Selection: profile definition, posting, interviews, onboarding.'},
-     {q:'What is the role of the HR Business Partner?',a:['An external adviser','An HR person assigned to a business unit acting as internal adviser','The CEO','Only training'],correct:1,exp:'HRBP: HR specialist assigned to a specific business area.'},
-     {q:'What does a People Analyst do?',a:['Organise team-building','Analyse HR data to support data-based decisions','Negotiate collective agreements','Only job postings'],correct:1,exp:'People Analyst: HR data analysis for evidence-based decisions.'},
-     {q:'HR structure: large company vs. SME?',a:['Large companies have fewer HR staff','Large: specialised departments; SME: 1-3 people cover everything','SMEs always outsource','No difference'],correct:1,exp:'Large company: full HR department. SME: 1-3 people cover all functions.'}],
-    [{q:'What does HR as transformation agent mean?',a:['Only managing structures','Actively driving change, supporting people, reducing resistance','Replace all old employees','Only external consultants'],correct:1,exp:'Transformation agent: initiate change and accompany employees through it.'},
-     {q:'HR in digital transformation?',a:['Only buy software','Identify competence gaps, design digital training, accompany employees','Replace all with robots','Only coordinate IT'],correct:1,exp:'Digital transformation: identify gaps and design digital training.'},
-     {q:'Main goals of HR management?',a:['Only cut costs','Attract the right people, develop capacities, retain talent, motivate, safe environment','Only salaries','Only laws'],correct:1,exp:'6 goals: attract, develop, retain, motivate, safe environment, align.'},
-     {q:'Strategic, tactical, operational goals?',a:['All identical','Strategic = long-term; Tactical = medium-term; Operational = short-term','Operational is longer','Tactical = over 5 years'],correct:1,exp:'Strategic (years) → Tactical (1-2 years) → Operational (months).'},
-     {q:'What does high voluntary turnover indicate?',a:['Company is very attractive','Possible problems with climate, leadership, salary, development','Employees are retiring','Company is growing'],correct:1,exp:'High voluntary turnover signals problems.'},
-     {q:'Better selection and company results?',a:['No connection','Better selection → better service → satisfied customers → more revenue','Only higher salaries','Advertising unnecessary'],correct:1,exp:'Chain: Better selection → customer experience → revenue → competitive advantage.'},
-     {q:'Risk without clear HR goals?',a:['Everything runs better','Actions without visible benefit, money without return, mistakes repeat','Employees more independent','Costs fall'],correct:1,exp:'Without goals: pointless actions, no return on investment, recurring mistakes.'},
-     {q:'Function of Occupational Risk Prevention?',a:['Only admin','Assess risks, propose prevention, training, investigate accidents','Only salaries','Only external audits'],correct:1,exp:'ORP: assess risks, prevention measures, training, accident investigation.'},
-     {q:'What does Diversity & Inclusion cover?',a:['Only hire women','Equality policies, awareness, discrimination-free processes','Only minimum quotas','Only sort by age'],correct:1,exp:'D&I: policies, awareness, discrimination-free processes.'},
-     {q:'Interpreting vs. observing HR indicators?',a:['Just look at numbers','Compare, ask critical questions, find root causes','Pass data to consultants','Only measure annually'],correct:1,exp:'Interpreting: compare, question, find root causes.'}]
-  ],
-  es:[
-    [{q:'¿Qué es la Dirección Estratégica de RRHH?',a:['Un enfoque puramente administrativo','Un enfoque que integra RRHH en el núcleo de la estrategia empresarial','Un departamento que solo calcula salarios','Una consultora externa'],correct:1,exp:'La Dirección Estratégica integra la gestión de personas en el centro de la estrategia empresarial.'},
-     {q:'¿De dónde surge toda estrategia de RRHH?',a:['Del deseo del director de personal','De la estrategia corporativa','De las obligaciones legales','De las tendencias del sector'],correct:1,exp:'Toda estrategia de RRHH parte de la estrategia corporativa.'},
-     {q:'¿En qué etapa es RRHH reactivo?',a:['Etapa 3','Etapa 2','Etapa 1','Etapa 4'],correct:2,exp:'Etapa 1 es el enfoque reactivo: solo contratos y nóminas.'},
-     {q:'¿Qué significa "reactivo" en RRHH?',a:['Responder proactivamente','Actuar solo cuando ya ha surgido un problema','Analizar datos','Planificar estratégicamente'],correct:1,exp:'Reactivo: actuar solo cuando algo falla.'},
-     {q:'¿Ejemplo típico de RRHH en Etapa 1?',a:['Usar People Analytics','Participar en la estrategia','Buscar sustituto solo cuando alguien dimite','Realizar encuestas de clima'],correct:2,exp:'En Etapa 1, RRHH comienza la búsqueda solo cuando el empleado ya se fue.'},
-     {q:'¿Qué es la Etapa 2 comparada con la Etapa 1?',a:['Menos tareas','Más funciones especializadas: selección, formación, motivación','Integración completa','Automatización completa'],correct:1,exp:'Etapa 2: nuevas funciones pero aún sin participación estratégica.'},
-     {q:'¿Qué significa Etapa 3?',a:['Solo administrativo','RRHH se convierte en departamento clave para el futuro','Solo con sindicatos','Responsable del marketing'],correct:1,exp:'Etapa 3: RRHH proactivo y analítico, participa en la dirección.'},
-     {q:'¿Qué tecnologías aceleran el RRHH estratégico?',a:['Fax e impresoras','Digitalización, teletrabajo, automatización e IA','Solo redes sociales','Solo cloud'],correct:1,exp:'Digitalización, teletrabajo, automatización e IA son los impulsores principales.'},
-     {q:'¿Qué es People Analytics?',a:['Software de RRHH para nóminas','Análisis de datos de personal para decisiones basadas en datos','Proceso de reclutamiento','Método para team-building'],correct:1,exp:'People Analytics: analizar datos de personal como en finanzas o marketing.'},
-     {q:'¿RRHH ante expansión internacional?',a:['Solo más material de oficina','Perfiles con idiomas, competencias interculturales y políticas de movilidad','Despedir a todos','Solo ajustar salarios'],correct:1,exp:'Expansión internacional: planificar idiomas, competencias y movilidad.'}],
-    [{q:'¿Qué significa ventaja competitiva en RRHH?',a:['Pagar salarios más bajos','Que la empresa supera permanentemente a sus competidores gracias a sus empleados','Más publicidad','Más tecnología'],correct:1,exp:'Ventaja competitiva: permanentemente mejor que la competencia gracias a los empleados.'},
-     {q:'¿Tres condiciones para la ventaja competitiva?',a:['Baratos, jóvenes, flexibles','Difíciles de imitar, generadores de valor, sostenibles','Solo titulación alta','Siempre horas extra'],correct:1,exp:'(1) difíciles de imitar, (2) generadores de valor, (3) sostenibles en el tiempo.'},
-     {q:'¿Qué significa upskilling?',a:['Despedir y sustituir','Mejorar habilidades existentes para el trabajo actual','Cambiar a un rol completamente nuevo','Solo formaciones externas'],correct:1,exp:'Upskilling: mejorar competencias existentes.'},
-     {q:'¿Qué significa reskilling?',a:['Mismo trabajo con nuevas herramientas','Aprender habilidades nuevas para cambiar de rol','Prepararse para la jubilación','Desarrollar liderazgo'],correct:1,exp:'Reskilling: reorientación profesional.'},
-     {q:'¿RRHH en empresa orientada a la innovación?',a:['Control estricto','Fomentar creatividad, tolerancia al error y trabajo en equipo','Reducir costes','Reforzar jerarquías'],correct:1,exp:'Innovación: equipos diversos, espacios creativos, reconocimiento de nuevas ideas.'},
-     {q:'¿Qué ocurre si RRHH no crea ventaja competitiva?',a:['Éxito internacional','Alta rotación, mal clima, dificultad para atraer talento','Más motivación','Más productividad'],correct:1,exp:'Sin RRHH estratégico: rotación, mal clima, escasez de talento.'},
-     {q:'¿Por qué las personas son más difíciles de copiar que las máquinas?',a:['Las personas son más baratas','La combinación de talento, cultura, liderazgo y procesos es única','No existe tecnología','La ley lo prohíbe'],correct:1,exp:'La combinación única es extremadamente difícil de replicar.'},
-     {q:'¿RRHH en empresa orientada al cliente?',a:['Solo contratar técnicos','Seleccionar personas con competencias sociales, formar en empatía, crear incentivos','Solo política salarial','Solo eficiencia'],correct:1,exp:'Enfoque cliente: habilidades sociales, empatía, incentivos vinculados al cliente.'},
-     {q:'¿Función de RRHH respecto al liderazgo?',a:['Retirar a los líderes','Formar en comunicación, motivación y gestión de conflictos','Solo solicitar aumentos','Ignorar'],correct:1,exp:'RRHH forma a los líderes en comunicación y resolución de conflictos.'},
-     {q:'¿Qué son los sistemas de compensación y reconocimiento?',a:['Solo el salario base','Salarios, incentivos y beneficios para atraer, retener y motivar talento','Solo bonos','Solo medidas disciplinarias'],correct:1,exp:'Compensación: salarios, incentivos y beneficios para atraer y retener talento.'}],
-    [{q:'¿Qué es la planificación estratégica de RRHH?',a:['Solo reaccionar a vacantes','Anticipar qué empleados necesitará la empresa para cumplir objetivos futuros','Destinar a todos al mismo área','Solo consultoría externa'],correct:1,exp:'Planificación estratégica: anticipar, preparar y alinear.'},
-     {q:'¿Orden lógico en la planificación de personal?',a:['RRHH → Empresa → Mercado','Estrategia empresarial → RRHH traduce → Plan diseñado','Empleados → RRHH → Empresa','Ley → RRHH → Empresa'],correct:1,exp:'Estrategia empresarial → RRHH traduce en necesidades → Plan de acción.'},
-     {q:'¿Qué analiza RRHH en la auditoría interna?',a:['Solo la competencia','Plantilla actual, competencias, clima y procesos de RRHH','Solo finanzas','Solo salarios'],correct:1,exp:'Auditoría interna: plantilla, competencias, clima, eficiencia de procesos de RRHH.'},
-     {q:'¿Qué contiene un DAFO para RRHH?',a:['Solo fortalezas y debilidades','Fortalezas, Debilidades, Oportunidades y Amenazas','Solo análisis externo','Solo datos de satisfacción'],correct:1,exp:'DAFO: las cuatro dimensiones para el área de RRHH.'},
-     {q:'¿Diferencia planificación cuantitativa vs. cualitativa?',a:['Cuantitativa = salarios; Cualitativa = competencias','Cuantitativa = ¿Cuántos? Cualitativa = ¿Qué perfiles?','Interna vs. externa','No hay diferencia'],correct:1,exp:'Cuantitativa: cantidad. Cualitativa: habilidades y perfiles.'},
-     {q:'¿KPIs típicos en RRHH?',a:['Cotización en bolsa','Tasa de rotación, absentismo, horas de formación, satisfacción','Solo ventas','Solo valoraciones'],correct:1,exp:'KPIs: rotación, absentismo, duración de vacantes, horas de formación, índice de satisfacción.'},
-     {q:'¿Función de Selección y Reclutamiento?',a:['Solo negociaciones salariales','Incorporar a las personas adecuadas: perfil → puesto → onboarding','Solo formaciones externas','Solo obligaciones legales'],correct:1,exp:'Selección: perfil, convocatoria, entrevistas, onboarding.'},
-     {q:'¿Qué es el HR Business Partner?',a:['Un consultor externo','Una persona de RRHH asignada a una unidad de negocio como asesor interno','El CEO','Solo formación'],correct:1,exp:'HRBP: especialista de RRHH asignado a un área concreta.'},
-     {q:'¿Qué hace un People Analyst?',a:['Organizar team-building','Analizar datos de personal para decisiones basadas en datos','Negociar convenios','Solo ofertas de empleo'],correct:1,exp:'People Analyst: analizar datos de RRHH para decisiones basadas en evidencias.'},
-     {q:'¿Estructura RRHH gran empresa vs. PYME?',a:['Grandes empresas tienen menos RRHH','Grandes: especializadas; PYME: 1-3 personas cubren todo','PYMES siempre externalizan','No hay diferencia'],correct:1,exp:'Gran empresa: departamento completo. PYME: 1-3 personas cubren todo.'}],
-    [{q:'¿Qué significa RRHH como agente de transformación?',a:['Solo gestionar estructuras','Impulsar cambios, acompañar personas, reducir resistencias','Sustituir a todos los empleados','Solo consultores externos'],correct:1,exp:'Agente de transformación: impulsar el cambio y acompañar a las personas.'},
-     {q:'¿RRHH en transformación digital?',a:['Solo comprar software','Identificar brechas de competencias, formaciones digitales, acompañamiento','Sustituir todo por robots','Solo coordinar TI'],correct:1,exp:'Transformación digital: identificar brechas y diseñar formaciones digitales.'},
-     {q:'¿Objetivos principales de la Gestión de RRHH?',a:['Solo reducir costes','Atraer personas, desarrollar, retener, motivar, entorno seguro','Solo salarios','Solo leyes'],correct:1,exp:'6 objetivos: atraer, desarrollar, retener, motivar, entorno seguro, alinear.'},
-     {q:'¿Objetivos estratégicos, tácticos y operativos?',a:['Todos idénticos','Estratégico = largo plazo; Táctico = medio; Operativo = corto plazo','Operativo es más largo','Táctico = más de 5 años'],correct:1,exp:'Estratégico (años) → Táctico (1-2 años) → Operativo (meses).'},
-     {q:'¿Qué indica alta rotación voluntaria?',a:['Empresa muy atractiva','Posibles problemas de clima, liderazgo, salario, desarrollo','Empleados jubilándose','Empresa creciendo'],correct:1,exp:'Alta rotación voluntaria señala problemas.'},
-     {q:'¿Mejor selección y resultados empresariales?',a:['Ninguna relación','Mejor selección → mejor servicio → clientes satisfechos → más ventas','Solo salarios más altos','Publicidad innecesaria'],correct:1,exp:'Cadena: mejor selección → experiencia cliente → ventas → ventaja competitiva.'},
-     {q:'¿Riesgo sin objetivos claros en RRHH?',a:['Todo mejor','Acciones sin beneficio, dinero sin retorno, errores se repiten','Empleados más autónomos','Costes bajan'],correct:1,exp:'Sin objetivos: acciones inútiles, sin retorno, errores recurrentes.'},
-     {q:'¿Función de Prevención de Riesgos Laborales?',a:['Solo administrativo','Evaluar riesgos, proponer prevención, formaciones, investigar accidentes','Solo salarios','Solo auditorías externas'],correct:1,exp:'PRL: evaluar riesgos, prevención, formaciones, investigación de accidentes.'},
-     {q:'¿Qué abarca la Diversidad e Inclusión?',a:['Solo contratar mujeres','Políticas de igualdad, sensibilización, procesos libres de discriminación','Solo cuotas mínimas','Solo clasificar por edad'],correct:1,exp:'D&I: políticas de igualdad, sensibilización, procesos sin discriminación.'},
-     {q:'¿Interpretar vs. observar indicadores de RRHH?',a:['Solo mirar los números','Comparar, hacer preguntas críticas, encontrar causas','Pasar datos a consultores','Solo medir anualmente'],correct:1,exp:'Interpretar: comparar, cuestionar, encontrar causas raíz.'}]
-  ]
+  de:[
+    [{q:'Was ist die Dirección Estratégica de RRHH?',a:['Ein rein administrativer Ansatz','Ein Ansatz, der HR in die Unternehmensstrategie integriert','Eine Abteilung, die nur Gehälter berechnet','Eine externe Beratungsstelle'],correct:1,exp:'Die Dirección Estratégica de RRHH integriert das Personalmanagement ins Zentrum der Unternehmensstrategie.'},
+     {q:'Woraus entsteht jede HR-Strategie?',a:['Aus dem Wunsch des Personalchefs','Aus der Unternehmensstrategie','Aus gesetzlichen Vorgaben','Aus Branchentrends'],correct:1,exp:'Jede HR-Strategie entspringt der Unternehmensstrategie.'},
+     {q:'In welcher Etappe ist HR reaktiv?',a:['Etapa 3','Etapa 2','Etapa 1','Etapa 4'],correct:2,exp:'Etapa 1 ist der reaktive Ansatz: nur Verträge und Gehaltslisten verwalten.'},
+     {q:'Was bedeutet „reaktiv" im HR-Kontext?',a:['Proaktiv auf Herausforderungen reagieren','Erst handeln wenn ein Problem aufgetreten ist','Daten analysieren','Personal strategisch planen'],correct:1,exp:'Reaktiv: nur handeln, wenn etwas schiefläuft.'},
+     {q:'Typisches Beispiel für HR in Etapa 1?',a:['People Analytics einsetzen','An der Strategie teilnehmen','Erst Ersatz suchen, wenn jemand kündigt','Klimabefragungen durchführen'],correct:2,exp:'In Etapa 1 beginnt HR erst dann mit der Suche, wenn der Mitarbeiter bereits weg ist.'},
+     {q:'Was ist Etapa 2 (Gestión de RRHH)?',a:['Weniger Aufgaben','Mehr spezialisierte Funktionen wie Auswahl und Schulung','Vollständige Integration','Vollständige Automatisierung'],correct:1,exp:'Etapa 2: neue Funktionen (Selektion, Training), aber noch keine strategische Teilnahme.'},
+     {q:'Was bedeutet Etapa 3?',a:['Nur administrativ','HR wird Schlüsselabteilung für die Unternehmenszukunft','Nur mit Gewerkschaften','Verantwortlich für Marketing'],correct:1,exp:'Etapa 3: HR wird proaktiv und analytisch, nimmt an der Unternehmensleitung teil.'},
+     {q:'Welche Technologien beschleunigen strategisches HR?',a:['Fax und Drucker','Digitalisierung, Homeoffice, Automatisierung und KI','Nur Social Media','Nur Cloud'],correct:1,exp:'Digitalisierung, Telearbeit, Automatisierung und KI sind die Haupttreiber.'},
+     {q:'Was ist People Analytics?',a:['HR-Software für Gehälter','Analyse von Personaldaten für datenbasierte Entscheidungen','Verfahren zur Rekrutierung','Methode für Teambuilding'],correct:1,exp:'People Analytics: Personaldaten analysieren wie Finanzen oder Marketing.'},
+     {q:'HR bei internationaler Expansion?',a:['Nur mehr Büromaterial','Profile mit Sprachkenntnissen und interkultureller Kompetenz','Alle entlassen','Nur Gehaltsstruktur anpassen'],correct:1,exp:'Bei internationaler Expansion: Sprachkenntnisse, interkulturelle Kompetenzen und Mobilitätspolitiken vorausplanen.'}],
+    [{q:'Was bedeutet Wettbewerbsvorteil im HR-Kontext?',a:['Niedrigere Gehälter','Durch Mitarbeiter dauerhaft besser als Konkurrenten sein','Mehr Werbung','Mehr Technologie'],correct:1,exp:'Wettbewerbsvorteil: durch Mitarbeiter dauerhaft besser als Konkurrenten.'},
+     {q:'Drei Bedingungen für Wettbewerbsvorteil?',a:['Billig, jung, flexibel','Schwer zu imitieren, wertschöpfend, nachhaltig','Nur hohe Bildung','Immer Überstunden'],correct:1,exp:'(1) schwer zu imitieren, (2) wertschöpfend organisiert, (3) nachhaltig.'},
+     {q:'Was bedeutet Upskilling?',a:['Entlassen und ersetzen','Bestehende Fähigkeiten verbessern für aktuellen Job','In völlig neuen Rol wechseln','Nur externe Schulungen'],correct:1,exp:'Upskilling: bestehende Kompetenzen verbessern.'},
+     {q:'Was bedeutet Reskilling?',a:['Gleicher Job mit neuen Werkzeugen','Neue Fähigkeiten für eine andere Rolle','Auf Rente vorbereiten','Führungskompetenz entwickeln'],correct:1,exp:'Reskilling: berufliche Neuausrichtung.'},
+     {q:'HR bei innovationsorientiertem Unternehmen?',a:['Strenge Kontrolle','Kreativität, Fehlertoleranz, Teamarbeit fördern','Kosten reduzieren','Hierarchien verstärken'],correct:1,exp:'Bei Innovation: diverse Teams, kreative Räume, Anerkennung neuer Ideen.'},
+     {q:'Was wenn HR keinen Wettbewerbsvorteil schafft?',a:['Internationaler Erfolg','Hohe Fluktuation, schlechtes Klima, Schwierigkeit Talente zu gewinnen','Mehr Motivation','Mehr Produktivität'],correct:1,exp:'Ohne strategisches HR: Fluktuation, schlechtes Klima, Talentmangel.'},
+     {q:'Warum sind Menschen schwerer zu kopieren als Maschinen?',a:['Menschen sind billiger','Kombination aus Talent, Kultur, Führung und Prozessen ist einzigartig','Es gibt keine Technologie','Gesetze verbieten es'],correct:1,exp:'Die einzigartige Kombination ist extrem schwer zu replizieren.'},
+     {q:'HR in kundenserviceorientiertem Unternehmen?',a:['Nur Technikspezialisten','Soziale Kompetenzen auswählen, Empathie schulen, kundenbezogene Anreize','Nur Gehaltspolitik','Nur Effizienz'],correct:1,exp:'Kundenservice: soziale Fähigkeiten, Empathie, Anreize an Kundenzufriedenheit.'},
+     {q:'Aufgabe von HR bezüglich Führung?',a:['Führungskräfte entfernen','In Kommunikation, Motivation, Konfliktmanagement schulen','Nur Gehaltserhöhungen beantragen','Ignorieren'],correct:1,exp:'HR schult Führungskräfte in Kommunikation und Konfliktlösung.'},
+     {q:'Was sind Vergütungs- und Anerkennungssysteme?',a:['Nur Grundgehalt','Gehälter, Anreize, Vorteile zur Gewinnung und Bindung von Talent','Nur Boni','Nur Strafmaßnahmen'],correct:1,exp:'Vergütung: Gehälter, Anreize und Sozialleistungen für Talentgewinnung und -bindung.'}],
+    [{q:'Was ist strategische Personalplanung?',a:['Nur auf Vakanzen reagieren','Vorausdenken welche Mitarbeiter das Unternehmen braucht','Alle gleich einsetzen','Nur externe Beratung'],correct:1,exp:'Strategische Planung: vorhersehen, vorbereiten, ausrichten.'},
+     {q:'Logische Reihenfolge der Personalplanung?',a:['HR → Unternehmen → Markt','Unternehmensstrategie → HR übersetzt → Plan entworfen','Mitarbeiter → HR → Unternehmen','Gesetz → HR → Unternehmen'],correct:1,exp:'Unternehmensstrategie → HR übersetzt in Talentbedarf → Aktionsplan.'},
+     {q:'Was analysiert HR beim internen Audit?',a:['Nur die Konkurrenz','Belegschaft, Kompetenzen, Klima, HR-Prozesse','Nur Finanzen','Nur Gehälter'],correct:1,exp:'Intern: Belegschaft, Kompetenzen, Klima, Effizienz der HR-Prozesse.'},
+     {q:'Was enthält ein DAFO für HR?',a:['Nur Stärken und Schwächen','Stärken, Schwächen, Chancen, Risiken','Nur externe Analyse','Nur Zufriedenheitsdaten'],correct:1,exp:'DAFO: alle vier Dimensionen für den HR-Bereich.'},
+     {q:'Unterschied quantitative vs. qualitative Personalplanung?',a:['Quantitativ = Gehälter; Qualitativ = Kompetenzen','Quantitativ = Wie viele? Qualitativ = Welche Profile?','Intern vs. extern','Kein Unterschied'],correct:1,exp:'Quantitativ: Anzahl. Qualitativ: Fähigkeiten und Profile.'},
+     {q:'Typische HR-KPIs?',a:['Aktienkurs','Fluktuationsrate, Absentismus, Schulungsstunden, Zufriedenheit','Nur Umsatz','Nur Kundenbewertungen'],correct:1,exp:'KPIs: Fluktuation, Absentismus, Vakanzdauer, Schulungsstunden, Zufriedenheitsindex.'},
+     {q:'Funktion von Selektion & Rekrutierung?',a:['Nur Gehaltsverhandlungen','Richtige Personen bringen: Profil → Stelle → Onboarding','Nur Schulungen','Nur gesetzliche Pflichten'],correct:1,exp:'Selektion: Profil, Ausschreibung, Interviews, Onboarding.'},
+     {q:'Was ist die Rolle des HR Business Partner?',a:['Externer Berater','RRHH-Person für einen Geschäftsbereich als interner Berater','Der CEO','Nur Schulungen'],correct:1,exp:'HRBP: HR-Spezialist, der einem Unternehmensbereich zugeordnet ist.'},
+     {q:'Was macht ein People Analyst?',a:['Teambuilding organisieren','Personaldaten analysieren für datenbasierte Entscheidungen','Tarifverträge verhandeln','Nur Ausschreibungen'],correct:1,exp:'People Analyst: HR-Daten analysieren für datenbasierte Entscheidungen.'},
+     {q:'HR-Struktur Großunternehmen vs. KMU?',a:['Großunternehmen hat weniger HR','Großunternehmen: spezialisiert; KMU: 1-3 Personen für alles','KMU immer ausgelagert','Kein Unterschied'],correct:1,exp:'Großunternehmen: vollständige HR-Abteilung. KMU: 1-3 Personen decken alles ab.'}],
+    [{q:'Was bedeutet HR als Transformationsagent?',a:['Nur Strukturen verwalten','Veränderungen anstoßen, begleiten, Widerstände reduzieren','Alle alten Mitarbeiter ersetzen','Nur externe Berater'],correct:1,exp:'Als Transformationsagent: Wandel initiieren und Mitarbeiter begleiten.'},
+     {q:'HR bei digitaler Transformation?',a:['Nur Software kaufen','Kompetenzlücken identifizieren, digitale Schulungen, Begleitung','Alle durch Roboter ersetzen','Nur IT koordinieren'],correct:1,exp:'Digitaltransformation: Kompetenzlücken identifizieren und digitale Schulungen gestalten.'},
+     {q:'Hauptziele der HR-Gestión?',a:['Nur Kosten senken','Richtige Personen gewinnen, entwickeln, halten, motivieren, sicheres Umfeld','Nur Gehälter','Nur Gesetze einhalten'],correct:1,exp:'6 Ziele: anziehen, entwickeln, halten, motivieren, sicheres Umfeld, ausrichten.'},
+     {q:'Strategische, taktische, operative Ziele?',a:['Alle identisch','Strategisch = langfristig; Taktisch = mittelfristig; Operativ = kurzfristig','Operativ ist langfristiger','Taktisch = über 5 Jahre'],correct:1,exp:'Strategisch (Jahre) → Taktisch (1-2 Jahre) → Operativ (Monate).'},
+     {q:'Was zeigt hohe freiwillige Fluktuation?',a:['Unternehmen ist attraktiv','Probleme mit Klima, Führung, Gehalt, Entwicklung','Mitarbeiter gehen in Rente','Unternehmen wächst'],correct:1,exp:'Hohe freiwillige Fluktuation deutet auf Probleme hin.'},
+     {q:'Bessere Selektion und Unternehmensresultate?',a:['Kein Zusammenhang','Bessere Selektion → besserer Service → zufriedene Kunden → mehr Umsatz','Nur höhere Gehälter','Werbung überflüssig'],correct:1,exp:'Kette: Bessere Selektion → Kundenerlebnis → Umsatz → Wettbewerbsvorteil.'},
+     {q:'Risiko ohne klare HR-Ziele?',a:['Alles besser','Aktionen ohne Nutzen, Geld ohne Rücklauf, Fehler wiederholen sich','Mitarbeiter selbstständiger','Kosten sinken'],correct:1,exp:'Ohne Ziele: sinnlose Aktionen, kein Rückfluss, wiederholende Fehler.'},
+     {q:'Funktion von Prävention von Arbeitsrisiken?',a:['Nur administrativ','Risiken bewerten, Prävention, Schulungen, Unfälle untersuchen','Nur Gehälter','Nur externe Audits'],correct:1,exp:'PRL: Risiken evaluieren, Prävention, Schulungen, Unfalluntersuchung.'},
+     {q:'Was umfasst Diversität & Inklusion?',a:['Nur Frauen einstellen','Gleichstellungspolitiken, Sensibilisierung, diskriminierungsfreie Prozesse','Nur Quoten','Nur nach Alter sortieren'],correct:1,exp:'D&I: Politiken, Sensibilisierung, diskriminierungsfreie Prozesse.'},
+     {q:'HR-Indikatoren interpretieren vs. betrachten?',a:['Nur Zahlen anschauen','Vergleichen, kritische Fragen stellen, Ursachen finden','Daten weitergeben','Nur jährlich messen'],correct:1,exp:'Interpretieren: vergleichen, hinterfragen, Ursachen suchen.'}]
+  ],
+  en:[
+    [{q:'What is Dirección Estratégica de RRHH?',a:['A purely administrative approach','An approach that integrates HR into the core of business strategy','A department that only calculates salaries','An external consultancy'],correct:1,exp:'Strategic HR integrates people management into the centre of business strategy.'},
+     {q:'What is every HR strategy derived from?',a:['The HR manager\'s wishes','The corporate strategy','Legal requirements','Industry trends'],correct:1,exp:'Every HR strategy derives from the corporate strategy.'},
+     {q:'In which stage is HR reactive?',a:['Stage 3','Stage 2','Stage 1','Stage 4'],correct:2,exp:'Stage 1 is the reactive approach: only managing contracts and payroll.'},
+     {q:'What does "reactive" mean in an HR context?',a:['Proactively responding to future challenges','Acting only when a problem has already occurred','Analysing data and making decisions','Strategically planning staff'],correct:1,exp:'Reactive means acting only when something goes wrong.'},
+     {q:'Typical example of HR in Stage 1?',a:['Using People Analytics','Participating in strategy','Only searching for a replacement when someone quits','Running climate surveys'],correct:2,exp:'In Stage 1, HR only starts looking for a replacement after the employee has left.'},
+     {q:'What is Stage 2 (HR Management) compared to Stage 1?',a:['Fewer tasks and more bureaucracy','More specialised functions like selection, training and motivation','Full integration into strategy','Full automation'],correct:1,exp:'Stage 2: new functions (selection, training, appraisal) but still no strategic participation.'},
+     {q:'What does Stage 3 mean?',a:['Purely administrative','HR becomes a key department for the company\'s future','Works only with unions','Responsible for marketing'],correct:1,exp:'Stage 3: HR becomes proactive and analytical, participating in company leadership.'},
+     {q:'Which technologies accelerate strategic HR?',a:['Fax and printers','Digitalisation, remote work, automation and AI','Only social media','Only cloud storage'],correct:1,exp:'Digitalisation, remote work, automation and AI are the main drivers.'},
+     {q:'What is People Analytics?',a:['HR software for payroll','Analysis of personnel data for data-based decisions','A recruitment process','A team-building method'],correct:1,exp:'People Analytics: analysing HR data like finance or marketing.'},
+     {q:'HR when a company expands internationally?',a:['Only buy more office supplies','Profiles with language skills, intercultural competences and mobility policies','Dismiss all employees','Only adjust salary structure'],correct:1,exp:'International expansion: plan ahead for language skills, intercultural competences and mobility policies.'}],
+    [{q:'What does competitive advantage mean in HR?',a:['Paying lower salaries than competitors','The company permanently outperforming competitors through its employees','More advertising','More technology'],correct:1,exp:'Competitive advantage: permanently better than competitors through employees.'},
+     {q:'Three conditions for competitive advantage?',a:['Cheap, young, flexible','Hard to imitate, value-creating, sustainable','Only high qualifications','Always overtime'],correct:1,exp:'(1) hard to imitate, (2) value-creating, (3) sustainable over time.'},
+     {q:'What does upskilling mean?',a:['Dismiss and replace','Improve existing skills for the current job','Move to a completely different role','Only external training'],correct:1,exp:'Upskilling: improving existing competences.'},
+     {q:'What does reskilling mean?',a:['Same job with new tools','Learning completely new skills to switch to a different role','Preparing for retirement','Developing leadership'],correct:1,exp:'Reskilling: professional reorientation.'},
+     {q:'HR in an innovation-oriented company?',a:['Strict control','Foster creativity, tolerance for failure and teamwork','Reduce costs','Reinforce hierarchies'],correct:1,exp:'Innovation focus: diverse teams, creative spaces, recognising new ideas.'},
+     {q:'What if HR creates no competitive advantage?',a:['International success','High turnover, poor climate, difficulty attracting talent','More motivation','More productivity'],correct:1,exp:'Without strategic HR: turnover, poor climate, talent shortage.'},
+     {q:'Why are people harder to copy than machines?',a:['People are cheaper','Combination of talent, culture, leadership and processes is unique','No technology exists','Laws forbid it'],correct:1,exp:'The unique combination is extremely hard to replicate.'},
+     {q:'HR in a customer-service-oriented company?',a:['Only hire technicians','Select people with social skills, train empathy, create customer-linked incentives','Only salary policy','Only efficiency'],correct:1,exp:'Customer focus: social skills, empathy, incentives tied to customer satisfaction.'},
+     {q:'HR\'s role regarding leadership?',a:['Remove leaders','Train leaders in communication, motivation and conflict management','Only request pay rises','Ignore them'],correct:1,exp:'HR trains leaders in communication and conflict resolution.'},
+     {q:'What are compensation and recognition systems?',a:['Only basic salary','Salaries, incentives and benefits to attract, retain and encourage desired behaviour','Only bonuses','Only disciplinary measures'],correct:1,exp:'Compensation: salaries, incentives and benefits for talent attraction and retention.'}],
+    [{q:'What is strategic workforce planning?',a:['Only reacting to vacancies','Anticipating what employees the company will need for future goals','Deploy everyone the same','Only external consulting'],correct:1,exp:'Strategic planning: anticipate, prepare and align.'},
+     {q:'Logical order in workforce planning?',a:['HR → Company → Market','Corporate strategy → HR translates → Plan is designed','Employees → HR → Company','Law → HR → Company'],correct:1,exp:'Corporate strategy → HR translates into talent needs → Action plan.'},
+     {q:'What does HR analyse in an internal audit?',a:['Only competitors','Current workforce, competences, climate and HR processes','Only finances','Only salaries'],correct:1,exp:'Internal audit: workforce, competences, climate, efficiency of HR processes.'},
+     {q:'What does a SWOT for HR contain?',a:['Only strengths and weaknesses','Strengths, Weaknesses, Opportunities and Threats','Only external analysis','Only satisfaction data'],correct:1,exp:'SWOT: all four dimensions for the HR area.'},
+     {q:'Difference between quantitative and qualitative workforce planning?',a:['Quantitative = salaries; Qualitative = competences','Quantitative = How many? Qualitative = What profiles?','Internal vs. external','No difference'],correct:1,exp:'Quantitative: numbers. Qualitative: skills and profiles.'},
+     {q:'Typical HR KPIs?',a:['Stock price','Turnover rate, absenteeism, training hours, satisfaction','Only revenue','Only customer ratings'],correct:1,exp:'KPIs: turnover, absenteeism, vacancy duration, training hours, satisfaction index.'},
+     {q:'Function of Selection & Recruitment?',a:['Only salary negotiations','Bringing the right people in: from profile to onboarding','Only external training','Only legal duties'],correct:1,exp:'Selection: profile definition, posting, interviews, onboarding.'},
+     {q:'What is the role of the HR Business Partner?',a:['An external adviser','An HR person assigned to a business unit acting as internal adviser','The CEO','Only training'],correct:1,exp:'HRBP: HR specialist assigned to a specific business area.'},
+     {q:'What does a People Analyst do?',a:['Organise team-building','Analyse HR data to support data-based decisions','Negotiate collective agreements','Only job postings'],correct:1,exp:'People Analyst: HR data analysis for evidence-based decisions.'},
+     {q:'HR structure: large company vs. SME?',a:['Large companies have fewer HR staff','Large: specialised departments; SME: 1-3 people cover everything','SMEs always outsource','No difference'],correct:1,exp:'Large company: full HR department. SME: 1-3 people cover all functions.'}],
+    [{q:'What does HR as transformation agent mean?',a:['Only managing structures','Actively driving change, supporting people, reducing resistance','Replace all old employees','Only external consultants'],correct:1,exp:'Transformation agent: initiate change and accompany employees through it.'},
+     {q:'HR in digital transformation?',a:['Only buy software','Identify competence gaps, design digital training, accompany employees','Replace all with robots','Only coordinate IT'],correct:1,exp:'Digital transformation: identify gaps and design digital training.'},
+     {q:'Main goals of HR management?',a:['Only cut costs','Attract the right people, develop capacities, retain talent, motivate, safe environment','Only salaries','Only laws'],correct:1,exp:'6 goals: attract, develop, retain, motivate, safe environment, align.'},
+     {q:'Strategic, tactical, operational goals?',a:['All identical','Strategic = long-term; Tactical = medium-term; Operational = short-term','Operational is longer','Tactical = over 5 years'],correct:1,exp:'Strategic (years) → Tactical (1-2 years) → Operational (months).'},
+     {q:'What does high voluntary turnover indicate?',a:['Company is very attractive','Possible problems with climate, leadership, salary, development','Employees are retiring','Company is growing'],correct:1,exp:'High voluntary turnover signals problems.'},
+     {q:'Better selection and company results?',a:['No connection','Better selection → better service → satisfied customers → more revenue','Only higher salaries','Advertising unnecessary'],correct:1,exp:'Chain: Better selection → customer experience → revenue → competitive advantage.'},
+     {q:'Risk without clear HR goals?',a:['Everything runs better','Actions without visible benefit, money without return, mistakes repeat','Employees more independent','Costs fall'],correct:1,exp:'Without goals: pointless actions, no return on investment, recurring mistakes.'},
+     {q:'Function of Occupational Risk Prevention?',a:['Only admin','Assess risks, propose prevention, training, investigate accidents','Only salaries','Only external audits'],correct:1,exp:'ORP: assess risks, prevention measures, training, accident investigation.'},
+     {q:'What does Diversity & Inclusion cover?',a:['Only hire women','Equality policies, awareness, discrimination-free processes','Only minimum quotas','Only sort by age'],correct:1,exp:'D&I: policies, awareness, discrimination-free processes.'},
+     {q:'Interpreting vs. observing HR indicators?',a:['Just look at numbers','Compare, ask critical questions, find root causes','Pass data to consultants','Only measure annually'],correct:1,exp:'Interpreting: compare, question, find root causes.'}]
+  ],
+  es:[
+    [{q:'¿Qué es la Dirección Estratégica de RRHH?',a:['Un enfoque puramente administrativo','Un enfoque que integra RRHH en el núcleo de la estrategia empresarial','Un departamento que solo calcula salarios','Una consultora externa'],correct:1,exp:'La Dirección Estratégica integra la gestión de personas en el centro de la estrategia empresarial.'},
+     {q:'¿De dónde surge toda estrategia de RRHH?',a:['Del deseo del director de personal','De la estrategia corporativa','De las obligaciones legales','De las tendencias del sector'],correct:1,exp:'Toda estrategia de RRHH parte de la estrategia corporativa.'},
+     {q:'¿En qué etapa es RRHH reactivo?',a:['Etapa 3','Etapa 2','Etapa 1','Etapa 4'],correct:2,exp:'Etapa 1 es el enfoque reactivo: solo contratos y nóminas.'},
+     {q:'¿Qué significa "reactivo" en RRHH?',a:['Responder proactivamente','Actuar solo cuando ya ha surgido un problema','Analizar datos','Planificar estratégicamente'],correct:1,exp:'Reactivo: actuar solo cuando algo falla.'},
+     {q:'¿Ejemplo típico de RRHH en Etapa 1?',a:['Usar People Analytics','Participar en la estrategia','Buscar sustituto solo cuando alguien dimite','Realizar encuestas de clima'],correct:2,exp:'En Etapa 1, RRHH comienza la búsqueda solo cuando el empleado ya se fue.'},
+     {q:'¿Qué es la Etapa 2 comparada con la Etapa 1?',a:['Menos tareas','Más funciones especializadas: selección, formación, motivación','Integración completa','Automatización completa'],correct:1,exp:'Etapa 2: nuevas funciones pero aún sin participación estratégica.'},
+     {q:'¿Qué significa Etapa 3?',a:['Solo administrativo','RRHH se convierte en departamento clave para el futuro','Solo con sindicatos','Responsable del marketing'],correct:1,exp:'Etapa 3: RRHH proactivo y analítico, participa en la dirección.'},
+     {q:'¿Qué tecnologías aceleran el RRHH estratégico?',a:['Fax e impresoras','Digitalización, teletrabajo, automatización e IA','Solo redes sociales','Solo cloud'],correct:1,exp:'Digitalización, teletrabajo, automatización e IA son los impulsores principales.'},
+     {q:'¿Qué es People Analytics?',a:['Software de RRHH para nóminas','Análisis de datos de personal para decisiones basadas en datos','Proceso de reclutamiento','Método para team-building'],correct:1,exp:'People Analytics: analizar datos de personal como en finanzas o marketing.'},
+     {q:'¿RRHH ante expansión internacional?',a:['Solo más material de oficina','Perfiles con idiomas, competencias interculturales y políticas de movilidad','Despedir a todos','Solo ajustar salarios'],correct:1,exp:'Expansión internacional: planificar idiomas, competencias y movilidad.'}],
+    [{q:'¿Qué significa ventaja competitiva en RRHH?',a:['Pagar salarios más bajos','Que la empresa supera permanentemente a sus competidores gracias a sus empleados','Más publicidad','Más tecnología'],correct:1,exp:'Ventaja competitiva: permanentemente mejor que la competencia gracias a los empleados.'},
+     {q:'¿Tres condiciones para la ventaja competitiva?',a:['Baratos, jóvenes, flexibles','Difíciles de imitar, generadores de valor, sostenibles','Solo titulación alta','Siempre horas extra'],correct:1,exp:'(1) difíciles de imitar, (2) generadores de valor, (3) sostenibles en el tiempo.'},
+     {q:'¿Qué significa upskilling?',a:['Despedir y sustituir','Mejorar habilidades existentes para el trabajo actual','Cambiar a un rol completamente nuevo','Solo formaciones externas'],correct:1,exp:'Upskilling: mejorar competencias existentes.'},
+     {q:'¿Qué significa reskilling?',a:['Mismo trabajo con nuevas herramientas','Aprender habilidades nuevas para cambiar de rol','Prepararse para la jubilación','Desarrollar liderazgo'],correct:1,exp:'Reskilling: reorientación profesional.'},
+     {q:'¿RRHH en empresa orientada a la innovación?',a:['Control estricto','Fomentar creatividad, tolerancia al error y trabajo en equipo','Reducir costes','Reforzar jerarquías'],correct:1,exp:'Innovación: equipos diversos, espacios creativos, reconocimiento de nuevas ideas.'},
+     {q:'¿Qué ocurre si RRHH no crea ventaja competitiva?',a:['Éxito internacional','Alta rotación, mal clima, dificultad para atraer talento','Más motivación','Más productividad'],correct:1,exp:'Sin RRHH estratégico: rotación, mal clima, escasez de talento.'},
+     {q:'¿Por qué las personas son más difíciles de copiar que las máquinas?',a:['Las personas son más baratas','La combinación de talento, cultura, liderazgo y procesos es única','No existe tecnología','La ley lo prohíbe'],correct:1,exp:'La combinación única es extremadamente difícil de replicar.'},
+     {q:'¿RRHH en empresa orientada al cliente?',a:['Solo contratar técnicos','Seleccionar personas con competencias sociales, formar en empatía, crear incentivos','Solo política salarial','Solo eficiencia'],correct:1,exp:'Enfoque cliente: habilidades sociales, empatía, incentivos vinculados al cliente.'},
+     {q:'¿Función de RRHH respecto al liderazgo?',a:['Retirar a los líderes','Formar en comunicación, motivación y gestión de conflictos','Solo solicitar aumentos','Ignorar'],correct:1,exp:'RRHH forma a los líderes en comunicación y resolución de conflictos.'},
+     {q:'¿Qué son los sistemas de compensación y reconocimiento?',a:['Solo el salario base','Salarios, incentivos y beneficios para atraer, retener y motivar talento','Solo bonos','Solo medidas disciplinarias'],correct:1,exp:'Compensación: salarios, incentivos y beneficios para atraer y retener talento.'}],
+    [{q:'¿Qué es la planificación estratégica de RRHH?',a:['Solo reaccionar a vacantes','Anticipar qué empleados necesitará la empresa para cumplir objetivos futuros','Destinar a todos al mismo área','Solo consultoría externa'],correct:1,exp:'Planificación estratégica: anticipar, preparar y alinear.'},
+     {q:'¿Orden lógico en la planificación de personal?',a:['RRHH → Empresa → Mercado','Estrategia empresarial → RRHH traduce → Plan diseñado','Empleados → RRHH → Empresa','Ley → RRHH → Empresa'],correct:1,exp:'Estrategia empresarial → RRHH traduce en necesidades → Plan de acción.'},
+     {q:'¿Qué analiza RRHH en la auditoría interna?',a:['Solo la competencia','Plantilla actual, competencias, clima y procesos de RRHH','Solo finanzas','Solo salarios'],correct:1,exp:'Auditoría interna: plantilla, competencias, clima, eficiencia de procesos de RRHH.'},
+     {q:'¿Qué contiene un DAFO para RRHH?',a:['Solo fortalezas y debilidades','Fortalezas, Debilidades, Oportunidades y Amenazas','Solo análisis externo','Solo datos de satisfacción'],correct:1,exp:'DAFO: las cuatro dimensiones para el área de RRHH.'},
+     {q:'¿Diferencia planificación cuantitativa vs. cualitativa?',a:['Cuantitativa = salarios; Cualitativa = competencias','Cuantitativa = ¿Cuántos? Cualitativa = ¿Qué perfiles?','Interna vs. externa','No hay diferencia'],correct:1,exp:'Cuantitativa: cantidad. Cualitativa: habilidades y perfiles.'},
+     {q:'¿KPIs típicos en RRHH?',a:['Cotización en bolsa','Tasa de rotación, absentismo, horas de formación, satisfacción','Solo ventas','Solo valoraciones'],correct:1,exp:'KPIs: rotación, absentismo, duración de vacantes, horas de formación, índice de satisfacción.'},
+     {q:'¿Función de Selección y Reclutamiento?',a:['Solo negociaciones salariales','Incorporar a las personas adecuadas: perfil → puesto → onboarding','Solo formaciones externas','Solo obligaciones legales'],correct:1,exp:'Selección: perfil, convocatoria, entrevistas, onboarding.'},
+     {q:'¿Qué es el HR Business Partner?',a:['Un consultor externo','Una persona de RRHH asignada a una unidad de negocio como asesor interno','El CEO','Solo formación'],correct:1,exp:'HRBP: especialista de RRHH asignado a un área concreta.'},
+     {q:'¿Qué hace un People Analyst?',a:['Organizar team-building','Analizar datos de personal para decisiones basadas en datos','Negociar convenios','Solo ofertas de empleo'],correct:1,exp:'People Analyst: analizar datos de RRHH para decisiones basadas en evidencias.'},
+     {q:'¿Estructura RRHH gran empresa vs. PYME?',a:['Grandes empresas tienen menos RRHH','Grandes: especializadas; PYME: 1-3 personas cubren todo','PYMES siempre externalizan','No hay diferencia'],correct:1,exp:'Gran empresa: departamento completo. PYME: 1-3 personas cubren todo.'}],
+    [{q:'¿Qué significa RRHH como agente de transformación?',a:['Solo gestionar estructuras','Impulsar cambios, acompañar personas, reducir resistencias','Sustituir a todos los empleados','Solo consultores externos'],correct:1,exp:'Agente de transformación: impulsar el cambio y acompañar a las personas.'},
+     {q:'¿RRHH en transformación digital?',a:['Solo comprar software','Identificar brechas de competencias, formaciones digitales, acompañamiento','Sustituir todo por robots','Solo coordinar TI'],correct:1,exp:'Transformación digital: identificar brechas y diseñar formaciones digitales.'},
+     {q:'¿Objetivos principales de la Gestión de RRHH?',a:['Solo reducir costes','Atraer personas, desarrollar, retener, motivar, entorno seguro','Solo salarios','Solo leyes'],correct:1,exp:'6 objetivos: atraer, desarrollar, retener, motivar, entorno seguro, alinear.'},
+     {q:'¿Objetivos estratégicos, tácticos y operativos?',a:['Todos idénticos','Estratégico = largo plazo; Táctico = medio; Operativo = corto plazo','Operativo es más largo','Táctico = más de 5 años'],correct:1,exp:'Estratégico (años) → Táctico (1-2 años) → Operativo (meses).'},
+     {q:'¿Qué indica alta rotación voluntaria?',a:['Empresa muy atractiva','Posibles problemas de clima, liderazgo, salario, desarrollo','Empleados jubilándose','Empresa creciendo'],correct:1,exp:'Alta rotación voluntaria señala problemas.'},
+     {q:'¿Mejor selección y resultados empresariales?',a:['Ninguna relación','Mejor selección → mejor servicio → clientes satisfechos → más ventas','Solo salarios más altos','Publicidad innecesaria'],correct:1,exp:'Cadena: mejor selección → experiencia cliente → ventas → ventaja competitiva.'},
+     {q:'¿Riesgo sin objetivos claros en RRHH?',a:['Todo mejor','Acciones sin beneficio, dinero sin retorno, errores se repiten','Empleados más autónomos','Costes bajan'],correct:1,exp:'Sin objetivos: acciones inútiles, sin retorno, errores recurrentes.'},
+     {q:'¿Función de Prevención de Riesgos Laborales?',a:['Solo administrativo','Evaluar riesgos, proponer prevención, formaciones, investigar accidentes','Solo salarios','Solo auditorías externas'],correct:1,exp:'PRL: evaluar riesgos, prevención, formaciones, investigación de accidentes.'},
+     {q:'¿Qué abarca la Diversidad e Inclusión?',a:['Solo contratar mujeres','Políticas de igualdad, sensibilización, procesos libres de discriminación','Solo cuotas mínimas','Solo clasificar por edad'],correct:1,exp:'D&I: políticas de igualdad, sensibilización, procesos sin discriminación.'},
+     {q:'¿Interpretar vs. observar indicadores de RRHH?',a:['Solo mirar los números','Comparar, hacer preguntas críticas, encontrar causas','Pasar datos a consultores','Solo medir anualmente'],correct:1,exp:'Interpretar: comparar, cuestionar, encontrar causas raíz.'}]
+  ]
 };
 
 // ── QUIZ STATE ─────────────────────────────────
 let lang = 'de';
 let qState = {
-  currentLevel:null,currentQ:0,score:0,answered:false,_shuffled:[],
-  unlockedLevels:[0],completedLevels:{},currentRank:0,lastPct:0,
+  currentLevel:null,currentQ:0,score:0,answered:false,_shuffled:[],
+  unlockedLevels:[0],completedLevels:{},currentRank:0,lastPct:0,
 };
 const LEVEL_META = [
-  {emoji:'📚',medal:'🥉',rankUnlock:1},{emoji:'⚔️',medal:'🥈',rankUnlock:3},
-  {emoji:'📐',medal:'🥇',rankUnlock:5},{emoji:'👑',medal:'🏆',rankUnlock:6},
+  {emoji:'📚',medal:'🥉',rankUnlock:1},{emoji:'⚔️',medal:'🥈',rankUnlock:3},
+  {emoji:'📐',medal:'🥇',rankUnlock:5},{emoji:'👑',medal:'🏆',rankUnlock:6},
 ];
 const RANK_ICONS = ['🎓','📋','🗂️','👔','📊','🤝','🏆'];
 
 // ── INIT ──────────────────────────────────────
 function init(){
-  loadState();
-  applyLang('de');
+  loadState();
+  applyLang('de');
 }
 
 function loadState(){
-  try{
-    const s=localStorage.getItem('upskill_v1');
-    if(s){const d=JSON.parse(s);qState.unlockedLevels=d.u||[0];qState.completedLevels=d.c||{};qState.currentRank=d.r||0;}
-  }catch(e){}
+  try{
+    const s=localStorage.getItem('upskill_v1');
+    if(s){const d=JSON.parse(s);qState.unlockedLevels=d.u||[0];qState.completedLevels=d.c||{};qState.currentRank=d.r||0;}
+  }catch(e){}
 }
 function saveState(){
-  try{localStorage.setItem('upskill_v1',JSON.stringify({u:qState.unlockedLevels,c:qState.completedLevels,r:qState.currentRank}));}catch(e){}
+  try{localStorage.setItem('upskill_v1',JSON.stringify({u:qState.unlockedLevels,c:qState.completedLevels,r:qState.currentRank}));}catch(e){}
 }
 
 // ── LANG ──────────────────────────────────────
 function setLang(l){
-  lang=l;
-  applyLang(l);
+  lang=l;
+  applyLang(l);
 }
 function applyLang(l){
-  lang=l;
-  const d=I18N[l];
-  ['de','en','es'].forEach(x=>{
-    document.getElementById('btn-'+x).classList.toggle('active',x===l);
-    const m=document.getElementById('m-btn-'+x);
-    if(m)m.classList.toggle('active',x===l);
-  });
-  document.documentElement.lang=l;
-  document.querySelectorAll('[data-i18n]').forEach(el=>{
-    const k=el.getAttribute('data-i18n');
-    if(d[k]!==undefined)el.textContent=d[k];
-  });
-  if(document.getElementById('cert-name'))document.getElementById('cert-name').placeholder=d.name_ph||'';
-  if(document.getElementById('btn-retry'))document.getElementById('btn-retry').textContent=d.btn_retry||'';
-  if(document.getElementById('btn-download'))document.getElementById('btn-download').textContent=d.btn_dl||'';
-  if(document.getElementById('btn-home-r'))document.getElementById('btn-home-r').textContent=d.btn_home||'';
-  if(document.getElementById('lbl-name-input'))document.getElementById('lbl-name-input').textContent=d.lbl_name||'';
-  if(document.getElementById('lbl-correct'))document.getElementById('lbl-correct').textContent=d.lbl_correct||'';
-  if(document.getElementById('lbl-wrong'))document.getElementById('lbl-wrong').textContent=d.lbl_wrong||'';
-  if(document.getElementById('lbl-pct'))document.getElementById('lbl-pct').textContent=d.lbl_pct||'';
-  if(document.getElementById('next-btn'))document.getElementById('next-btn').textContent=d.q_next||'';
-  renderRankLadder();
-  renderLevelGrid();
+  lang=l;
+  const d=I18N[l];
+  ['de','en','es'].forEach(x=>{
+    document.getElementById('btn-'+x).classList.toggle('active',x===l);
+    const m=document.getElementById('m-btn-'+x);
+    if(m)m.classList.toggle('active',x===l);
+  });
+  document.documentElement.lang=l;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const k=el.getAttribute('data-i18n');
+    if(d[k]!==undefined)el.textContent=d[k];
+  });
+  if(document.getElementById('cert-name'))document.getElementById('cert-name').placeholder=d.name_ph||'';
+  if(document.getElementById('btn-retry'))document.getElementById('btn-retry').textContent=d.btn_retry||'';
+  if(document.getElementById('btn-download'))document.getElementById('btn-download').textContent=d.btn_dl||'';
+  if(document.getElementById('btn-home-r'))document.getElementById('btn-home-r').textContent=d.btn_home||'';
+  if(document.getElementById('lbl-name-input'))document.getElementById('lbl-name-input').textContent=d.lbl_name||'';
+  if(document.getElementById('lbl-correct'))document.getElementById('lbl-correct').textContent=d.lbl_correct||'';
+  if(document.getElementById('lbl-wrong'))document.getElementById('lbl-wrong').textContent=d.lbl_wrong||'';
+  if(document.getElementById('lbl-pct'))document.getElementById('lbl-pct').textContent=d.lbl_pct||'';
+  if(document.getElementById('next-btn'))document.getElementById('next-btn').textContent=d.q_next||'';
+  renderRankLadder();
+  renderLevelGrid();
 }
 function t(k){return(I18N[lang]&&I18N[lang][k]!==undefined)?I18N[lang][k]:(I18N.de[k]||k);}
 
 // ── NAVIGATION ────────────────────────────────
 function showPage(id){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  document.querySelectorAll('.nav-link').forEach(l=>{
-    l.classList.toggle('active',l.getAttribute('data-page')===id);
-  });
-  window.scrollTo(0,0);
-  if(id==='quiz-select'){renderRankLadder();renderLevelGrid();}
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(l=>{
+    l.classList.toggle('active',l.getAttribute('data-page')===id);
+  });
+  window.scrollTo(0,0);
+  if(id==='quiz-select'){renderRankLadder();renderLevelGrid();}
 }
 function toggleMobile(){
-  document.getElementById('mobile-menu').classList.toggle('open');
+  document.getElementById('mobile-menu').classList.toggle('open');
 }
 function showLegalTab(tab){
-  ['impressum','datenschutz-de','datenschutz-es'].forEach(t=>{
-    document.getElementById('legal-'+t).style.display=t===tab?'block':'none';
-  });
-  document.querySelectorAll('.legal-tab').forEach((btn,i)=>{
-    const tabs=['impressum','datenschutz-de','datenschutz-es'];
-    btn.classList.toggle('active',tabs[i]===tab);
-  });
+  ['impressum','datenschutz-de','datenschutz-es'].forEach(t=>{
+    document.getElementById('legal-'+t).style.display=t===tab?'block':'none';
+  });
+  document.querySelectorAll('.legal-tab').forEach((btn,i)=>{
+    const tabs=['impressum','datenschutz-de','datenschutz-es'];
+    btn.classList.toggle('active',tabs[i]===tab);
+  });
 }
 
 // ── RANK LADDER ───────────────────────────────
 function renderRankLadder(){
-  const el=document.getElementById('rank-ladder');
-  if(!el)return;
-  const ranks=t('ranks');
-  el.innerHTML='';
-  ranks.forEach((r,i)=>{
-    if(i>0){const c=document.createElement('div');c.className='rank-conn'+(i<=qState.currentRank?' filled':'');el.appendChild(c);}
-    const s=document.createElement('div');
-    s.className='rank-step'+(i<qState.currentRank?' unlocked':'')+(i===qState.currentRank?' current':'');
-    s.innerHTML=`<span class="rs-icon">${RANK_ICONS[i]}</span><span class="rs-lbl">${r}</span>`;
-    el.appendChild(s);
-  });
+  const el=document.getElementById('rank-ladder');
+  if(!el)return;
+  const ranks=t('ranks');
+  el.innerHTML='';
+  ranks.forEach((r,i)=>{
+    if(i>0){const c=document.createElement('div');c.className='rank-conn'+(i<=qState.currentRank?' filled':'');el.appendChild(c);}
+    const s=document.createElement('div');
+    s.className='rank-step'+(i<qState.currentRank?' unlocked':'')+(i===qState.currentRank?' current':'');
+    s.innerHTML=`<span class="rs-icon">${RANK_ICONS[i]}</span><span class="rs-lbl">${r}</span>`;
+    el.appendChild(s);
+  });
 }
 
 // ── LEVEL GRID ────────────────────────────────
 function renderLevelGrid(){
-  const el=document.getElementById('level-grid');
-  if(!el)return;
-  const diffs=t('difficulties');
-  const names=t('levelNames');
-  const descs=t('levelDesc');
-  el.innerHTML='';
-  LEVEL_META.forEach((lm,i)=>{
-    const unlocked=qState.unlockedLevels.includes(i);
-    const done=qState.completedLevels[i];
-    const card=document.createElement('div');
-    card.className='card'+(unlocked?'':' topic-card locked');
-    card.style.cursor=unlocked?'pointer':'not-allowed';
-    card.onclick=()=>unlocked?startLevel(i):showToast(t('lockedToast'));
-    let stars='';
-    if(done!==undefined)for(let s=0;s<4;s++)stars+=s<done?'⭐':'☆';
-    card.innerHTML=`
-      <div style="position:absolute;top:14px;right:14px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;${unlocked?'background:rgba(201,168,76,.15);color:var(--gold);border:1px solid rgba(201,168,76,.3)':'background:rgba(255,255,255,.05);color:var(--silver);border:1px solid rgba(255,255,255,.1)'}">
-        ${unlocked?diffs[i]:'🔒'}
-      </div>
-      <div class="card-icon">${lm.emoji}</div>
-      <div class="card-title">${names[i]}</div>
-      <div class="card-text">${descs[i]}</div>
-      ${done!==undefined?`<div style="margin-top:10px;font-size:16px;">${stars}</div>`:''}
-      <div style="font-size:12px;color:var(--silver);margin-top:6px;">${done!==undefined?t('bestMedal')+' '+lm.medal:unlocked?t('questionsInfo')+' '+lm.medal:t('prevLevel')}</div>
-    `;
-    el.appendChild(card);
-  });
+  const el=document.getElementById('level-grid');
+  if(!el)return;
+  const diffs=t('difficulties');
+  const names=t('levelNames');
+  const descs=t('levelDesc');
+  el.innerHTML='';
+  LEVEL_META.forEach((lm,i)=>{
+    const unlocked=qState.unlockedLevels.includes(i);
+    const done=qState.completedLevels[i];
+    const card=document.createElement('div');
+    card.className='card'+(unlocked?'':' topic-card locked');
+    card.style.cursor=unlocked?'pointer':'not-allowed';
+    card.onclick=()=>unlocked?startLevel(i):showToast(t('lockedToast'));
+    let stars='';
+    if(done!==undefined)for(let s=0;s<4;s++)stars+=s<done?'⭐':'☆';
+    card.innerHTML=`
+      <div style="position:absolute;top:14px;right:14px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;${unlocked?'background:rgba(201,168,76,.15);color:var(--gold);border:1px solid rgba(201,168,76,.3)':'background:rgba(255,255,255,.05);color:var(--silver);border:1px solid rgba(255,255,255,.1)'}">
+        ${unlocked?diffs[i]:'🔒'}
+      </div>
+      <div class="card-icon">${lm.emoji}</div>
+      <div class="card-title">${names[i]}</div>
+      <div class="card-text">${descs[i]}</div>
+      ${done!==undefined?`<div style="margin-top:10px;font-size:16px;">${stars}</div>`:''}
+      <div style="font-size:12px;color:var(--silver);margin-top:6px;">${done!==undefined?t('bestMedal')+' '+lm.medal:unlocked?t('questionsInfo')+' '+lm.medal:t('prevLevel')}</div>
+    `;
+    el.appendChild(card);
+  });
 }
 
 // ── QUIZ ──────────────────────────────────────
 function startLevel(levelId){
-  const qs=QDB[lang][levelId];
-  qState.currentLevel=levelId;qState.currentQ=0;qState.score=0;qState.answered=false;
-  qState._shuffled=[...qs].sort(()=>Math.random()-.5);
-  const lm=LEVEL_META[levelId];
-  document.getElementById('quiz-level-title').textContent=lm.emoji+' '+t('levelNames')[levelId];
-  document.getElementById('q-total').textContent=qState._shuffled.length;
-  document.getElementById('q-score').textContent='0';
-  document.getElementById('next-btn').textContent=t('q_next');
-  showPage('quiz');
-  renderQuestion();
+  const qs=QDB[lang][levelId];
+  qState.currentLevel=levelId;qState.currentQ=0;qState.score=0;qState.answered=false;
+  qState._shuffled=[...qs].sort(()=>Math.random()-.5);
+  const lm=LEVEL_META[levelId];
+  document.getElementById('quiz-level-title').textContent=lm.emoji+' '+t('levelNames')[levelId];
+  document.getElementById('q-total').textContent=qState._shuffled.length;
+  document.getElementById('q-score').textContent='0';
+  document.getElementById('next-btn').textContent=t('q_next');
+  showPage('quiz');
+  renderQuestion();
 }
 
 function renderQuestion(){
-  const q=qState._shuffled[qState.currentQ];
-  const total=qState._shuffled.length;
-  qState.answered=false;
-  document.getElementById('q-current').textContent=qState.currentQ+1;
-  document.getElementById('q-number').textContent=t('q_label')+' '+(qState.currentQ+1)+' '+t('q_of')+' '+total;
-  document.getElementById('q-text').textContent=q.q;
-  document.getElementById('progress-fill').style.width=((qState.currentQ/total)*100)+'%';
-  const expl=document.getElementById('explanation');expl.style.display='none';expl.innerHTML='';
-  document.getElementById('next-btn').style.display='none';
-  const cont=document.getElementById('answers-container');cont.innerHTML='';
-  const letters=['A','B','C','D'];
-  const idx=q.a.map((_,i)=>i).sort(()=>Math.random()-.5);
-  const sh=idx.map(i=>({text:q.a[i],origIdx:i}));
-  const corrSh=sh.findIndex(a=>a.origIdx===q.correct);
-  sh.forEach((ans,i)=>{
-    const btn=document.createElement('button');
-    btn.className='answer-btn';
-    btn.innerHTML=`<span class="answer-letter">${letters[i]}</span>${ans.text}`;
-    btn.onclick=()=>handleAnswer(i,corrSh,q.exp);
-    cont.appendChild(btn);
-  });
+  const q=qState._shuffled[qState.currentQ];
+  const total=qState._shuffled.length;
+  qState.answered=false;
+  document.getElementById('q-current').textContent=qState.currentQ+1;
+  document.getElementById('q-number').textContent=t('q_label')+' '+(qState.currentQ+1)+' '+t('q_of')+' '+total;
+  document.getElementById('q-text').textContent=q.q;
+  document.getElementById('progress-fill').style.width=((qState.currentQ/total)*100)+'%';
+  const expl=document.getElementById('explanation');expl.style.display='none';expl.innerHTML='';
+  document.getElementById('next-btn').style.display='none';
+  const cont=document.getElementById('answers-container');cont.innerHTML='';
+  const letters=['A','B','C','D'];
+  const idx=q.a.map((_,i)=>i).sort(()=>Math.random()-.5);
+  const sh=idx.map(i=>({text:q.a[i],origIdx:i}));
+  const corrSh=sh.findIndex(a=>a.origIdx===q.correct);
+  sh.forEach((ans,i)=>{
+    const btn=document.createElement('button');
+    btn.className='answer-btn';
+    btn.innerHTML=`<span class="answer-letter">${letters[i]}</span>${ans.text}`;
+    btn.onclick=()=>handleAnswer(i,corrSh,q.exp);
+    cont.appendChild(btn);
+  });
 }
 
 function handleAnswer(sel,corr,exp){
-  if(qState.answered)return;
-  qState.answered=true;
-  const btns=document.querySelectorAll('.answer-btn');
-  btns.forEach(b=>b.disabled=true);
-  const ok=sel===corr;
-  if(ok){qState.score++;document.getElementById('q-score').textContent=qState.score;btns[sel].classList.add('correct');}
-  else{btns[sel].classList.add('wrong');btns[corr].classList.add('missed');}
-  const expl=document.getElementById('explanation');
-  expl.innerHTML=`<strong>${ok?t('q_correct'):t('q_wrong')}</strong> ${exp}`;
-  expl.style.display='block';
-  document.getElementById('next-btn').style.display='block';
+  if(qState.answered)return;
+  qState.answered=true;
+  const btns=document.querySelectorAll('.answer-btn');
+  btns.forEach(b=>b.disabled=true);
+  const ok=sel===corr;
+  if(ok){qState.score++;document.getElementById('q-score').textContent=qState.score;btns[sel].classList.add('correct');}
+  else{btns[sel].classList.add('wrong');btns[corr].classList.add('missed');}
+  const expl=document.getElementById('explanation');
+  expl.innerHTML=`<strong>${ok?t('q_correct'):t('q_wrong')}</strong> ${exp}`;
+  expl.style.display='block';
+  document.getElementById('next-btn').style.display='block';
 }
 
 function nextQuestion(){
-  qState.currentQ++;
-  if(qState.currentQ>=qState._shuffled.length)showResults();
-  else renderQuestion();
+  qState.currentQ++;
+  if(qState.currentQ>=qState._shuffled.length)showResults();
+  else renderQuestion();
 }
 
 // ── RESULTS ───────────────────────────────────
 function showResults(){
-  const lm=LEVEL_META[qState.currentLevel];
-  const total=qState._shuffled.length,correct=qState.score,pct=Math.round((correct/total)*100);
-  qState.lastPct=pct;
-  let stars=1;
-  if(pct>=90)stars=4;else if(pct>=75)stars=3;else if(pct>=50)stars=2;
-  qState.completedLevels[qState.currentLevel]=Math.max(qState.completedLevels[qState.currentLevel]||0,stars);
-  if(pct>=50&&!qState.unlockedLevels.includes(qState.currentLevel+1)&&qState.currentLevel+1<4)qState.unlockedLevels.push(qState.currentLevel+1);
-  let rankedUp=false;
-  if(pct>=60&&qState.currentRank<lm.rankUnlock){qState.currentRank=lm.rankUnlock;rankedUp=true;}
-  saveState();
-  const tiers=t('certTiers');
-  const tier=tiers.find(t=>pct>=t.min&&pct<=t.max)||tiers[0];
-  const rt=t('resultTitles');
-  let rtIdx=0;if(pct>=90)rtIdx=3;else if(pct>=70)rtIdx=2;else if(pct>=50)rtIdx=1;
-  const ranks=t('ranks');
-  document.getElementById('result-medal').textContent=lm.medal;
-  document.getElementById('result-title').textContent=rt[rtIdx];
-  document.getElementById('result-rank').innerHTML=`${t('rankLabel')} <strong>${RANK_ICONS[qState.currentRank]} ${ranks[qState.currentRank]}</strong>`;
-  document.getElementById('score-number').innerHTML=`${correct}<small>/${total}</small>`;
-  setTimeout(()=>{document.getElementById('score-ring').style.background=`conic-gradient(var(--gold) ${pct*3.6}deg,rgba(26,46,69,1) 0deg)`;},300);
-  document.getElementById('stat-correct').textContent=correct;
-  document.getElementById('stat-wrong').textContent=total-correct;
-  document.getElementById('stat-pct').textContent=pct+'%';
-  document.getElementById('lbl-correct').textContent=t('lbl_correct');
-  document.getElementById('lbl-wrong').textContent=t('lbl_wrong');
-  document.getElementById('lbl-pct').textContent=t('lbl_pct');
-  document.getElementById('lbl-name-input').textContent=t('lbl_name');
-  document.getElementById('cert-name').placeholder=t('name_ph');
-  document.getElementById('btn-retry').textContent=t('btn_retry');
-  document.getElementById('btn-download').textContent=t('btn_dl');
-  document.getElementById('btn-home-r').textContent=t('btn_home');
-  const banner=document.getElementById('rank-up-banner');
-  if(rankedUp){banner.style.display='block';document.getElementById('rank-up-text').innerHTML=`${t('rankUp')} <strong>${RANK_ICONS[qState.currentRank]} ${ranks[qState.currentRank]}</strong>`;}
-  else banner.style.display='none';
-  showPage('result');
-  if(pct>=70)spawnConfetti();
+  const lm=LEVEL_META[qState.currentLevel];
+  const total=qState._shuffled.length,correct=qState.score,pct=Math.round((correct/total)*100);
+  qState.lastPct=pct;
+  let stars=1;
+  if(pct>=90)stars=4;else if(pct>=75)stars=3;else if(pct>=50)stars=2;
+  qState.completedLevels[qState.currentLevel]=Math.max(qState.completedLevels[qState.currentLevel]||0,stars);
+  if(pct>=50&&!qState.unlockedLevels.includes(qState.currentLevel+1)&&qState.currentLevel+1<4)qState.unlockedLevels.push(qState.currentLevel+1);
+  let rankedUp=false;
+  if(pct>=60&&qState.currentRank<lm.rankUnlock){qState.currentRank=lm.rankUnlock;rankedUp=true;}
+  saveState();
+  const tiers=t('certTiers');
+  const tier=tiers.find(t=>pct>=t.min&&pct<=t.max)||tiers[0];
+  const rt=t('resultTitles');
+  let rtIdx=0;if(pct>=90)rtIdx=3;else if(pct>=70)rtIdx=2;else if(pct>=50)rtIdx=1;
+  const ranks=t('ranks');
+  document.getElementById('result-medal').textContent=lm.medal;
+  document.getElementById('result-title').textContent=rt[rtIdx];
+  document.getElementById('result-rank').innerHTML=`${t('rankLabel')} <strong>${RANK_ICONS[qState.currentRank]} ${ranks[qState.currentRank]}</strong>`;
+  document.getElementById('score-number').innerHTML=`${correct}<small>/${total}</small>`;
+  setTimeout(()=>{document.getElementById('score-ring').style.background=`conic-gradient(var(--gold) ${pct*3.6}deg,rgba(26,46,69,1) 0deg)`;},300);
+  document.getElementById('stat-correct').textContent=correct;
+  document.getElementById('stat-wrong').textContent=total-correct;
+  document.getElementById('stat-pct').textContent=pct+'%';
+  document.getElementById('lbl-correct').textContent=t('lbl_correct');
+  document.getElementById('lbl-wrong').textContent=t('lbl_wrong');
+  document.getElementById('lbl-pct').textContent=t('lbl_pct');
+  document.getElementById('lbl-name-input').textContent=t('lbl_name');
+  document.getElementById('cert-name').placeholder=t('name_ph');
+  document.getElementById('btn-retry').textContent=t('btn_retry');
+  document.getElementById('btn-download').textContent=t('btn_dl');
+  document.getElementById('btn-home-r').textContent=t('btn_home');
+  const banner=document.getElementById('rank-up-banner');
+  if(rankedUp){banner.style.display='block';document.getElementById('rank-up-text').innerHTML=`${t('rankUp')} <strong>${RANK_ICONS[qState.currentRank]} ${ranks[qState.currentRank]}</strong>`;}
+  else banner.style.display='none';
+  showPage('result');
+  if(pct>=70)spawnConfetti();
 }
 
 // ── PDF CERT ──────────────────────────────────
 function downloadCert(){
-  const name=document.getElementById('cert-name').value.trim();
-  if(!name){showToast(t('noNameToast'));return;}
-  const pct=qState.lastPct,total=qState._shuffled?qState._shuffled.length:10,correct=qState.score;
-  const tiers=t('certTiers');
-  const tier=tiers.find(ti=>pct>=ti.min&&pct<=ti.max)||tiers[0];
-  const today=new Date().toLocaleDateString(lang==='es'?'es-ES':lang==='en'?'en-GB':'de-DE',{year:'numeric',month:'long',day:'numeric'});
-  const {jsPDF}=window.jspdf;
-  const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
-  const W=297,H=210;
-  doc.setFillColor(13,27,42);doc.rect(0,0,W,H,'F');
-  doc.setDrawColor(201,168,76);doc.setLineWidth(2);doc.rect(8,8,W-16,H-16);
-  doc.setLineWidth(.5);doc.rect(12,12,W-24,H-24);
-  [[14,14],[W-14,14],[14,H-14],[W-14,H-14]].forEach(([cx,cy])=>{doc.setFillColor(201,168,76);doc.circle(cx,cy,2.5,'F');});
-  doc.setDrawColor(201,168,76);doc.setLineWidth(.3);doc.line(40,38,W-40,38);doc.line(40,40,W-40,40);
-  doc.setTextColor(201,168,76);doc.setFont('helvetica','bold');doc.setFontSize(11);
-  doc.text('UPSKILL ACADEMY', W/2,52,{align:'center'});
-  doc.setTextColor(176,190,197);doc.setFont('helvetica','normal');doc.setFontSize(8);
-  doc.text(t('certModule'),W/2,60,{align:'center'});
-  doc.setFont('helvetica','bold');doc.setFontSize(26);doc.setTextColor(245,240,232);
-  doc.text(tier.title.toUpperCase(),W/2,82,{align:'center'});
-  doc.setDrawColor(201,168,76);doc.setLineWidth(.5);doc.line(W/2-50,87,W/2+50,87);
-  doc.setFont('helvetica','italic');doc.setFontSize(10);doc.setTextColor(176,190,197);
-  const l1=lang==='es'?'Se certifica que':lang==='en'?'This certifies that':'Hiermit wird bestätigt, dass';
-  doc.text(l1,W/2,96,{align:'center'});
-  doc.setFont('helvetica','bold');doc.setFontSize(22);doc.setTextColor(232,201,122);
-  doc.text(name,W/2,110,{align:'center'});
-  const nw=doc.getTextWidth(name);
-  doc.setDrawColor(201,168,76);doc.setLineWidth(.4);doc.line(W/2-nw/2,113,W/2+nw/2,113);
-  doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(176,190,197);
-  doc.text(t('certHereby'),W/2,122,{align:'center'});
-  doc.text(`"${t('levelNames')[qState.currentLevel]}" ${t('certCompleted')}`,W/2,130,{align:'center'});
-  doc.setFont('helvetica','bold');doc.setTextColor(201,168,76);
-  doc.text(`${correct} ${t('q_of')} ${total} (${pct}%) ${t('certScored')}`,W/2,138,{align:'center'});
-  doc.setDrawColor(201,168,76);doc.setLineWidth(.3);doc.line(40,H-52,W-40,H-52);doc.line(40,H-50,W-40,H-50);
-  doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(176,190,197);
-  doc.line(30,H-32,100,H-32);doc.text(t('certSigned'),65,H-27,{align:'center'});
-  doc.setFont('helvetica','bold');doc.setTextColor(201,168,76);doc.text('Sara Manoochehri',65,H-22,{align:'center'});
-  doc.setFont('helvetica','normal');doc.setTextColor(176,190,197);
-  doc.line(W-100,H-32,W-30,H-32);doc.text(t('certDate'),W-65,H-27,{align:'center'});
-  doc.setFont('helvetica','bold');doc.setTextColor(201,168,76);doc.text(today,W-65,H-22,{align:'center'});
-  doc.setFillColor(201,168,76);doc.roundedRect(W/2-18,H-42,36,16,3,3,'F');
-  doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(13,27,42);
-  doc.text(pct+'%',W/2,H-31,{align:'center'});
-  doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(100,120,140);
-  doc.text('© Copyright by Sara Manoochehri | Upskill Academy',W/2,H-10,{align:'center'});
-  doc.save(`Upskill_Academy_Certificate_${name.replace(/[^a-zA-Z0-9]/g,'_')}.pdf`);
-  showToast(t('dlToast'));
+  const name=document.getElementById('cert-name').value.trim();
+  if(!name){showToast(t('noNameToast'));return;}
+  const pct=qState.lastPct,total=qState._shuffled?qState._shuffled.length:10,correct=qState.score;
+  const tiers=t('certTiers');
+  const tier=tiers.find(ti=>pct>=ti.min&&pct<=ti.max)||tiers[0];
+  const today=new Date().toLocaleDateString(lang==='es'?'es-ES':lang==='en'?'en-GB':'de-DE',{year:'numeric',month:'long',day:'numeric'});
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
+  const W=297,H=210;
+  doc.setFillColor(13,27,42);doc.rect(0,0,W,H,'F');
+  doc.setDrawColor(201,168,76);doc.setLineWidth(2);doc.rect(8,8,W-16,H-16);
+  doc.setLineWidth(.5);doc.rect(12,12,W-24,H-24);
+  [[14,14],[W-14,14],[14,H-14],[W-14,H-14]].forEach(([cx,cy])=>{doc.setFillColor(201,168,76);doc.circle(cx,cy,2.5,'F');});
+  doc.setDrawColor(201,168,76);doc.setLineWidth(.3);doc.line(40,38,W-40,38);doc.line(40,40,W-40,40);
+  doc.setTextColor(201,168,76);doc.setFont('helvetica','bold');doc.setFontSize(11);
+  doc.text('UPSKILL ACADEMY', W/2,52,{align:'center'});
+  doc.setTextColor(176,190,197);doc.setFont('helvetica','normal');doc.setFontSize(8);
+  doc.text(t('certModule'),W/2,60,{align:'center'});
+  doc.setFont('helvetica','bold');doc.setFontSize(26);doc.setTextColor(245,240,232);
+  doc.text(tier.title.toUpperCase(),W/2,82,{align:'center'});
+  doc.setDrawColor(201,168,76);doc.setLineWidth(.5);doc.line(W/2-50,87,W/2+50,87);
+  doc.setFont('helvetica','italic');doc.setFontSize(10);doc.setTextColor(176,190,197);
+  const l1=lang==='es'?'Se certifica que':lang==='en'?'This certifies that':'Hiermit wird bestätigt, dass';
+  doc.text(l1,W/2,96,{align:'center'});
+  doc.setFont('helvetica','bold');doc.setFontSize(22);doc.setTextColor(232,201,122);
+  doc.text(name,W/2,110,{align:'center'});
+  const nw=doc.getTextWidth(name);
+  doc.setDrawColor(201,168,76);doc.setLineWidth(.4);doc.line(W/2-nw/2,113,W/2+nw/2,113);
+  doc.setFont('helvetica','normal');doc.setFontSize(10);doc.setTextColor(176,190,197);
+  doc.text(t('certHereby'),W/2,122,{align:'center'});
+  doc.text(`"${t('levelNames')[qState.currentLevel]}" ${t('certCompleted')}`,W/2,130,{align:'center'});
+  doc.setFont('helvetica','bold');doc.setTextColor(201,168,76);
+  doc.text(`${correct} ${t('q_of')} ${total} (${pct}%) ${t('certScored')}`,W/2,138,{align:'center'});
+  doc.setDrawColor(201,168,76);doc.setLineWidth(.3);doc.line(40,H-52,W-40,H-52);doc.line(40,H-50,W-40,H-50);
+  doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(176,190,197);
+  doc.line(30,H-32,100,H-32);doc.text(t('certSigned'),65,H-27,{align:'center'});
+  doc.setFont('helvetica','bold');doc.setTextColor(201,168,76);doc.text('Sara Manoochehri',65,H-22,{align:'center'});
+  doc.setFont('helvetica','normal');doc.setTextColor(176,190,197);
+  doc.line(W-100,H-32,W-30,H-32);doc.text(t('certDate'),W-65,H-27,{align:'center'});
+  doc.setFont('helvetica','bold');doc.setTextColor(201,168,76);doc.text(today,W-65,H-22,{align:'center'});
+  doc.setFillColor(201,168,76);doc.roundedRect(W/2-18,H-42,36,16,3,3,'F');
+  doc.setFont('helvetica','bold');doc.setFontSize(12);doc.setTextColor(13,27,42);
+  doc.text(pct+'%',W/2,H-31,{align:'center'});
+  doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(100,120,140);
+  doc.text('© Copyright by Sara Manoochehri | Upskill Academy',W/2,H-10,{align:'center'});
+  doc.save(`Upskill_Academy_Certificate_${name.replace(/[^a-zA-Z0-9]/g,'_')}.pdf`);
+  showToast(t('dlToast'));
 }
 
 function retryLevel(){startLevel(qState.currentLevel);}
@@ -852,12 +1048,12 @@ function retryLevel(){startLevel(qState.currentLevel);}
 // ── UTILS ─────────────────────────────────────
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800);}
 function spawnConfetti(){
-  const cols=['#C9A84C','#E8C97A','#2ECC71','#E74C3C','#3498DB','#9B59B6'];
-  for(let i=0;i<55;i++){
-    const el=document.createElement('div');el.className='confetti-piece';
-    el.style.cssText=`left:${Math.random()*100}vw;top:-10px;background:${cols[Math.floor(Math.random()*cols.length)]};width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;border-radius:${Math.random()>.5?'50%':'0'};animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*.8}s;`;
-    document.body.appendChild(el);setTimeout(()=>el.remove(),4000);
-  }
+  const cols=['#C9A84C','#E8C97A','#2ECC71','#E74C3C','#3498DB','#9B59B6'];
+  for(let i=0;i<55;i++){
+    const el=document.createElement('div');el.className='confetti-piece';
+    el.style.cssText=`left:${Math.random()*100}vw;top:-10px;background:${cols[Math.floor(Math.random()*cols.length)]};width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;border-radius:${Math.random()>.5?'50%':'0'};animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*.8}s;`;
+    document.body.appendChild(el);setTimeout(()=>el.remove(),4000);
+  }
 }
 init();
 </script>
