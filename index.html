@@ -35,13 +35,40 @@ html{
   scroll-behavior:smooth;
 }
 
-body{
-  font-family:'DM Sans',sans-serif;
-  background:var(--background);
-  color:var(--text);
-  min-height:100vh;
-  overflow-x:hidden;
-}
+<body>
+
+<!-- NEU: Header -->
+<header class="header">
+  Upskill Academy
+</header>
+
+<!-- NEU: Hero -->
+<section class="hero">
+  <h1>Lerne HR, Lohnbuchhaltung und Grundlagen der Buchhaltung interaktiv</h1>
+  <p>Deine mehrsprachige Lernplattform mit Quiz, Praxis und Zertifikat.</p>
+  <button class="start-btn">Lernen starten</button>
+</section>
+
+<!-- NEU: Themen -->
+<section class="grid">
+  <div class="card">
+    <h2>HR</h2>
+    <p>Grundlagen und Praxis im Personalwesen</p>
+  </div>
+
+  <div class="card">
+    <h2>Lohnbuchhaltung</h2>
+    <p>Alles rund um Gehälter und Abrechnung</p>
+  </div>
+
+  <div class="card">
+    <h2>Buchhaltung</h2>
+    <p>Einführung in finanzielle Grundlagen</p>
+  </div>
+</section>
+
+<!-- HIER bleibt dein bestehender Quiz Code -->
+</body>
 
 /* ── NAV ── */
 nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(13,27,42,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(201,168,76,.15);padding:0 20px;}
