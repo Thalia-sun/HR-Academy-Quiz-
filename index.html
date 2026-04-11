@@ -1,1693 +1,656 @@
 <!DOCTYPE html>
 
-<html lang="de">
+<html lang="de" data-theme="light">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Upskill Academy – Interaktive Lernplattform für HR, Gehaltsabrechnung und mehr. Lerne mit Quizzes direkt am Smartphone.">
-<meta name="theme-color" content="#4F46E5">
-<meta property="og:title" content="Upskill Academy">
-<meta property="og:description" content="Interaktives Lernen für HR & Administration">
-<meta property="og:type" content="website">
-<title>Upskill Academy</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
-<!--
-  ╔══════════════════════════════════════════════╗
-  ║  GITHUB DEPLOYMENT INSTRUCTIONS              ║
-  ║  1. Save this file as index.html             ║
-  ║  2. Save the CSS artifact as style.css       ║
-  ║     in the SAME folder                       ║
-  ║  3. Push both files to your repo             ║
-  ║  4. Settings → Pages → Branch: main / root  ║
-  ╚══════════════════════════════════════════════╝
-  For production: replace the <style> block below
-  with: <link rel="stylesheet" href="style.css">
--->
-<style>
-/* ─────────────────────────────────────────────
-   PASTE FULL style.css CONTENT HERE
-   OR use: <link rel="stylesheet" href="style.css">
-   ───────────────────────────────────────────── */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap');
-:root{--indigo:#4F46E5;--indigo-mid:#6366F1;--indigo-light:#A5B4FC;--indigo-pale:#EEF2FF;--teal:#0D9488;--teal-light:#CCFBF1;--amber:#F59E0B;--amber-light:#FEF3C7;--rose:#F43F5E;--green:#10B981;--green-light:#D1FAE5;--red:#EF4444;--red-light:#FEE2E2;--white:#FFFFFF;--gray-50:#F8FAFC;--gray-100:#F1F5F9;--gray-200:#E2E8F0;--gray-300:#CBD5E1;--gray-400:#94A3B8;--gray-500:#64748B;--gray-600:#475569;--gray-700:#334155;--gray-800:#1E293B;--gray-900:#0F172A;--bg:var(--gray-50);--surface:var(--white);--border:var(--gray-200);--text:var(--gray-800);--text-muted:var(--gray-500);--font-sans:'Plus Jakarta Sans',system-ui,sans-serif;--font-display:'Fraunces',Georgia,serif;--radius-sm:8px;--radius-md:14px;--radius-lg:20px;--radius-xl:28px;--radius-full:9999px;--shadow-sm:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);--shadow-md:0 4px 16px rgba(0,0,0,.08);--shadow-lg:0 12px 40px rgba(0,0,0,.10),0 4px 12px rgba(0,0,0,.06);--shadow-xl:0 24px 64px rgba(0,0,0,.13);--shadow-indigo:0 8px 24px rgba(79,70,229,.25);--ease:cubic-bezier(.4,0,.2,1);--ease-spring:cubic-bezier(.34,1.56,.64,1);}
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{font-family:var(--font-sans);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
-img{max-width:100%;height:auto;display:block;}
-a{color:var(--indigo);}
-button{font-family:var(--font-sans);cursor:pointer;border:none;background:none;}
-ul,ol{list-style:none;}
-:focus-visible{outline:3px solid var(--indigo);outline-offset:3px;border-radius:var(--radius-sm);}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Upskill Academy – Interaktive Lernplattform für HR, Gehaltsabrechnung und mehr." />
+  <meta name="theme-color" content="#4F46E5" />
+  <title>Upskill Academy</title>
 
-/* SKIP LINKS */
-.skip-links{position:absolute;top:0;left:0;z-index:9999;}
-.skip-link{position:absolute;top:-120px;left:20px;background:var(–indigo);color:#fff;padding:12px 20px;border-radius:var(–radius-md);font-size:14px;font-weight:700;transition:top .2s;white-space:nowrap;text-decoration:none;}
-.skip-link:focus{top:10px;outline:3px solid #fff;outline-offset:2px;}
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+  <!-- Google Fonts -->
 
-/* A11Y TOOLBAR */
-.a11y-toolbar{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:490;display:flex;flex-direction:column;gap:2px;background:var(–white);border:1px solid var(–border);border-right:none;border-radius:var(–radius-md) 0 0 var(–radius-md);padding:6px;box-shadow:var(–shadow-md);}
-.a11y-btn{width:40px;height:40px;border-radius:var(–radius-sm);background:var(–gray-100);color:var(–gray-700);font-size:17px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;transition:all .2s;font-family:var(–font-sans);position:relative;}
-.a11y-btn:hover{background:var(–indigo-pale);color:var(–indigo);}
-.a11y-btn.active{background:var(–indigo);color:#fff;}
-.a11y-btn:focus-visible{outline:3px solid var(–indigo);outline-offset:2px;}
-.a11y-tooltip{position:absolute;right:46px;background:var(–gray-800);color:#fff;font-size:11px;white-space:nowrap;padding:4px 10px;border-radius:6px;pointer-events:none;opacity:0;transition:opacity .2s;}
-.a11y-btn:hover .a11y-tooltip,.a11y-btn:focus .a11y-tooltip{opacity:1;}
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:ital,wght@0,700;0,900;1,700&display=swap"
+    rel="stylesheet"
+  />
 
-/* A11Y MODES */
-body.high-contrast{–indigo:#0000CC;–teal:#006644;–text:#000;–text-muted:#111;–bg:#fff;–surface:#fff;–border:#000;}
-body.high-contrast *{border-color:#000 !important;}
-body.large-text{font-size:18px;}
-body.large-text .nav-link{font-size:16px;}
-body.large-text .answer-btn{font-size:17px;}
-body.dyslexia-font,body.dyslexia-font *{font-family:‘Comic Sans MS’,cursive !important;letter-spacing:.06em;word-spacing:.12em;line-height:2;}
-.reading-ruler{position:fixed;left:0;right:0;height:44px;background:rgba(255,255,100,.3);pointer-events:none;z-index:9998;display:none;border-top:2px solid rgba(180,160,0,.4);border-bottom:2px solid rgba(180,160,0,.4);}
-body.reading-ruler-on .reading-ruler{display:block;}
+  <!-- jsPDF (CDN) -->
 
-/* NAV */
-#main-nav{position:fixed;top:0;left:0;right:0;z-index:500;background:rgba(255,255,255,.93);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(–border);transition:box-shadow .3s;}
-#main-nav.scrolled{box-shadow:var(–shadow-md);}
-.nav-inner{max-width:1100px;margin:0 auto;padding:0 24px;height:64px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.nav-logo{display:flex;align-items:center;gap:10px;font-family:var(–font-display);font-size:20px;font-weight:700;color:var(–indigo);white-space:nowrap;cursor:pointer;text-decoration:none;}
-.logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(–indigo),var(–teal));border-radius:var(–radius-sm);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-.nav-links{display:flex;align-items:center;gap:2px;}
-.nav-link{padding:7px 12px;border-radius:var(–radius-sm);font-size:14px;font-weight:500;color:var(–gray-600);transition:all .2s;white-space:nowrap;cursor:pointer;border:none;background:none;font-family:var(–font-sans);}
-.nav-link:hover,.nav-link.active{color:var(–indigo);background:var(–indigo-pale);}
-.nav-right{display:flex;align-items:center;gap:8px;}
-.lang-switcher{display:flex;gap:3px;background:var(–gray-100);border-radius:var(–radius-full);padding:3px;}
-.lang-btn{padding:5px 10px;border-radius:var(–radius-full);font-size:12px;font-weight:700;color:var(–gray-500);transition:all .2s;display:flex;align-items:center;gap:4px;cursor:pointer;border:none;background:none;font-family:var(–font-sans);}
-.lang-btn .flag{font-size:15px;}
-.lang-btn:hover{color:var(–indigo);}
-.lang-btn.active{background:var(–white);color:var(–indigo);box-shadow:var(–shadow-sm);}
-.ham{display:none;width:44px;height:44px;border-radius:var(–radius-sm);color:var(–gray-700);font-size:22px;align-items:center;justify-content:center;transition:background .2s;cursor:pointer;border:none;background:none;margin-left:4px;}
-.ham:hover{background:var(–gray-100);}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-/* MOBILE DRAWER */
-.mobile-drawer-overlay{display:none;position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:600;backdrop-filter:blur(4px);}
-.mobile-drawer-overlay.open{display:block;animation:fadeO .2s;}
-@keyframes fadeO{from{opacity:0;}to{opacity:1;}}
-.mobile-drawer{position:fixed;top:0;right:-320px;bottom:0;width:290px;background:var(–white);z-index:601;box-shadow:var(–shadow-xl);display:flex;flex-direction:column;transition:right .3s var(–ease);overflow-y:auto;}
-.mobile-drawer.open{right:0;}
-.drawer-header{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid var(–border);}
-.drawer-logo{font-family:var(–font-display);font-size:17px;font-weight:700;color:var(–indigo);display:flex;align-items:center;gap:8px;}
-.drawer-close{width:36px;height:36px;border-radius:var(–radius-sm);background:var(–gray-100);color:var(–gray-600);font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;transition:background .2s;}
-.drawer-close:hover{background:var(–gray-200);}
-.drawer-nav{display:flex;flex-direction:column;padding:10px 12px;flex:1;gap:2px;}
-.drawer-nav .nav-link{padding:12px 16px;font-size:15px;text-align:left;display:flex;align-items:center;gap:10px;border-radius:var(–radius-sm);}
-.drawer-lang{padding:14px 16px 20px;border-top:1px solid var(–border);}
-.drawer-lang p{font-size:11px;font-weight:700;color:var(–text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
-.drawer-lang-btns{display:flex;gap:8px;flex-wrap:wrap;}
-.drawer-a11y{padding:12px 16px 16px;border-top:1px solid var(–border);}
-.drawer-a11y p{font-size:11px;font-weight:700;color:var(–text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px;}
-.drawer-a11y-btns{display:flex;gap:6px;flex-wrap:wrap;}
-.drawer-a11y-btn{padding:7px 12px;border-radius:var(–radius-sm);background:var(–gray-100);color:var(–gray-700);font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:var(–font-sans);}
-.drawer-a11y-btn:hover{background:var(–indigo-pale);color:var(–indigo);}
-.drawer-a11y-btn.active{background:var(–indigo);color:#fff;}
+  <!-- Stylesheet -->
 
-/* PAGES */
-.page{display:none;padding-top:64px;min-height:100vh;}
-.page.active{display:block;}
-.container{max-width:1080px;margin:0 auto;padding:0 24px;}
-.container-sm{max-width:740px;margin:0 auto;padding:0 24px;}
-.section{padding:72px 0;}
-.section-sm{padding:48px 0;}
-
-/* HERO */
-.hero{position:relative;min-height:calc(100vh - 64px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow:hidden;}
-.hero-bg-img{position:absolute;inset:0;background-image:url(‘https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1600&q=80’);background-size:cover;background-position:center 30%;z-index:0;}
-.hero-bg{position:absolute;inset:0;background:linear-gradient(160deg,rgba(79,70,229,.83) 0%,rgba(13,148,136,.74) 55%,rgba(245,158,11,.58) 100%);z-index:1;}
-.hero-content{position:relative;z-index:2;padding:48px 24px;max-width:800px;animation:heroFadeUp .8s var(–ease) both;}
-@keyframes heroFadeUp{from{opacity:0;transform:translateY(32px);}to{opacity:1;transform:translateY(0);}}
-.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);border-radius:var(–radius-full);padding:6px 16px;font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#fff;margin-bottom:24px;backdrop-filter:blur(8px);}
-.hero h1{font-family:var(–font-display);font-size:clamp(36px,6vw,68px);font-weight:900;color:#fff;line-height:1.06;margin-bottom:16px;text-shadow:0 2px 20px rgba(0,0,0,.18);}
-.hero h1 em{font-style:italic;color:#FDE68A;}
-.hero-desc{font-size:clamp(14px,2vw,17px);color:rgba(255,255,255,.92);max-width:600px;margin:0 auto 40px;line-height:1.8;background:rgba(0,0,0,.16);border-radius:var(–radius-lg);padding:22px 28px;border:1px solid rgba(255,255,255,.15);backdrop-filter:blur(6px);}
-.hero-btns{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;}
-.hero-scroll{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:5px;color:rgba(255,255,255,.7);font-size:11px;letter-spacing:1px;text-transform:uppercase;animation:bounce 2s ease-in-out infinite;}
-@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(6px);}}
-
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(–font-sans);font-size:15px;font-weight:600;padding:13px 26px;border-radius:var(–radius-md);border:none;cursor:pointer;transition:all .22s var(–ease);text-decoration:none;white-space:nowrap;letter-spacing:.2px;}
-.btn:focus-visible{outline:3px solid currentColor;outline-offset:3px;}
-.btn-primary{background:linear-gradient(135deg,var(–indigo),var(–indigo-mid));color:#fff;box-shadow:var(–shadow-indigo);}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(79,70,229,.35);}
-.btn-white{background:rgba(255,255,255,.95);color:var(–indigo);box-shadow:0 4px 16px rgba(0,0,0,.12);}
-.btn-white:hover{background:#fff;transform:translateY(-2px);}
-.btn-outline{background:transparent;border:2px solid rgba(255,255,255,.65);color:#fff;}
-.btn-outline:hover{background:rgba(255,255,255,.12);border-color:#fff;}
-.btn-ghost{background:transparent;border:1.5px solid var(–border);color:var(–gray-600);}
-.btn-ghost:hover{border-color:var(–indigo);color:var(–indigo);background:var(–indigo-pale);}
-.btn-sm{padding:9px 18px;font-size:13px;}
-.btn-lg{padding:16px 34px;font-size:16px;border-radius:var(–radius-lg);}
-.btn-cert{background:linear-gradient(135deg,var(–green),#059669);color:#fff;}
-.btn-cert:hover{transform:translateY(-2px);}
-.btn-amber{background:linear-gradient(135deg,var(–amber),#D97706);color:#fff;}
-.btn-amber:hover{transform:translateY(-2px);}
-
-/* SECTION HEADER */
-.section-header{text-align:center;margin-bottom:52px;}
-.section-label{display:inline-block;font-size:11px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(–indigo);background:var(–indigo-pale);padding:5px 14px;border-radius:var(–radius-full);margin-bottom:14px;}
-.section-title{font-family:var(–font-display);font-size:clamp(26px,4vw,40px);font-weight:900;color:var(–gray-800);line-height:1.2;margin-bottom:14px;}
-.section-sub{font-size:17px;color:var(–text-muted);max-width:560px;margin:0 auto;line-height:1.7;}
-
-/* FEATURE CARDS */
-.feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;}
-.feature-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–radius-lg);padding:32px 28px;transition:all .28s var(–ease);position:relative;overflow:hidden;}
-.feature-card::before{content:’’;position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(–indigo),var(–teal));opacity:0;transition:opacity .28s;}
-.feature-card:hover{transform:translateY(-5px);box-shadow:var(–shadow-lg);border-color:transparent;}
-.feature-card:hover::before{opacity:1;}
-.feature-icon{width:52px;height:52px;border-radius:var(–radius-md);display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:18px;}
-.icon-indigo{background:var(–indigo-pale);}
-.icon-teal{background:var(–teal-light);}
-.icon-amber{background:var(–amber-light);}
-.icon-green{background:var(–green-light);}
-.feature-card h3{font-size:17px;font-weight:700;color:var(–gray-800);margin-bottom:8px;}
-.feature-card p{font-size:14px;color:var(–text-muted);line-height:1.65;}
-
-/* STATS BAR */
-.stats-bar{background:linear-gradient(135deg,var(–indigo),var(–teal));border-radius:var(–radius-xl);padding:40px 48px;display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:24px;text-align:center;margin:48px 0;}
-.stat-num{font-family:var(–font-display);font-size:36px;font-weight:900;color:#fff;line-height:1;margin-bottom:6px;}
-.stat-label{font-size:13px;color:rgba(255,255,255,.82);font-weight:500;}
-
-/* TOPIC CARDS */
-.topic-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;}
-.topic-card{background:var(–surface);border:1.5px solid var(–border);border-radius:var(–radius-lg);padding:32px 22px;cursor:pointer;transition:all .28s var(–ease);text-align:center;position:relative;}
-.topic-card:hover{transform:translateY(-5px);box-shadow:var(–shadow-lg);border-color:var(–indigo);}
-.topic-card.locked{opacity:.55;cursor:not-allowed;filter:grayscale(.4);}
-.topic-card.locked:hover{transform:none;box-shadow:none;border-color:var(–border);}
-.topic-icon-wrap{width:70px;height:70px;background:linear-gradient(135deg,var(–indigo-pale),#E0E7FF);border-radius:var(–radius-lg);display:flex;align-items:center;justify-content:center;font-size:34px;margin:0 auto 18px;transition:transform .28s var(–ease-spring);}
-.topic-card:hover .topic-icon-wrap{transform:scale(1.08) rotate(-3deg);}
-.topic-card h3{font-size:18px;font-weight:700;color:var(–gray-800);margin-bottom:8px;}
-.topic-card p{font-size:13px;color:var(–text-muted);line-height:1.55;margin-bottom:12px;}
-.topic-meta{font-size:12px;font-weight:600;color:var(–indigo);}
-.badge-soon{display:inline-block;margin-top:10px;background:var(–gray-100);color:var(–gray-500);font-size:11px;font-weight:600;padding:4px 12px;border-radius:var(–radius-full);}
-
-/* LEVEL CARDS */
-.level-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:24px;}
-.level-card{background:var(–surface);border:1.5px solid var(–border);border-radius:var(–radius-lg);padding:24px 20px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden;}
-.level-card:hover{transform:translateY(-4px);box-shadow:var(–shadow-lg);border-color:var(–indigo);}
-.level-card.locked{opacity:.5;cursor:not-allowed;}
-.level-card.locked:hover{transform:none;box-shadow:none;border-color:var(–border);}
-.lc-diff{position:absolute;top:14px;right:14px;font-size:10px;font-weight:700;padding:4px 10px;border-radius:var(–radius-full);letter-spacing:.4px;text-transform:uppercase;}
-.diff-easy{background:var(–green-light);color:#065F46;}
-.diff-medium{background:var(–amber-light);color:#92400E;}
-.diff-hard{background:var(–red-light);color:#991B1B;}
-.diff-expert{background:var(–indigo-pale);color:#3730A3;}
-.diff-locked{background:var(–gray-100);color:var(–gray-500);}
-.lc-icon{font-size:30px;margin-bottom:10px;}
-.level-card h3{font-size:16px;font-weight:700;color:var(–gray-800);margin-bottom:5px;}
-.level-card p{font-size:13px;color:var(–text-muted);line-height:1.5;}
-.level-stars{margin-top:8px;font-size:14px;}
-.level-info{font-size:11px;color:var(–text-muted);margin-top:4px;}
-
-/* RANK LADDER */
-.rank-ladder{display:flex;align-items:flex-start;justify-content:center;flex-wrap:wrap;margin:0 0 28px;background:var(–surface);border:1px solid var(–border);border-radius:var(–radius-lg);padding:18px 12px;}
-.rank-step{display:flex;flex-direction:column;align-items:center;gap:4px;opacity:.3;transition:all .35s;min-width:50px;}
-.rank-step.unlocked{opacity:1;}
-.rank-step.current{opacity:1;}
-.rank-step.current .rs-icon{background:linear-gradient(135deg,var(–indigo),var(–teal));transform:scale(1.12);color:#fff;}
-.rs-icon{width:34px;height:34px;border-radius:var(–radius-sm);background:var(–gray-100);display:flex;align-items:center;justify-content:center;font-size:17px;transition:all .35s;}
-.rs-lbl{font-size:7px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(–text-muted);text-align:center;}
-.rank-step.current .rs-lbl{color:var(–indigo);}
-.rank-conn{width:20px;height:2px;background:var(–gray-200);margin-top:15px;flex-shrink:0;}
-.rank-conn.filled{background:linear-gradient(90deg,var(–indigo),var(–teal));}
-
-/* QUIZ */
-.quiz-wrap{max-width:760px;margin:0 auto;}
-.quiz-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
-.quiz-title{font-family:var(–font-display);font-size:20px;font-weight:700;color:var(–gray-800);}
-.quiz-pills{display:flex;gap:8px;}
-.pill{background:var(–indigo-pale);border-radius:var(–radius-full);padding:6px 14px;font-size:13px;font-weight:600;color:var(–indigo);}
-.pill-teal{background:var(–teal-light);color:var(–teal);}
-.progress-bar{width:100%;height:6px;background:var(–gray-200);border-radius:var(–radius-full);margin-bottom:28px;overflow:hidden;}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(–indigo),var(–teal));border-radius:var(–radius-full);transition:width .5s var(–ease);}
-.question-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–radius-xl);padding:36px 32px;margin-bottom:18px;box-shadow:var(–shadow-sm);}
-.q-number{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(–indigo);margin-bottom:12px;}
-.q-text{font-size:clamp(16px,2.5vw,19px);font-weight:600;line-height:1.55;color:var(–gray-800);}
-.answers{display:grid;gap:10px;margin-bottom:20px;}
-.answer-btn{background:var(–surface);border:1.5px solid var(–border);border-radius:var(–radius-md);padding:16px 20px;text-align:left;font-family:var(–font-sans);font-size:15px;color:var(–gray-700);transition:all .22s;display:flex;align-items:flex-start;gap:12px;line-height:1.45;cursor:pointer;width:100%;}
-.answer-btn:hover:not(:disabled){border-color:var(–indigo);background:var(–indigo-pale);color:var(–indigo);transform:translateX(4px);}
-.answer-btn:disabled{cursor:default;}
-.answer-btn.correct{border-color:var(–green);background:var(–green-light);color:#065F46;}
-.answer-btn.wrong{border-color:var(–red);background:var(–red-light);color:#991B1B;}
-.answer-btn.missed{border-color:var(–green);border-style:dashed;}
-.answer-letter{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:var(–radius-sm);background:var(–gray-100);font-size:12px;font-weight:700;color:var(–gray-500);flex-shrink:0;margin-top:1px;}
-.answer-btn.correct .answer-letter{background:rgba(16,185,129,.2);color:#065F46;}
-.answer-btn.wrong .answer-letter{background:rgba(239,68,68,.2);color:#991B1B;}
-.explanation{background:#FFFBEB;border:1px solid #FDE68A;border-left:4px solid var(–amber);border-radius:0 var(–radius-md) var(–radius-md) 0;padding:16px 18px;font-size:14px;line-height:1.65;color:var(–gray-700);margin-bottom:18px;display:none;animation:fadeIn .3s;}
-@keyframes fadeIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
-.nav-btns{display:flex;gap:10px;justify-content:flex-end;}
-.back-btn{display:inline-flex;align-items:center;gap:6px;color:var(–gray-500);font-size:14px;font-weight:500;padding:8px 0;margin-bottom:20px;transition:color .2s;cursor:pointer;background:none;border:none;font-family:var(–font-sans);}
-.back-btn:hover{color:var(–indigo);}
-
-/* RESULT */
-.result-wrap{text-align:center;padding:40px 20px;max-width:580px;margin:0 auto;}
-.result-medal{font-size:88px;display:block;margin-bottom:12px;animation:medalPop .65s var(–ease-spring) both;}
-@keyframes medalPop{0%{transform:scale(0) rotate(-20deg);opacity:0;}100%{transform:scale(1) rotate(0);opacity:1;}}
-.result-title{font-family:var(–font-display);font-size:clamp(24px,4vw,36px);font-weight:900;color:var(–gray-800);margin-bottom:6px;}
-.result-rank-label{font-size:16px;color:var(–text-muted);margin-bottom:24px;}
-.result-rank-label strong{color:var(–indigo);}
-.score-ring{width:130px;height:130px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;position:relative;}
-.score-ring::before{content:’’;position:absolute;inset:11px;border-radius:50%;background:var(–bg);}
-.score-num{position:relative;z-index:1;font-family:var(–font-display);font-size:32px;font-weight:900;color:var(–indigo);}
-.score-num small{font-size:14px;color:var(–text-muted);font-family:var(–font-sans);}
-.stats-row{display:flex;justify-content:center;gap:14px;margin-bottom:28px;flex-wrap:wrap;}
-.stat-box{background:var(–surface);border:1px solid var(–border);border-radius:var(–radius-md);padding:16px 20px;min-width:100px;box-shadow:var(–shadow-sm);}
-.stat-v{font-family:var(–font-display);font-size:26px;font-weight:700;color:var(–gray-800);}
-.stat-l{font-size:11px;color:var(–text-muted);margin-top:3px;}
-.rank-up-banner{background:linear-gradient(135deg,var(–indigo-pale),#E0E7FF);border:1px solid var(–indigo-light);border-radius:var(–radius-lg);padding:14px 20px;margin-bottom:18px;font-size:14px;color:var(–indigo);font-weight:600;}
-.name-input-wrap{background:var(–surface);border:1px solid var(–border);border-radius:var(–radius-lg);padding:20px;margin-bottom:18px;text-align:left;box-shadow:var(–shadow-sm);}
-.name-input-wrap label{display:block;font-size:13px;font-weight:600;color:var(–gray-600);margin-bottom:8px;}
-.name-input{width:100%;background:var(–gray-50);border:1.5px solid var(–border);border-radius:var(–radius-sm);padding:12px 14px;font-family:var(–font-sans);font-size:15px;color:var(–text);outline:none;transition:border-color .2s;}
-.name-input:focus{border-color:var(–indigo);background:var(–white);}
-.name-input::placeholder{color:var(–gray-400);}
-.result-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
-
-/* SHARE */
-.share-strip{background:var(–surface);border:1px solid var(–border);border-radius:var(–radius-lg);padding:18px 22px;margin-bottom:18px;text-align:left;}
-.share-strip h4{font-size:14px;font-weight:700;color:var(–gray-700);margin-bottom:12px;}
-.share-btns{display:flex;gap:8px;flex-wrap:wrap;}
-.share-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 14px;border-radius:var(–radius-sm);font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:var(–font-sans);}
-.share-wa{background:#25D366;color:#fff;}.share-wa:hover{background:#1ebe57;}
-.share-li{background:#0A66C2;color:#fff;}.share-li:hover{background:#0958a8;}
-.share-cp{background:var(–gray-100);color:var(–gray-700);border:1px solid var(–border);}.share-cp:hover{background:var(–gray-200);}
-
-/* AUTH MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(6px);z-index:800;display:none;align-items:center;justify-content:center;padding:20px;}
-.modal-overlay.open{display:flex;animation:fadeO .2s;}
-.modal{background:var(–white);border-radius:var(–radius-xl);padding:40px 36px;width:100%;max-width:440px;box-shadow:var(–shadow-xl);animation:mSlide .3s var(–ease-spring);position:relative;}
-@keyframes mSlide{from{transform:translateY(20px) scale(.97);opacity:0;}to{transform:translateY(0) scale(1);opacity:1;}}
-.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:var(–radius-sm);background:var(–gray-100);color:var(–gray-500);font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;border:none;}
-.modal-close:hover{background:var(–gray-200);}
-.modal-logo{text-align:center;margin-bottom:24px;}
-.modal-logo .logo-big{width:56px;height:56px;background:linear-gradient(135deg,var(–indigo),var(–teal));border-radius:var(–radius-md);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 12px;}
-.modal-logo h2{font-family:var(–font-display);font-size:22px;font-weight:900;color:var(–gray-800);}
-.modal-logo p{font-size:14px;color:var(–text-muted);margin-top:4px;}
-.modal-tabs{display:flex;background:var(–gray-100);border-radius:var(–radius-md);padding:4px;margin-bottom:24px;}
-.modal-tab{flex:1;padding:9px;border-radius:var(–radius-sm);font-size:14px;font-weight:600;color:var(–gray-500);background:none;border:none;cursor:pointer;transition:all .2s;font-family:var(–font-sans);}
-.modal-tab.active{background:var(–white);color:var(–indigo);box-shadow:var(–shadow-sm);}
-.modal-form{display:flex;flex-direction:column;gap:14px;}
-.form-group{display:flex;flex-direction:column;gap:5px;}
-.form-group label{font-size:13px;font-weight:600;color:var(–gray-600);}
-.form-group input{padding:11px 14px;border:1.5px solid var(–border);border-radius:var(–radius-sm);font-family:var(–font-sans);font-size:15px;color:var(–text);background:var(–gray-50);outline:none;transition:all .2s;}
-.form-group input:focus{border-color:var(–indigo);background:var(–white);box-shadow:0 0 0 3px rgba(79,70,229,.1);}
-.form-note{font-size:12px;color:var(–text-muted);}
-.modal-divider{display:flex;align-items:center;gap:10px;font-size:12px;color:var(–gray-400);margin:4px 0;}
-.modal-divider::before,.modal-divider::after{content:’’;flex:1;height:1px;background:var(–border);}
-.btn-social{display:flex;align-items:center;gap:10px;padding:11px 14px;border:1.5px solid var(–border);border-radius:var(–radius-sm);background:var(–white);color:var(–gray-700);font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;width:100%;font-family:var(–font-sans);}
-.btn-social:hover{border-color:var(–indigo);background:var(–indigo-pale);color:var(–indigo);}
-
-/* DASHBOARD */
-.dashboard-grid{display:grid;grid-template-columns:260px 1fr;gap:24px;margin-top:28px;}
-.dash-sidebar{background:var(–surface);border:1px solid var(–border);border-radius:var(–radius-xl);padding:26px 22px;height:fit-content;box-shadow:var(–shadow-sm);}
-.user-avatar{width:70px;height:70px;border-radius:50%;background:linear-gradient(135deg,var(–indigo),var(–teal));display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;margin:0 auto 12px;font-family:var(–font-display);font-weight:900;}
-.dash-name{font-size:17px;font-weight:700;color:var(–gray-800);text-align:center;margin-bottom:4px;}
-.dash-email{font-size:13px;color:var(–text-muted);text-align:center;margin-bottom:18px;}
-.dash-stat-row{display:flex;gap:8px;margin-bottom:18px;}
-.dash-mini-stat{flex:1;background:var(–gray-50);border-radius:var(–radius-md);padding:10px;text-align:center;}
-.dash-mini-stat .val{font-size:20px;font-weight:800;color:var(–indigo);font-family:var(–font-display);}
-.dash-mini-stat .lbl{font-size:9px;color:var(–text-muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
-.xp-bar-wrap{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
-.xp-label{font-size:11px;color:var(–text-muted);white-space:nowrap;}
-.xp-bar{flex:1;height:7px;background:var(–gray-200);border-radius:var(–radius-full);overflow:hidden;}
-.xp-fill{height:100%;background:linear-gradient(90deg,var(–indigo),var(–teal));border-radius:var(–radius-full);transition:width 1s;}
-.dash-card{background:var(–surface);border:1px solid var(–border);border-radius:var(–radius-xl);padding:26px;margin-bottom:18px;box-shadow:var(–shadow-sm);}
-.dash-card h3{font-size:16px;font-weight:700;color:var(–gray-800);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
-.cert-list{display:flex;flex-direction:column;gap:10px;}
-.cert-item{display:flex;align-items:center;gap:12px;padding:13px 15px;background:var(–gray-50);border:1px solid var(–border);border-radius:var(–radius-md);transition:all .2s;}
-.cert-item:hover{border-color:var(–indigo);background:var(–indigo-pale);}
-.ci-medal{font-size:26px;flex-shrink:0;}
-.ci-info{flex:1;}
-.ci-name{font-size:14px;font-weight:600;color:var(–gray-800);}
-.ci-date{font-size:12px;color:var(–text-muted);}
-.ci-pct{font-size:14px;font-weight:700;color:var(–indigo);}
-.achievement-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;}
-.achievement{background:var(–gray-50);border:1px solid var(–border);border-radius:var(–radius-md);padding:12px 8px;text-align:center;transition:all .2s;}
-.achievement.earned{background:var(–indigo-pale);border-color:var(–indigo-light);}
-.ach-icon{font-size:26px;margin-bottom:5px;filter:grayscale(1);}
-.achievement.earned .ach-icon{filter:none;}
-.ach-name{font-size:10px;font-weight:600;color:var(–text-muted);}
-.achievement.earned .ach-name{color:var(–indigo);}
-
-/* ABOUT PLATFORM */
-.about-step{display:flex;gap:20px;padding:22px 0;border-bottom:1px solid var(–border);}
-.about-step:last-child{border-bottom:none;}
-.step-num{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(–indigo),var(–teal));color:#fff;font-size:16px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(–font-display);}
-.step-body h4{font-size:16px;font-weight:700;color:var(–gray-800);margin-bottom:4px;}
-.step-body p{font-size:14px;color:var(–text-muted);line-height:1.65;}
-
-/* CERT PAGE */
-.cert-tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:14px;margin:28px 0;}
-.cert-tier-card{background:var(–surface);border:1.5px solid var(–border);border-radius:var(–radius-lg);padding:26px 18px;text-align:center;transition:all .25s;}
-.cert-tier-card:hover{transform:translateY(-4px);box-shadow:var(–shadow-md);border-color:var(–indigo);}
-.ct-medal{font-size:42px;margin-bottom:10px;}
-.cert-tier-card h4{font-size:14px;font-weight:700;color:var(–gray-800);margin-bottom:4px;}
-.cert-tier-card p{font-size:12px;color:var(–text-muted);}
-.premium-box{background:linear-gradient(135deg,var(–indigo-pale),#E0E7FF);border:1.5px solid var(–indigo-light);border-radius:var(–radius-xl);padding:40px 32px;text-align:center;margin-top:32px;}
-.premium-box h3{font-family:var(–font-display);font-size:24px;color:var(–indigo);margin-bottom:10px;}
-.premium-box p{color:var(–gray-600);font-size:15px;max-width:500px;margin:0 auto 24px;}
-
-/* ABOUT ME */
-.about-me-grid{display:grid;grid-template-columns:200px 1fr;gap:48px;align-items:start;}
-.about-avatar-wrap{text-align:center;}
-.about-avatar{width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,var(–indigo-pale),#E0E7FF);border:4px solid var(–border);display:flex;align-items:center;justify-content:center;font-size:72px;margin:0 auto 14px;}
-.about-tags{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:8px;}
-.tag{background:var(–indigo-pale);color:var(–indigo);font-size:12px;font-weight:600;padding:5px 12px;border-radius:var(–radius-full);}
-.about-quote{background:var(–gray-50);border-left:4px solid var(–indigo);border-radius:0 var(–radius-md) var(–radius-md) 0;padding:20px 24px;font-size:15px;font-style:italic;line-height:1.75;color:var(–gray-700);margin:18px 0;}
-.about-text{font-size:15px;color:var(–text-muted);line-height:1.8;margin-bottom:12px;}
-
-/* LEGAL */
-.legal-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;}
-.legal-tab{background:var(–surface);border:1.5px solid var(–border);border-radius:var(–radius-sm);padding:8px 16px;font-size:13px;font-weight:600;color:var(–gray-500);cursor:pointer;transition:all .2s;font-family:var(–font-sans);}
-.legal-tab:hover{border-color:var(–indigo);color:var(–indigo);}
-.legal-tab.active{background:var(–indigo);border-color:var(–indigo);color:#fff;}
-.legal-content h3{font-size:17px;font-weight:700;color:var(–gray-800);margin:24px 0 8px;}
-.legal-content h3:first-child{margin-top:0;}
-.legal-content p,.legal-content li{font-size:14px;color:var(–text-muted);line-height:1.85;}
-.legal-content ul{padding-left:20px;margin:8px 0;list-style:disc;}
-.legal-content a{color:var(–indigo);}
-
-/* FOOTER */
-footer{background:var(–gray-900);color:rgba(255,255,255,.7);padding:52px 0 28px;margin-top:80px;}
-.footer-inner{max-width:1080px;margin:0 auto;padding:0 24px;}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;margin-bottom:36px;}
-.footer-brand h4{font-family:var(–font-display);font-size:20px;font-weight:900;color:#fff;margin-bottom:8px;}
-.footer-brand p{font-size:14px;line-height:1.7;max-width:280px;}
-.footer-col h5{font-size:12px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
-.footer-col ul{display:flex;flex-direction:column;gap:8px;}
-.footer-col ul li a{font-size:14px;color:rgba(255,255,255,.6);transition:color .2s;text-decoration:none;}
-.footer-col ul li a:hover{color:#fff;}
-.footer-col ul li button{font-size:14px;color:rgba(255,255,255,.6);transition:color .2s;background:none;border:none;cursor:pointer;font-family:var(–font-sans);padding:0;text-align:left;}
-.footer-col ul li button:hover{color:#fff;}
-.footer-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
-.footer-bottom p{font-size:13px;}
-.footer-links{display:flex;gap:18px;}
-.footer-links a,.footer-links button{font-size:13px;color:rgba(255,255,255,.5);transition:color .2s;text-decoration:none;background:none;border:none;cursor:pointer;font-family:var(–font-sans);}
-.footer-links a:hover,.footer-links button:hover{color:#fff;}
-
-/* TOAST */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(90px);background:var(–gray-800);color:#fff;border-radius:var(–radius-md);padding:13px 22px;font-size:14px;font-weight:500;z-index:999;transition:transform .4s var(–ease-spring);white-space:nowrap;box-shadow:var(–shadow-lg);}
-.toast.show{transform:translateX(-50%) translateY(0);}
-
-/* CONFETTI */
-.confetti-piece{position:fixed;pointer-events:none;z-index:1000;animation:fall linear forwards;border-radius:2px;}
-@keyframes fall{0%{transform:translateY(-20px) rotate(0);opacity:1;}100%{transform:translateY(105vh) rotate(720deg);opacity:0;}}
-
-/* A11Y HIGH CONTRAST */
-@media(prefers-contrast:high){:root{–indigo:#0000CC;–teal:#006644;–text:#000;–text-muted:#111;–bg:#fff;–surface:#fff;–border:#000;}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important;}}
-
-/* RESPONSIVE */
-@media(max-width:900px){
-.dashboard-grid{grid-template-columns:1fr;}
-.about-me-grid{grid-template-columns:1fr;}
-.footer-grid{grid-template-columns:1fr 1fr;}
-.about-avatar{width:120px;height:120px;font-size:56px;}
-}
-@media(max-width:700px){
-.nav-links{display:none;}
-.nav-right .lang-switcher{display:none;}
-.nav-right .btn{display:none;}
-.ham{display:flex;}
-.a11y-toolbar{display:none;}
-.footer-grid{grid-template-columns:1fr;gap:24px;}
-.stats-bar{padding:28px 20px;}
-.question-card{padding:22px 16px;}
-.answer-btn{font-size:14px;padding:13px 14px;}
-.modal{padding:26px 20px;}
-.section{padding:48px 0;}
-}
-@media(max-width:480px){
-.hero h1{font-size:30px;}
-.hero-btns{flex-direction:column;align-items:center;}
-.result-btns{flex-direction:column;align-items:center;}
-.result-btns .btn{width:100%;max-width:300px;}
-.share-btns{flex-direction:column;}
-.stats-bar{padding:22px 14px;}
-}
-</style>
-
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
-<!-- Reading ruler (accessibility) -->
+  <!-- ══ SKIP LINK (Accessibility) ══ -->
 
-<div class="reading-ruler" id="reading-ruler" aria-hidden="true"></div>
+<a class="skip-link" href="#main-content">Zum Hauptinhalt springen</a>
 
-<!-- Skip links -->
+  <!-- ══ ACCESSIBILITY TOOLBAR ══ -->
 
-<div class="skip-links">
-  <a class="skip-link" href="#main-content" id="skip-main">Zum Hauptinhalt springen</a>
-  <a class="skip-link" href="#main-nav" style="left:220px" id="skip-nav">Zur Navigation</a>
-</div>
-
-<!-- ══ ACCESSIBILITY TOOLBAR (desktop) ══ -->
-
-<aside class="a11y-toolbar" aria-label="Barrierefreiheit-Einstellungen" role="complementary">
-  <button class="a11y-btn" id="a11y-contrast" onclick="toggleA11y('high-contrast','a11y-contrast')" aria-pressed="false" aria-label="Hoher Kontrast umschalten">
-    ◑<span class="a11y-tooltip">Hoher Kontrast</span>
-  </button>
-  <button class="a11y-btn" id="a11y-large" onclick="toggleA11y('large-text','a11y-large')" aria-pressed="false" aria-label="Große Schrift umschalten">
-    A⁺<span class="a11y-tooltip">Größere Schrift</span>
-  </button>
-  <button class="a11y-btn" id="a11y-dyslexia" onclick="toggleA11y('dyslexia-font','a11y-dyslexia')" aria-pressed="false" aria-label="Legasthenie-Schrift umschalten">
-    𝔸<span class="a11y-tooltip">Legasthenie-Schrift</span>
-  </button>
-  <button class="a11y-btn" id="a11y-ruler" onclick="toggleRuler()" aria-pressed="false" aria-label="Leselineal umschalten">
-    ═<span class="a11y-tooltip">Leselineal</span>
-  </button>
-  <button class="a11y-btn" id="a11y-motion" onclick="toggleA11y('no-motion','a11y-motion')" aria-pressed="false" aria-label="Animationen reduzieren">
-    ⏸<span class="a11y-tooltip">Animationen aus</span>
-  </button>
-</aside>
-
-<!-- ══ NAV ══ -->
-
-<nav id="main-nav" role="navigation" aria-label="Hauptnavigation">
-  <div class="nav-inner">
-    <button class="nav-logo" onclick="showSection('home')" aria-label="Upskill Academy – Startseite">
-      <span class="logo-icon" aria-hidden="true">🎓</span>
-      Upskill Academy
-    </button>
-
-
-<div class="nav-links" role="menubar">
-  <button class="nav-link active" role="menuitem" data-section="home"           onclick="showSection('home')"           data-i18n="navHome">Home</button>
-  <button class="nav-link"        role="menuitem" data-section="about-platform" onclick="showSection('about-platform')" data-i18n="navWhat">Was ist UA</button>
-  <button class="nav-link"        role="menuitem" data-section="topics"         onclick="showSection('topics')"         data-i18n="navTopics">Themen</button>
-  <button class="nav-link"        role="menuitem" data-section="certificate"    onclick="showSection('certificate')"    data-i18n="navCert">Zertifikat</button>
-  <button class="nav-link"        role="menuitem" data-section="about-me"       onclick="showSection('about-me')"       data-i18n="navAbout">Über mich</button>
-</div>
-
-<div class="nav-right">
-  <div class="lang-switcher" role="group" aria-label="Sprache wählen">
-    <button class="lang-btn active" id="btn-de" onclick="setLang('de')" aria-label="Deutsch" aria-pressed="true"><span class="flag" aria-hidden="true">🇩🇪</span> DE</button>
-    <button class="lang-btn"        id="btn-en" onclick="setLang('en')" aria-label="English" aria-pressed="false"><span class="flag" aria-hidden="true">🇬🇧</span> EN</button>
-    <button class="lang-btn"        id="btn-es" onclick="setLang('es')" aria-label="Español" aria-pressed="false"><span class="flag" aria-hidden="true">🇪🇸</span> ES</button>
+  <div id="a11y-bar" role="toolbar" aria-label="Barrierefreiheit-Werkzeuge">
+    <span class="a11y-label" aria-hidden="true">♿</span>
+    <button onclick="setFontSize('normal')" aria-label="Schriftgröße normal">A</button>
+    <button onclick="setFontSize('lg')"     aria-label="Schrift vergrößern">A+</button>
+    <button onclick="setFontSize('xl')"     aria-label="Schrift sehr groß">A++</button>
+    <button onclick="toggleTheme()"         aria-label="Dunkel-/Hellmodus wechseln">🌙</button>
+    <button onclick="toggleContrast()"      aria-label="Hohen Kontrast aktivieren">◑</button>
+    <button onclick="toggleLineHeight()"    aria-label="Zeilenabstand erhöhen">↕</button>
+    <button onclick="resetA11y()"           aria-label="Barrierefreiheits-Einstellungen zurücksetzen">✕</button>
   </div>
-  <button class="btn btn-primary btn-sm" onclick="openAuth()" id="nav-auth-btn" data-i18n="navLogin">Anmelden</button>
-</div>
 
-<!-- Hamburger – right side, mobile only -->
-<button class="ham" id="ham-btn" onclick="openDrawer()" aria-label="Menü öffnen" aria-expanded="false" aria-controls="mobile-drawer">
-  <span aria-hidden="true">☰</span>
-</button>
+  <!-- ══ NAVIGATION ══ -->
 
+  <nav id="main-nav" role="navigation" aria-label="Hauptnavigation">
+    <div class="nav-inner">
 
+```
+  <!-- Logo -->
+  <button class="nav-logo" onclick="goHome()" aria-label="Upskill Academy – Zur Startseite">
+    <span class="logo-icon" aria-hidden="true">🎓</span>
+    <span>Upskill Academy</span>
+  </button>
+
+  <!-- Desktop Links -->
+  <div class="nav-links" role="menubar" aria-label="Hauptmenü">
+    <button class="nav-link active" role="menuitem" data-page="home"           onclick="showPage('home')"           data-i18n="navHome">Home</button>
+    <button class="nav-link"        role="menuitem" data-page="about-platform" onclick="showPage('about-platform')" data-i18n="navWhat">Was ist UA</button>
+    <button class="nav-link"        role="menuitem" data-page="topics"         onclick="showPage('topics')"         data-i18n="navTopics">Themen</button>
+    <button class="nav-link"        role="menuitem" data-page="certificate"    onclick="showPage('certificate')"    data-i18n="navCert">Zertifikat</button>
+    <button class="nav-link"        role="menuitem" data-page="about-me"       onclick="showPage('about-me')"       data-i18n="navAbout">Über mich</button>
   </div>
-</nav>
 
-<!-- ══ MOBILE DRAWER ══ -->
-
-<div class="mobile-drawer-overlay" id="drawer-overlay" onclick="closeDrawer()" aria-hidden="true"></div>
-<nav class="mobile-drawer" id="mobile-drawer" aria-label="Mobilmenü" aria-hidden="true">
-  <div class="drawer-header">
-    <span class="drawer-logo"><span aria-hidden="true">🎓</span> Upskill Academy</span>
-    <button class="drawer-close" onclick="closeDrawer()" aria-label="Menü schließen">✕</button>
-  </div>
-  <div class="drawer-nav" role="menubar">
-    <button class="nav-link" role="menuitem" data-section="home"           onclick="showSection('home');closeDrawer()"           data-i18n="navHome"><span aria-hidden="true">🏠</span> Home</button>
-    <button class="nav-link" role="menuitem" data-section="about-platform" onclick="showSection('about-platform');closeDrawer()" data-i18n="navWhat"><span aria-hidden="true">ℹ️</span> Was ist UA</button>
-    <button class="nav-link" role="menuitem" data-section="topics"         onclick="showSection('topics');closeDrawer()"         data-i18n="navTopics"><span aria-hidden="true">📚</span> Themen</button>
-    <button class="nav-link" role="menuitem" data-section="certificate"    onclick="showSection('certificate');closeDrawer()"    data-i18n="navCert"><span aria-hidden="true">🎓</span> Zertifikat</button>
-    <button class="nav-link" role="menuitem" data-section="about-me"       onclick="showSection('about-me');closeDrawer()"       data-i18n="navAbout"><span aria-hidden="true">👩‍💼</span> Über mich</button>
-    <button class="nav-link" role="menuitem"                               onclick="openAuth();closeDrawer()"                   data-i18n="navLogin"><span aria-hidden="true">👤</span> Anmelden</button>
-  </div>
-  <!-- Language at bottom of drawer -->
-  <div class="drawer-lang">
-    <p data-i18n="drawerLangLabel">Sprache</p>
-    <div class="drawer-lang-btns">
-      <button class="lang-btn active" id="d-btn-de" onclick="setLang('de')" aria-label="Deutsch" aria-pressed="true"><span class="flag">🇩🇪</span> Deutsch</button>
-      <button class="lang-btn"        id="d-btn-en" onclick="setLang('en')" aria-label="English" aria-pressed="false"><span class="flag">🇬🇧</span> English</button>
-      <button class="lang-btn"        id="d-btn-es" onclick="setLang('es')" aria-label="Español" aria-pressed="false"><span class="flag">🇪🇸</span> Español</button>
+  <!-- Right Cluster -->
+  <div class="nav-right">
+    <!-- Language Switcher (Desktop) -->
+    <div class="lang-switcher-desktop" role="group" aria-label="Sprache wählen">
+      <button class="lang-btn active" id="btn-de" onclick="setLang('de')" aria-pressed="true"  aria-label="Deutsch">🇩🇪 DE</button>
+      <button class="lang-btn"        id="btn-en" onclick="setLang('en')" aria-pressed="false" aria-label="English">🇬🇧 EN</button>
+      <button class="lang-btn"        id="btn-es" onclick="setLang('es')" aria-pressed="false" aria-label="Español">🇪🇸 ES</button>
     </div>
+    <button class="btn btn-primary btn-sm" onclick="openAuth()" id="nav-auth-btn" data-i18n="navLogin">Anmelden</button>
   </div>
-  <!-- Accessibility shortcuts in drawer (mobile) -->
-  <div class="drawer-a11y">
-    <p data-i18n="drawerA11yLabel">Barrierefreiheit</p>
-    <div class="drawer-a11y-btns">
-      <button class="drawer-a11y-btn" id="da-contrast" onclick="toggleA11y('high-contrast','a11y-contrast','da-contrast')" data-i18n="a11yContrast">◑ Kontrast</button>
-      <button class="drawer-a11y-btn" id="da-large"    onclick="toggleA11y('large-text','a11y-large','da-large')"          data-i18n="a11yLarge">A⁺ Schrift</button>
-      <button class="drawer-a11y-btn" id="da-dyslexia" onclick="toggleA11y('dyslexia-font','a11y-dyslexia','da-dyslexia')" data-i18n="a11yDyslexia">𝔸 Legasthenie</button>
-      <button class="drawer-a11y-btn" id="da-motion"   onclick="toggleA11y('no-motion','a11y-motion','da-motion')"         data-i18n="a11yMotion">⏸ Animationen</button>
+
+  <!-- Hamburger (Mobile only) -->
+  <button
+    class="ham"
+    id="ham-btn"
+    onclick="openDrawer()"
+    aria-label="Menü öffnen"
+    aria-expanded="false"
+    aria-controls="mobile-drawer"
+  >☰</button>
+</div>
+```
+
+  </nav>
+
+  <!-- ══ MOBILE DRAWER ══ -->
+
+  <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+  <nav
+    class="mobile-drawer"
+    id="mobile-drawer"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Mobilmenü"
+  >
+    <div class="drawer-header">
+      <button class="nav-logo" onclick="goHome();closeDrawer()" aria-label="Startseite">
+        <span class="logo-icon" aria-hidden="true">🎓</span>
+        <span>Upskill Academy</span>
+      </button>
+      <button class="drawer-close" onclick="closeDrawer()" aria-label="Menü schließen">✕</button>
     </div>
-  </div>
-</nav>
 
-<!-- ══════════════════════════════════════════════
-     MAIN – all "sections" (pages) live here
-══════════════════════════════════════════════ -->
+```
+<div class="drawer-links">
+  <button class="drawer-link active" data-page="home"           onclick="showPage('home');closeDrawer()"           data-i18n="navHome"><span aria-hidden="true">🏠</span> Home</button>
+  <button class="drawer-link"        data-page="about-platform" onclick="showPage('about-platform');closeDrawer()" data-i18n="navWhat"><span aria-hidden="true">ℹ️</span> Was ist UA</button>
+  <button class="drawer-link"        data-page="topics"         onclick="showPage('topics');closeDrawer()"         data-i18n="navTopics"><span aria-hidden="true">📚</span> Themen</button>
+  <button class="drawer-link"        data-page="certificate"    onclick="showPage('certificate');closeDrawer()"    data-i18n="navCert"><span aria-hidden="true">🎓</span> Zertifikat</button>
+  <button class="drawer-link"        data-page="about-me"       onclick="showPage('about-me');closeDrawer()"       data-i18n="navAbout"><span aria-hidden="true">👩‍💼</span> Über mich</button>
+  <div class="drawer-divider"></div>
+  <button class="drawer-link" id="drawer-auth-btn" onclick="openAuth();closeDrawer()" data-i18n="navLogin"><span aria-hidden="true">👤</span> Anmelden</button>
+</div>
 
-<main id="main-content">
+<!-- Language (last in drawer) -->
+<div class="drawer-divider"></div>
+<p class="drawer-lang-label" data-i18n="langLabel">Sprache / Language</p>
+<div class="drawer-langs" role="group" aria-label="Sprache wählen">
+  <button class="lang-btn active" id="d-btn-de" onclick="setLang('de')" aria-pressed="true"  aria-label="Deutsch">🇩🇪 DE</button>
+  <button class="lang-btn"        id="d-btn-en" onclick="setLang('en')" aria-pressed="false" aria-label="English">🇬🇧 EN</button>
+  <button class="lang-btn"        id="d-btn-es" onclick="setLang('es')" aria-pressed="false" aria-label="Español">🇪🇸 ES</button>
+</div>
+```
 
-<!-- ──────────────────── HOME ──────────────────── -->
+  </nav>
 
-<section class="page active" id="section-home" aria-labelledby="home-h1">
+  <!-- ══════════════════════════════════════════
+       MAIN
+  ══════════════════════════════════════════ -->
 
+  <main id="main-content" tabindex="-1">
+
+```
+<!-- ── PAGE: HOME ── -->
+<div class="page active" id="page-home">
   <header class="hero" role="banner">
-    <div class="hero-bg-img" role="img" aria-label="Person arbeitet produktiv am Schreibtisch"></div>
+    <div class="hero-bg-img" role="img" aria-label="Moderne Büroumgebung – Symbolbild für Weiterbildung"></div>
     <div class="hero-bg" aria-hidden="true"></div>
     <div class="hero-content">
       <span class="hero-eyebrow">✨ <span data-i18n="heroBadge">Interaktives Lernen</span></span>
-      <h1 id="home-h1">Upskill<br><em data-i18n="heroTitle2">Academy</em></h1>
+      <h1>Upskill<br /><em data-i18n="heroTitle">Academy</em></h1>
       <div class="hero-desc" role="note">
-        <p data-i18n="heroDesc">Die Upskill Academy App ist eine interaktive Lernplattform, die dir ermöglicht, Fachwissen in administrativen Bereichen wie HR, Gehaltsabrechnung und mehr spielerisch zu erlernen – auch direkt am Smartphone oder Tablet möglich.</p>
+        <p data-i18n="heroDesc">
+          Die Upskill Academy App ist eine interaktive Lernplattform, die dir ermöglicht,
+          Fachwissen in administrativen Bereichen wie HR, Gehaltsabrechnung und mehr
+          spielerisch zu erlernen – auch direkt am Smartphone oder Tablet möglich.
+        </p>
       </div>
       <div class="hero-btns">
-        <button class="btn btn-white btn-lg" onclick="showSection('topics')" data-i18n="heroQuizBtn">🚀 Zum Quiz</button>
-        <button class="btn btn-outline btn-lg" onclick="showSection('about-platform')" data-i18n="heroLearnMore">Mehr erfahren</button>
+        <button class="btn btn-white btn-lg" onclick="showPage('topics')" data-i18n="heroQuiz">🚀 Zum Quiz</button>
+        <button class="btn btn-outline btn-lg" onclick="showPage('about-platform')" data-i18n="heroMore">Mehr erfahren</button>
       </div>
     </div>
-    <div class="hero-scroll" aria-hidden="true"><span>↓</span> <span data-i18n="scrollDown">scroll</span></div>
   </header>
 
-  <div class="section">
+  <section class="section" aria-labelledby="feat-heading">
     <div class="container">
-      <div class="section-header">
-        <span class="section-label" data-i18n="featLabel">Warum Upskill Academy?</span>
-        <h2 class="section-title" data-i18n="featTitle">Lernen, das wirklich funktioniert</h2>
-        <p class="section-sub" data-i18n="featSub">Entwickelt für Kursteilnehmer in Weiterbildungsprogrammen – von HR bis Buchhaltung.</p>
+      <div class="sec-header">
+        <span class="sec-label" data-i18n="featLabel">Warum Upskill Academy?</span>
+        <h2 class="sec-title" id="feat-heading" data-i18n="featTitle">Lernen, das wirklich funktioniert</h2>
+        <p class="sec-sub" data-i18n="featSub">Entwickelt für Kursteilnehmer in Weiterbildungsprogrammen.</p>
       </div>
-      <div class="feature-grid">
-        <article class="feature-card"><div class="feature-icon icon-indigo" aria-hidden="true">⚡</div><h3 data-i18n="feat1T">Sofortiges Feedback</h3><p data-i18n="feat1P">Nach jeder Antwort siehst du direkt ob du richtig lagst – mit ausführlicher Erklärung.</p></article>
-        <article class="feature-card"><div class="feature-icon icon-teal"   aria-hidden="true">📱</div><h3 data-i18n="feat2T">Lernen unterwegs</h3><p data-i18n="feat2P">Optimiert für Smartphone und Tablet. Lerne wann und wo du möchtest.</p></article>
-        <article class="feature-card"><div class="feature-icon icon-amber"  aria-hidden="true">🎯</div><h3 data-i18n="feat3T">Praxisnah & relevant</h3><p data-i18n="feat3P">Echte Inhalte aus Weiterbildungskursen – kein theoretischer Ballast.</p></article>
-        <article class="feature-card"><div class="feature-icon icon-green"  aria-hidden="true">🏆</div><h3 data-i18n="feat4T">Persönliche Urkunde</h3><p data-i18n="feat4P">Beende ein Modul und erhalte dein persönliches Zertifikat.</p></article>
+      <div class="feature-grid" role="list">
+        <article class="feature-card" role="listitem">
+          <div class="feature-icon icon-indigo" aria-hidden="true">⚡</div>
+          <h3 data-i18n="f1T">Sofortiges Feedback</h3>
+          <p data-i18n="f1P">Nach jeder Antwort siehst du direkt ob du richtig lagst – mit Erklärung.</p>
+        </article>
+        <article class="feature-card" role="listitem">
+          <div class="feature-icon icon-teal" aria-hidden="true">📱</div>
+          <h3 data-i18n="f2T">Lernen unterwegs</h3>
+          <p data-i18n="f2P">Optimiert für Smartphone und Tablet – kein Login zum Starten nötig.</p>
+        </article>
+        <article class="feature-card" role="listitem">
+          <div class="feature-icon icon-amber" aria-hidden="true">🎯</div>
+          <h3 data-i18n="f3T">Praxisnah & relevant</h3>
+          <p data-i18n="f3P">Echte Inhalte aus Weiterbildungskursen – kein theoretischer Ballast.</p>
+        </article>
+        <article class="feature-card" role="listitem">
+          <div class="feature-icon icon-green" aria-hidden="true">🏆</div>
+          <h3 data-i18n="f4T">Persönliche Urkunde</h3>
+          <p data-i18n="f4P">Beende ein Modul und erhalte dein Zertifikat zum Teilen oder Download.</p>
+        </article>
       </div>
-      <div class="stats-bar" role="region" aria-label="Statistiken">
-        <div><div class="stat-num">40+</div><div class="stat-label" data-i18n="stat1">Fragen · HR-Modul</div></div>
-        <div><div class="stat-num">3</div>  <div class="stat-label" data-i18n="stat2">Sprachen</div></div>
-        <div><div class="stat-num">4</div>  <div class="stat-label" data-i18n="stat3">Level pro Thema</div></div>
-        <div><div class="stat-num">100%</div><div class="stat-label" data-i18n="stat4">Kostenlos starten</div></div>
+
+      <div class="stats-bar" role="region" aria-label="Plattform-Statistiken">
+        <div class="stat-item"><div class="stat-num">75+</div><div class="stat-label" data-i18n="s1">Fragen · HR</div></div>
+        <div class="stat-item"><div class="stat-num">3</div><div class="stat-label" data-i18n="s2">Sprachen</div></div>
+        <div class="stat-item"><div class="stat-num">5</div><div class="stat-label" data-i18n="s3">Module</div></div>
+        <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label" data-i18n="s4">Gratis starten</div></div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</div><!-- /page-home -->
 
-<!-- ──────────────────── ABOUT PLATFORM ──────────────────── -->
-
-<section class="page" id="section-about-platform" aria-labelledby="ap-h2">
-  <div class="section">
+<!-- ── PAGE: ABOUT PLATFORM ── -->
+<div class="page" id="page-about-platform">
+  <section class="section">
     <div class="container-sm">
-      <div class="section-header">
-        <span class="section-label" data-i18n="apLabel">Die Plattform</span>
-        <h2 class="section-title" id="ap-h2" data-i18n="apTitle">Was ist Upskill Academy?</h2>
-        <p class="section-sub" data-i18n="apSub">Eine interaktive Lernapp für Weiterbildungskurse.</p>
+      <div class="sec-header">
+        <span class="sec-label" data-i18n="apLabel">Die Plattform</span>
+        <h2 class="sec-title" data-i18n="apTitle">Was ist Upskill Academy?</h2>
+        <p class="sec-sub" data-i18n="apSub">Eine interaktive Lernapp für Weiterbildungskurse in HR, Gehaltsabrechnung und mehr.</p>
       </div>
-      <div>
-        <div class="about-step"><div class="step-num" aria-hidden="true">1</div><div class="step-body"><h4 data-i18n="step1T">Quiz-basiertes Lernen</h4><p data-i18n="step1P">Lerne durch gezielte Fragen und Antworten statt stundenlang Skripte zu lesen.</p></div></div>
-        <div class="about-step"><div class="step-num" aria-hidden="true">2</div><div class="step-body"><h4 data-i18n="step2T">Sofortiges Feedback</h4><p data-i18n="step2P">Du siehst sofort ob du richtig lagst – mit Erklärung, damit du wirklich verstehst warum.</p></div></div>
-        <div class="about-step"><div class="step-num" aria-hidden="true">3</div><div class="step-body"><h4 data-i18n="step3T">Stufensystem</h4><p data-i18n="step3P">Von Grundlagen bis Expertenlevel – steige im Rang auf.</p></div></div>
-        <div class="about-step"><div class="step-num" aria-hidden="true">4</div><div class="step-body"><h4 data-i18n="step4T">Drei Sprachen</h4><p data-i18n="step4P">Deutsch, Englisch und Spanisch – lerne in deiner Sprache oder übe auf Spanisch wie im Kurs.</p></div></div>
-        <div class="about-step"><div class="step-num" aria-hidden="true">5</div><div class="step-body"><h4 data-i18n="step5T">Barrierefreies Lernen</h4><p data-i18n="step5P">Screenreader, Tastaturnavigation, Hoher Kontrast, Legasthenie-Schrift und Leselineal.</p></div></div>
+      <div class="about-steps">
+        <div class="about-step"><div class="step-num" aria-hidden="true">1</div><div class="step-body"><h3 data-i18n="st1T">Quiz-basiertes Lernen</h3><p data-i18n="st1P">Statt Skripte zu lesen, lernst du durch gezielte Fragen und Antworten.</p></div></div>
+        <div class="about-step"><div class="step-num" aria-hidden="true">2</div><div class="step-body"><h3 data-i18n="st2T">Sofortiges Feedback</h3><p data-i18n="st2P">Du siehst nach jeder Antwort warum sie richtig oder falsch war.</p></div></div>
+        <div class="about-step"><div class="step-num" aria-hidden="true">3</div><div class="step-body"><h3 data-i18n="st3T">Stufensystem</h3><p data-i18n="st3P">Von Grundlagen bis Expertenlevel – du steigst im Rang auf.</p></div></div>
+        <div class="about-step"><div class="step-num" aria-hidden="true">4</div><div class="step-body"><h3 data-i18n="st4T">Drei Sprachen</h3><p data-i18n="st4P">Deutsch, Englisch und Spanisch – lerne in deiner oder einer Fremdsprache.</p></div></div>
+        <div class="about-step"><div class="step-num" aria-hidden="true">5</div><div class="step-body"><h3 data-i18n="st5T">Barrierefreies Lernen</h3><p data-i18n="st5P">Screenreader, Tastaturnavigation, Dunkel-Modus, Schriftgrößen – für alle.</p></div></div>
       </div>
-      <div style="margin-top:52px;">
-        <div class="section-header"><h2 class="section-title" data-i18n="advTitle">Deine Vorteile</h2></div>
-        <div class="feature-grid">
-          <div class="feature-card"><div class="feature-icon icon-indigo">🧩</div><h3 data-i18n="adv1T">Interaktiv</h3><p data-i18n="adv1P">Aktives Lernen statt passivem Lesen.</p></div>
-          <div class="feature-card"><div class="feature-icon icon-teal">🏢</div><h3 data-i18n="adv2T">Praxisnah</h3><p data-i18n="adv2P">Echte Kursinhalte wie beim CEP Norte.</p></div>
-          <div class="feature-card"><div class="feature-icon icon-amber">⚡</div><h3 data-i18n="adv3T">Sofortig</h3><p data-i18n="adv3P">Ideal zur Prüfungsvorbereitung.</p></div>
-        </div>
+      <h2 class="sec-title" style="margin-top:3rem;" data-i18n="advTitle">Deine Vorteile</h2>
+      <div class="feature-grid" style="margin-top:1.5rem;">
+        <div class="feature-card"><div class="feature-icon icon-indigo">🧩</div><h3 data-i18n="av1T">Interaktiv</h3><p data-i18n="av1P">Aktives Lernen statt passivem Lesen.</p></div>
+        <div class="feature-card"><div class="feature-icon icon-teal">🏢</div><h3 data-i18n="av2T">Praxisnah</h3><p data-i18n="av2P">Echte Kursinhalte wie beim CEP Norte.</p></div>
+        <div class="feature-card"><div class="feature-icon icon-amber">⚡</div><h3 data-i18n="av3T">Sofortig</h3><p data-i18n="av3P">Ideal zur Prüfungsvorbereitung.</p></div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</div><!-- /page-about-platform -->
 
-<!-- ──────────────────── TOPICS ──────────────────── -->
-
-<section class="page" id="section-topics" aria-labelledby="topics-h2">
-  <div class="section">
+<!-- ── PAGE: TOPICS ── -->
+<div class="page" id="page-topics">
+  <section class="section">
     <div class="container">
-      <div class="section-header">
-        <span class="section-label" data-i18n="topicsLabel">Lernbereiche</span>
-        <h2 class="section-title" id="topics-h2" data-i18n="topicsTitle">Wähle dein Thema</h2>
-        <p class="section-sub" data-i18n="topicsSub">Jedes Thema führt durch Module und Quizzes – von Grundlagen bis Experte.</p>
+      <div class="sec-header">
+        <span class="sec-label" data-i18n="topLabel">Lernbereiche</span>
+        <h2 class="sec-title" data-i18n="topTitle">Wähle dein Thema</h2>
+        <p class="sec-sub" data-i18n="topSub">Jedes Thema führt dich durch Module und Quizzes – 15 Fragen pro Level.</p>
       </div>
-      <div class="topic-grid">
-        <article class="topic-card" tabindex="0" onclick="showSection('quiz-select')" onkeypress="if(event.key==='Enter')showSection('quiz-select')" aria-label="HR Human Resources – Modul starten">
-          <div class="topic-icon-wrap" aria-hidden="true">👥</div>
-          <h3 data-i18n="top1N">HR – Human Resources</h3>
-          <p data-i18n="top1D">Strategische Personalführung, Wettbewerbsvorteil, Planung & Struktur</p>
-          <div class="topic-meta" data-i18n="top1M">4 Module · 40 Fragen · Verfügbar</div>
-        </article>
-        <article class="topic-card locked" tabindex="0" aria-disabled="true" aria-label="Gehaltsabrechnung – Demnächst verfügbar">
-          <div class="topic-icon-wrap" aria-hidden="true">💰</div>
-          <h3 data-i18n="top2N">Gehaltsabrechnung</h3>
-          <p data-i18n="top2D">Lohnarten, Abzüge, Sozialversicherung, Steuerrecht</p>
-          <div class="topic-meta"><span class="badge-soon" data-i18n="comingSoon">Demnächst</span></div>
-        </article>
-        <article class="topic-card locked" tabindex="0" aria-disabled="true">
-          <div class="topic-icon-wrap" aria-hidden="true">📊</div>
-          <h3 data-i18n="top3N">Buchhaltung</h3>
-          <p data-i18n="top3D">Grundlagen, Bilanz, GuV</p>
-          <div class="topic-meta"><span class="badge-soon" data-i18n="comingSoon">Demnächst</span></div>
-        </article>
-        <article class="topic-card locked" tabindex="0" aria-disabled="true">
-          <div class="topic-icon-wrap" aria-hidden="true">📣</div>
-          <h3 data-i18n="top4N">Marketing</h3>
-          <p data-i18n="top4D">Grundlagen, Strategien, Digital</p>
-          <div class="topic-meta"><span class="badge-soon" data-i18n="comingSoon">Demnächst</span></div>
-        </article>
-        <article class="topic-card locked" tabindex="0" aria-disabled="true">
-          <div class="topic-icon-wrap" aria-hidden="true">💼</div>
-          <h3 data-i18n="top5N">Office Skills</h3>
-          <p data-i18n="top5D">Excel, Kommunikation, Projektmanagement</p>
-          <div class="topic-meta"><span class="badge-soon" data-i18n="comingSoon">Demnächst</span></div>
-        </article>
+      <div class="topic-grid" id="topic-grid" role="list">
+        <!-- Dynamisch befüllt via JS (renderTopics) -->
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</div><!-- /page-topics -->
 
-<!-- ──────────────────── QUIZ SELECT ──────────────────── -->
-
-<section class="page" id="section-quiz-select" aria-labelledby="qs-h2">
-  <div class="section-sm">
+<!-- ── PAGE: QUIZ SELECT ── -->
+<div class="page" id="page-quiz-select">
+  <section class="section-sm">
     <div class="container">
-      <button class="back-btn" onclick="showSection('topics')">← <span data-i18n="backTopics">Zurück zu Themen</span></button>
-      <div class="section-header" style="text-align:left;margin-bottom:24px;">
-        <span class="section-label">HR – Human Resources</span>
-        <h2 class="section-title" id="qs-h2" data-i18n="qsTitle">Wähle dein Modul</h2>
+      <button class="back-btn" onclick="showPage('topics')" aria-label="Zurück zu Themen">
+        ← <span data-i18n="backTop">Zurück zu Themen</span>
+      </button>
+      <div class="sec-header" style="text-align:left;margin-bottom:1.25rem;">
+        <span class="sec-label" id="module-label-select">HR – Human Resources</span>
+        <h2 class="sec-title" data-i18n="qsTitle">Wähle dein Level</h2>
       </div>
-      <div class="rank-ladder" id="rank-ladder" role="list" aria-label="Dein Fortschritt"></div>
-      <div class="level-grid" id="level-grid" role="list"></div>
+      <div class="rank-ladder" id="rank-ladder" role="list" aria-label="Dein Lernfortschritt"></div>
+      <div class="level-grid"  id="level-grid"  role="list"></div>
     </div>
-  </div>
-</section>
+  </section>
+</div><!-- /page-quiz-select -->
 
-<!-- ──────────────────── QUIZ ──────────────────── -->
-
-<section class="page" id="section-quiz" aria-labelledby="quiz-level-title">
-  <div class="section-sm">
+<!-- ── PAGE: QUIZ ── -->
+<div class="page" id="page-quiz">
+  <section class="section-sm">
     <div class="container">
       <div class="quiz-wrap">
-        <button class="back-btn" onclick="showSection('quiz-select')">← <span data-i18n="backModules">Zurück zu Modulen</span></button>
+        <button class="back-btn" onclick="showPage('quiz-select')" aria-label="Quiz abbrechen und zu Modulen zurück">
+          ← <span data-i18n="backMod">Zurück zu Leveln</span>
+        </button>
+
+        <!-- Top bar -->
         <div class="quiz-topbar">
-          <span class="quiz-title" id="quiz-level-title"></span>
+          <span class="quiz-title" id="quiz-title" aria-live="polite"></span>
           <div class="quiz-pills">
-            <span class="pill" id="pill-q"><span data-i18n="qPill">Frage</span> <span id="q-current">1</span>/<span id="q-total">10</span></span>
+            <span class="pill" id="q-progress-pill" aria-live="polite" aria-label="Fragenfortschritt">
+              <span data-i18n="qPill">Frage</span> <span id="q-cur">1</span>/<span id="q-tot">15</span>
+            </span>
             <span class="pill pill-teal">⭐ <span id="q-score">0</span></span>
           </div>
         </div>
-        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Quiz-Fortschritt">
-          <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+
+        <!-- Progress bar -->
+        <div
+          class="prog-bar"
+          role="progressbar"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="0"
+          aria-label="Quiz-Fortschritt in Prozent"
+        >
+          <div class="prog-fill" id="prog-fill" style="width:0%"></div>
         </div>
-        <div class="question-card">
-          <div class="q-number" id="q-number" aria-live="polite"></div>
-          <div class="q-text"   id="q-text"   aria-live="polite"></div>
+
+        <!-- Question card -->
+        <div class="question-card" role="group" aria-labelledby="q-num q-text">
+          <div class="q-num" id="q-num" aria-live="polite"></div>
+          <p class="q-text" id="q-text" aria-live="polite"></p>
         </div>
-        <div class="answers" id="answers-container" role="group" aria-label="Antwortmöglichkeiten"></div>
-        <div class="explanation" id="explanation" role="alert" aria-live="assertive" aria-atomic="true"></div>
+
+        <!-- Answers -->
+        <div class="answers" id="answers" role="group" aria-label="Antwortmöglichkeiten"></div>
+
+        <!-- Feedback / Explanation -->
+        <div
+          class="explanation"
+          id="explanation"
+          role="alert"
+          aria-live="assertive"
+          aria-atomic="true"
+          style="display:none;"
+        ></div>
+
+        <!-- Error message (no answer selected) -->
+        <div
+          class="error-msg"
+          id="error-msg"
+          role="alert"
+          aria-live="assertive"
+          style="display:none;"
+          data-i18n="errNoAnswer"
+        >Bitte wähle eine Antwort aus.</div>
+
+        <!-- Navigation -->
         <div class="nav-btns">
-          <button class="btn btn-primary" id="next-btn" style="display:none" onclick="nextQuestion()"></button>
+          <button class="btn btn-primary" id="next-btn" style="display:none;" onclick="nextQ()" aria-label="Zur nächsten Frage"></button>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</div><!-- /page-quiz -->
 
-<!-- ──────────────────── RESULT ──────────────────── -->
-
-<section class="page" id="section-result" aria-labelledby="result-title">
-  <div class="section-sm">
+<!-- ── PAGE: RESULT ── -->
+<div class="page" id="page-result">
+  <section class="section-sm">
     <div class="container">
-      <div class="result-wrap">
-        <span class="result-medal" id="result-medal" role="img" aria-label="Medaille">🥇</span>
-        <h2 class="result-title" id="result-title" aria-live="polite"></h2>
-        <p class="result-rank-label" id="result-rank-lbl"></p>
-        <div class="score-ring" id="score-ring" role="img" aria-label="Ergebnis">
-          <div class="score-num" id="score-number">0<small>/10</small></div>
+      <div class="result-wrap" role="main" aria-label="Quizergebnis">
+
+        <span class="result-medal" id="res-medal" role="img" aria-label="Ergebnis-Medaille">🥇</span>
+        <h2 class="result-title" id="res-title" aria-live="polite"></h2>
+        <p class="result-rank-lbl" id="res-rank" aria-live="polite"></p>
+
+        <!-- Score ring -->
+        <div class="score-ring" id="score-ring" role="img" aria-label="Ergebnis-Diagramm">
+          <div class="score-num" id="score-num" aria-live="polite">0<small>/15</small></div>
         </div>
+
+        <!-- Rating label -->
+        <div class="rating-badge" id="rating-badge" role="status" aria-live="polite"></div>
+
+        <!-- Stats -->
         <div class="stats-row" role="list">
-          <div class="stat-box" role="listitem"><div class="stat-v" id="stat-correct">0</div><div class="stat-l" id="lbl-correct">Richtig</div></div>
-          <div class="stat-box" role="listitem"><div class="stat-v" id="stat-wrong">0</div>  <div class="stat-l" id="lbl-wrong">Falsch</div></div>
-          <div class="stat-box" role="listitem"><div class="stat-v" id="stat-pct">0%</div>   <div class="stat-l" id="lbl-pct">Quote</div></div>
+          <div class="stat-box" role="listitem"><div class="stat-v" id="s-cor">0</div><div class="stat-l" id="lbl-cor">Richtig</div></div>
+          <div class="stat-box" role="listitem"><div class="stat-v" id="s-wr">0</div><div class="stat-l"  id="lbl-wr">Falsch</div></div>
+          <div class="stat-box" role="listitem"><div class="stat-v" id="s-pct">0%</div><div class="stat-l" id="lbl-pct">Quote</div></div>
         </div>
-        <div id="rank-up-banner" class="rank-up-banner" style="display:none" role="alert"></div>
-        <!-- SHARE (always visible) -->
+
+        <!-- Rank up -->
+        <div id="rank-up-banner" class="rank-up-banner" style="display:none;" role="alert" aria-live="assertive"></div>
+
+        <!-- Share -->
         <div class="share-strip">
-          <h4 data-i18n="shareTitle">🎉 Ergebnis teilen</h4>
+          <h3 data-i18n="shareT">🎉 Ergebnis teilen</h3>
           <div class="share-btns">
-            <button class="share-btn share-wa" onclick="shareWA()" aria-label="Auf WhatsApp teilen">📱 WhatsApp</button>
-            <button class="share-btn share-li" onclick="shareLI()" aria-label="Auf LinkedIn teilen">💼 LinkedIn</button>
-            <button class="share-btn share-cp" onclick="copyShare()">📋 <span data-i18n="shareCopy">Kopieren</span></button>
+            <button class="share-btn share-wa" onclick="shareWA()"  aria-label="Ergebnis auf WhatsApp teilen">📱 WhatsApp</button>
+            <button class="share-btn share-li" onclick="shareLI()"  aria-label="Ergebnis auf LinkedIn teilen">💼 LinkedIn</button>
+            <button class="share-btn share-cp" onclick="copyLink()" aria-label="Link kopieren"><span data-i18n="shareCopy">📋 Kopieren</span></button>
           </div>
         </div>
-        <!-- CERT DOWNLOAD: login required -->
-        <div class="name-input-wrap" id="cert-name-wrap" style="display:none">
-          <label id="lbl-name-input" for="cert-name">📝 Name für die Urkunde</label>
-          <input class="name-input" id="cert-name" type="text" maxlength="60" autocomplete="name"/>
+
+        <!-- Certificate download (login required) -->
+        <div id="cert-name-wrap" class="name-input-wrap" style="display:none;">
+          <label id="lbl-cert-name" for="cert-name" data-i18n="lblCertName">📝 Name für die Urkunde:</label>
+          <input
+            class="name-input"
+            id="cert-name"
+            type="text"
+            maxlength="60"
+            autocomplete="name"
+            placeholder="Vollständiger Name..."
+            aria-required="true"
+          />
         </div>
-        <div class="name-input-wrap" id="cert-login-hint">
-          <p style="font-size:14px;color:var(--gray-600);" data-i18n="certLoginHint">🔒 <strong>Registriere dich</strong>, um deine Urkunde als PDF herunterzuladen und deinen Fortschritt zu speichern.</p>
-          <button class="btn btn-primary btn-sm" style="margin-top:12px" onclick="openAuth()" data-i18n="certRegisterBtn">Jetzt registrieren</button>
+        <div id="cert-login-hint" class="name-input-wrap">
+          <p style="font-size:0.875rem;color:var(--text-muted);" data-i18n="certHint">
+            🔒 <strong>Registriere dich</strong>, um deine Urkunde als PDF herunterzuladen.
+          </p>
+          <button class="btn btn-primary btn-sm" style="margin-top:0.625rem;" onclick="openAuth()" data-i18n="certRegBtn">Jetzt registrieren</button>
         </div>
+
+        <!-- Buttons -->
         <div class="result-btns">
-          <button class="btn btn-ghost"   id="btn-retry"    onclick="retryLevel()">🔄 <span data-i18n="btnRetry">Nochmal</span></button>
-          <button class="btn btn-cert"    id="btn-download" onclick="downloadCert()" style="display:none">📜 <span data-i18n="btnDL">Urkunde herunterladen</span></button>
-          <button class="btn btn-primary" id="btn-home-r"   onclick="showSection('quiz-select')">🏛️ <span data-i18n="btnHome">Übersicht</span></button>
+          <button class="btn btn-ghost"    onclick="retryLevel()"            data-i18n="btnRetry">🔄 Nochmal</button>
+          <button class="btn btn-cert"     id="btn-dl" onclick="downloadCert()" style="display:none;" data-i18n="btnDL">📜 Urkunde herunterladen</button>
+          <button class="btn btn-primary"  onclick="showPage('quiz-select')" data-i18n="btnOvr">🏛️ Übersicht</button>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</div><!-- /page-result -->
 
-<!-- ──────────────────── CERTIFICATE ──────────────────── -->
-
-<section class="page" id="section-certificate" aria-labelledby="cert-h2">
-  <div class="section">
+<!-- ── PAGE: CERTIFICATE ── -->
+<div class="page" id="page-certificate">
+  <section class="section">
     <div class="container-sm">
-      <div class="section-header">
-        <span class="section-label" data-i18n="certLabel">Abschluss</span>
-        <h2 class="section-title" id="cert-h2" data-i18n="certTitle">Dein Zertifikat</h2>
-        <p class="section-sub" data-i18n="certSub">Nach dem Abschluss eines Moduls erhältst du ein persönliches Zertifikat – abgestuft nach deiner Leistung.</p>
+      <div class="sec-header">
+        <span class="sec-label" data-i18n="certLabel">Abschluss</span>
+        <h2 class="sec-title" data-i18n="certTitle">Dein Zertifikat</h2>
+        <p class="sec-sub" data-i18n="certSub">Zertifikate abgestuft nach deiner Leistung.</p>
       </div>
-      <div class="cert-tiers">
-        <article class="cert-tier-card"><div class="ct-medal">📜</div><h4 data-i18n="ct0T">Teilnahme</h4><p data-i18n="ct0P">Unter 50%</p></article>
-        <article class="cert-tier-card"><div class="ct-medal">🥉</div><h4 data-i18n="ct1T">Bestanden</h4><p data-i18n="ct1P">50–74%</p></article>
-        <article class="cert-tier-card"><div class="ct-medal">🥈</div><h4 data-i18n="ct2T">Mit Auszeichnung</h4><p data-i18n="ct2P">75–99%</p></article>
-        <article class="cert-tier-card"><div class="ct-medal">🏆</div><h4 data-i18n="ct3T">Höchstauszeichnung</h4><p data-i18n="ct3P">100% – Perfekt!</p></article>
+      <div class="cert-tiers" role="list">
+        <article class="cert-tier-card" role="listitem"><div class="ct-medal" aria-hidden="true">📜</div><h3 data-i18n="ct0T">Teilnahme</h3><p data-i18n="ct0P">Unter 50%</p></article>
+        <article class="cert-tier-card" role="listitem"><div class="ct-medal" aria-hidden="true">🥉</div><h3 data-i18n="ct1T">Bestanden</h3><p data-i18n="ct1P">50–74%</p></article>
+        <article class="cert-tier-card" role="listitem"><div class="ct-medal" aria-hidden="true">🥈</div><h3 data-i18n="ct2T">Mit Auszeichnung</h3><p data-i18n="ct2P">75–99%</p></article>
+        <article class="cert-tier-card" role="listitem"><div class="ct-medal" aria-hidden="true">🏆</div><h3 data-i18n="ct3T">Höchstauszeichnung</h3><p data-i18n="ct3P">100% – Perfekt!</p></article>
       </div>
-      <div class="premium-box">
+      <div class="premium-box" role="complementary" aria-label="Premium-Funktion">
         <h3>⭐ <span data-i18n="premH">Premium Download</span></h3>
-        <p data-i18n="premP">Teilen ist kostenlos. Für den <strong>PDF-Download</strong> mit deinem Namen ist eine kostenlose Registrierung erforderlich.</p>
-        <button class="btn btn-primary" onclick="openAuth()" data-i18n="premBtn">Jetzt registrieren & starten</button>
+        <p data-i18n="premP">Teilen ist kostenlos. Der PDF-Download ist nach kostenloser Registrierung verfügbar.</p>
+        <button class="btn btn-primary" onclick="openAuth()" data-i18n="premBtn">Jetzt registrieren</button>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</div><!-- /page-certificate -->
 
-<!-- ──────────────────── ABOUT ME ──────────────────── -->
-
-<section class="page" id="section-about-me" aria-labelledby="am-h2">
-  <div class="section">
+<!-- ── PAGE: ABOUT ME ── -->
+<div class="page" id="page-about-me">
+  <section class="section">
     <div class="container-sm">
-      <div class="section-header">
-        <span class="section-label" data-i18n="amLabel">Gründerin</span>
-        <h2 class="section-title" id="am-h2">Sara Manoochehri</h2>
+      <div class="sec-header">
+        <span class="sec-label" data-i18n="amLabel">Gründerin</span>
+        <h2 class="sec-title">Sara Manoochehri</h2>
       </div>
-      <div class="about-me-grid">
-        <div class="about-avatar-wrap">
-          <div class="about-avatar" role="img" aria-label="Sara Manoochehri">👩‍💼</div>
-          <div class="about-tags">
+      <div class="am-grid">
+        <div class="am-av-wrap">
+          <div class="am-av" role="img" aria-label="Porträt Sara Manoochehri">👩‍💼</div>
+          <div class="am-tags">
             <span class="tag">🇩🇪 Deutschland</span>
             <span class="tag">🇮🇷 Iran</span>
             <span class="tag">🏝️ Teneriffa</span>
           </div>
         </div>
         <div>
-          <p class="about-text" data-i18n="amBio">Ich bin gebürtige Iranerin, aufgewachsen in Deutschland – und lebe heute auf Teneriffa. Diese Mischung aus Kulturen und Sprachen hat mich immer begleitet und meine Art zu lernen geprägt.</p>
-          <blockquote class="about-quote" data-i18n="amQuote">„Ich habe einen Weiterbildungskurs im Bereich HR gemacht. Für die Prüfung musste ich viel Material in kurzer Zeit lernen – und das auf Spanisch. Ich dachte mir: Wie cool wäre es, wenn ich das am Handy lernen könnte und dabei direkt abgefragt werde. Und hier sind wir nun."</blockquote>
-          <p class="about-text" data-i18n="amMission">Die Upskill Academy macht Lernen einfacher, zugänglicher und angenehmer – für alle, die sich weiterbilden möchten.</p>
-          <p class="about-text" data-i18n="amVision">Langfristig möchte ich die Plattform Kurscentern wie dem CEP Norte und anderen Bildungsträgern anbieten.</p>
+          <p class="am-text" data-i18n="amBio">
+            Ich bin gebürtige Iranerin, aufgewachsen in Deutschland – und lebe heute auf Teneriffa.
+            Diese Mischung aus Kulturen und Sprachen hat mich immer begleitet.
+          </p>
+          <blockquote class="am-quote" data-i18n="amQuote">
+            „Ich habe einen Weiterbildungskurs im Bereich HR gemacht. Für die Prüfung musste ich viel
+            Material in kurzer Zeit lernen – und das auf Spanisch. Ich dachte mir: Wie cool wäre es,
+            wenn ich das am Handy lernen könnte und dabei direkt zu den Themen abgefragt werde.
+            Und hier sind wir nun."
+          </blockquote>
+          <p class="am-text" data-i18n="amMiss">
+            Upskill Academy macht Lernen einfacher, zugänglicher und angenehmer. Langfristig möchte
+            ich die Plattform Kurscentern wie dem CEP Norte anbieten.
+          </p>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</div><!-- /page-about-me -->
 
-<!-- ──────────────────── DASHBOARD ──────────────────── -->
-
-<section class="page" id="section-dashboard" aria-labelledby="dash-h2">
-  <div class="section-sm">
+<!-- ── PAGE: DASHBOARD ── -->
+<div class="page" id="page-dashboard">
+  <section class="section-sm">
     <div class="container">
-      <div class="section-header" style="text-align:left;">
-        <span class="section-label" data-i18n="dashLabel">Mein Bereich</span>
-        <h2 class="section-title" id="dash-h2" data-i18n="dashTitle">Mein Lernfortschritt</h2>
+      <div class="sec-header" style="text-align:left;">
+        <span class="sec-label" data-i18n="dashLabel">Mein Bereich</span>
+        <h2 class="sec-title" data-i18n="dashTitle">Mein Lernfortschritt</h2>
       </div>
-      <div class="dashboard-grid">
+      <div class="dash-grid">
         <aside class="dash-sidebar" aria-label="Nutzerprofil">
-          <div class="user-avatar" id="dash-avatar" aria-hidden="true">S</div>
+          <div class="user-av" id="dash-av" aria-hidden="true">S</div>
           <div class="dash-name"  id="dash-name">Sara M.</div>
           <div class="dash-email" id="dash-email">sara@example.com</div>
           <div class="dash-stat-row">
-            <div class="dash-mini-stat"><div class="val" id="dash-quizzes">0</div><div class="lbl" data-i18n="dashQuizzes">Quizzes</div></div>
-            <div class="dash-mini-stat"><div class="val" id="dash-certs">0</div>  <div class="lbl" data-i18n="dashCerts">Urkunden</div></div>
+            <div class="dash-mini"><div class="val" id="d-quizzes">0</div><div class="lbl" data-i18n="dashQ">Quizzes</div></div>
+            <div class="dash-mini"><div class="val" id="d-certs">0</div><div class="lbl"   data-i18n="dashC">Urkunden</div></div>
           </div>
-          <div>
-            <div style="font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;" data-i18n="dashXP">Erfahrungspunkte</div>
-            <div class="xp-bar-wrap">
-              <span class="xp-label" id="xp-level-lbl">Level 1</span>
-              <div class="xp-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="XP Fortschritt"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
-              <span class="xp-label" id="xp-pts">0 XP</span>
+          <div class="xp-row">
+            <span class="xp-lbl" id="xp-lv">Level 1</span>
+            <div class="xp-bar" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100" aria-label="Erfahrungspunkte">
+              <div class="xp-fill" id="xp-fill" style="width:30%"></div>
             </div>
+            <span class="xp-lbl" id="xp-pts">30 XP</span>
           </div>
-          <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:16px" onclick="logout()" data-i18n="btnLogout">Abmelden</button>
+          <button class="btn btn-ghost btn-sm" style="width:100%;margin-top:0.875rem;" onclick="logout()" data-i18n="btnLogout">Abmelden</button>
         </aside>
         <div>
           <div class="dash-card">
             <h3>🎓 <span data-i18n="dashMyCerts">Meine Urkunden</span></h3>
-            <div class="cert-list" id="cert-list"><p style="color:var(--text-muted);font-size:14px;" data-i18n="dashNoCerts">Noch keine Urkunden. Starte ein Quiz!</p></div>
+            <div id="cert-list"><p style="color:var(--text-muted);font-size:0.875rem;" data-i18n="noCerts">Noch keine Urkunden. Starte ein Quiz!</p></div>
           </div>
           <div class="dash-card">
             <h3>🏅 <span data-i18n="dashAchiev">Errungenschaften</span></h3>
-            <div class="achievement-grid" id="achievement-grid"></div>
+            <div class="ach-grid" id="ach-grid"></div>
           </div>
           <div class="dash-card">
-            <h3>📈 <span data-i18n="dashProgress">Lernfortschritt HR</span></h3>
-            <div id="progress-overview"></div>
+            <h3>📈 <span data-i18n="dashProg">Lernfortschritt HR</span></h3>
+            <div id="prog-overview"></div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</div><!-- /page-dashboard -->
 
-<!-- ──────────────────── LEGAL ──────────────────── -->
-
-<section class="page" id="section-legal" aria-labelledby="legal-h2">
-  <div class="section">
+<!-- ── PAGE: LEGAL ── -->
+<div class="page" id="page-legal">
+  <section class="section">
     <div class="container-sm">
-      <div class="section-header">
-        <span class="section-label" data-i18n="legalLabel">Rechtliches</span>
-        <h2 class="section-title" id="legal-h2" data-i18n="legalTitle">Impressum & Datenschutz</h2>
+      <div class="sec-header">
+        <span class="sec-label" data-i18n="legalLabel">Rechtliches</span>
+        <h2 class="sec-title" data-i18n="legalTitle">AGB & Datenschutz</h2>
       </div>
       <div class="legal-tabs" role="tablist" aria-label="Rechtliche Dokumente">
-        <button class="legal-tab active" role="tab" aria-selected="true"  onclick="showLegal('imp')"  data-i18n="tabImpr">Impressum</button>
+        <button class="legal-tab active" role="tab" aria-selected="true"  onclick="showLegal('imp')"  data-i18n="tabImp">Impressum</button>
         <button class="legal-tab"        role="tab" aria-selected="false" onclick="showLegal('dsde')" data-i18n="tabDSde">Datenschutz (DE)</button>
         <button class="legal-tab"        role="tab" aria-selected="false" onclick="showLegal('dses')" data-i18n="tabDSes">Privacidad (ES)</button>
-        <button class="legal-tab"        role="tab" aria-selected="false" onclick="showLegal('agb')"  data-i18n="tabAGB">AGB</button>
       </div>
       <div id="legal-imp" class="legal-content" role="tabpanel">
-        <h3 data-i18n="imprH">Impressum</h3>
-        <p>Sara Manoochehri<br>Teneriffa, Spanien<br>E-Mail: <a href="mailto:info@upskill-academy.com">info@upskill-academy.com</a></p>
-        <h3 data-i18n="imprDisH">Haftungsausschluss</h3>
-        <p data-i18n="imprDis">Diese Plattform dient ausschließlich zu Bildungszwecken. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann keine Gewähr übernommen werden.</p>
+        <h3>Impressum</h3>
+        <p>Sara Manoochehri · Teneriffa, Spanien<br />E-Mail: <a href="mailto:info@upskill-academy.com">info@upskill-academy.com</a></p>
+        <h3>Haftungsausschluss</h3>
+        <p>Diese Plattform dient ausschließlich zu Bildungszwecken.</p>
       </div>
-      <div id="legal-dsde" class="legal-content" style="display:none" role="tabpanel">
+      <div id="legal-dsde" class="legal-content" style="display:none;" role="tabpanel">
         <h3>Datenschutzerklärung</h3>
-        <p><strong>Verantwortliche:</strong> Sara Manoochehri, Teneriffa, Spanien · <a href="mailto:info@upskill-academy.com">info@upskill-academy.com</a></p>
+        <p><strong>Verantwortliche:</strong> Sara Manoochehri, Teneriffa, Spanien.</p>
         <h3>Datenverarbeitung</h3>
-        <p>Lernfortschritt wird lokal in deinem Browser (localStorage) gespeichert. Bei Registrierung werden Name und E-Mail ausschließlich zur Kontoverwaltung verarbeitet.</p>
+        <p>Lernfortschritt wird lokal im Browser (localStorage) gespeichert.</p>
         <h3>Cookies & Tracking</h3>
-        <ul><li>Keine Marketing-Cookies</li><li>Kein Tracking durch Drittanbieter</li><li>Kein Google Analytics</li></ul>
-        <h3>Deine Rechte (DSGVO)</h3>
-        <p>Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit und Widerspruch. Kontakt: <a href="mailto:info@upskill-academy.com">info@upskill-academy.com</a></p>
+        <ul><li>Keine Marketing-Cookies</li><li>Kein Drittanbieter-Tracking</li></ul>
+        <h3>Deine Rechte</h3>
+        <p>Auskunft, Berichtigung, Löschung: <a href="mailto:info@upskill-academy.com">info@upskill-academy.com</a></p>
       </div>
-      <div id="legal-dses" class="legal-content" style="display:none" role="tabpanel">
+      <div id="legal-dses" class="legal-content" style="display:none;" role="tabpanel">
         <h3>Política de Privacidad</h3>
-        <p><strong>Responsable:</strong> Sara Manoochehri, Tenerife, España · <a href="mailto:info@upskill-academy.com">info@upskill-academy.com</a></p>
+        <p><strong>Responsable:</strong> Sara Manoochehri, Tenerife, España.</p>
         <h3>Tratamiento de datos</h3>
-        <p>El progreso de aprendizaje se guarda localmente (localStorage). Al registrarte, el nombre y correo se usan exclusivamente para gestionar tu cuenta.</p>
+        <p>El progreso se guarda localmente (localStorage).</p>
         <h3>Cookies y seguimiento</h3>
-        <ul><li>Sin cookies de marketing</li><li>Sin seguimiento de terceros</li><li>Sin Google Analytics</li></ul>
-        <h3>Tus derechos (RGPD)</h3>
-        <p>Acceso, rectificación, supresión, limitación, portabilidad y oposición. Contacto: <a href="mailto:info@upskill-academy.com">info@upskill-academy.com</a></p>
-      </div>
-      <div id="legal-agb" class="legal-content" style="display:none" role="tabpanel">
-        <h3 data-i18n="agbH">Allgemeine Geschäftsbedingungen</h3>
-        <p data-i18n="agb1"><strong>§ 1 Geltungsbereich:</strong> Diese AGB gelten für die Nutzung der Upskill Academy Lernplattform.</p>
-        <p data-i18n="agb2"><strong>§ 2 Leistungsumfang:</strong> Die Plattform stellt interaktive Lernmodule und Quizzes bereit. Die kostenlose Version umfasst alle Lernmodule und das Teilen von Ergebnissen. Das PDF-Zertifikat ist nach Registrierung verfügbar.</p>
-        <p data-i18n="agb3"><strong>§ 3 Nutzungsbedingungen:</strong> Die Inhalte dienen ausschließlich zur persönlichen Weiterbildung. Eine kommerzielle Nutzung oder Weitergabe ohne Genehmigung ist untersagt.</p>
-        <p data-i18n="agb4"><strong>§ 4 Haftung:</strong> Die Inhalte wurden sorgfältig erstellt. Eine Garantie für Vollständigkeit oder Aktualität wird nicht übernommen.</p>
-        <p data-i18n="agb5"><strong>§ 5 Gerichtsstand:</strong> Es gilt spanisches Recht. Gerichtsstand ist Santa Cruz de Tenerife.</p>
+        <ul><li>Sin cookies de marketing</li><li>Sin seguimiento de terceros</li></ul>
+        <h3>Tus derechos</h3>
+        <p>Acceso, rectificación, supresión: <a href="mailto:info@upskill-academy.com">info@upskill-academy.com</a></p>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</div><!-- /page-legal -->
+```
 
-</main>
+  </main><!-- /main-content -->
 
-<!-- ══ FOOTER ══ -->
+  <!-- ══ FOOTER ══ -->
 
-<footer role="contentinfo">
-  <div class="footer-inner">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <h4>🎓 Upskill Academy</h4>
-        <p data-i18n="footerDesc">Interaktives Lernen für HR, Gehaltsabrechnung und mehr – entwickelt für Kursteilnehmer in Weiterbildungsprogrammen.</p>
+  <footer role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h2>🎓 Upskill Academy</h2>
+          <p data-i18n="footDesc">Interaktives Lernen für HR, Gehaltsabrechnung und mehr.</p>
+        </div>
+        <div class="footer-col">
+          <h3 data-i18n="footNav">Navigation</h3>
+          <ul>
+            <li><button onclick="showPage('home')"           data-i18n="navHome">Home</button></li>
+            <li><button onclick="showPage('about-platform')" data-i18n="navWhat">Was ist UA</button></li>
+            <li><button onclick="showPage('topics')"         data-i18n="navTopics">Themen</button></li>
+            <li><button onclick="showPage('certificate')"    data-i18n="navCert">Zertifikat</button></li>
+            <li><button onclick="showPage('about-me')"       data-i18n="navAbout">Über mich</button></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3 data-i18n="footLegal">AGB & Rechtliches</h3>
+          <ul>
+            <li><button onclick="showPage('legal');showLegal('imp')"  data-i18n="tabImp">Impressum</button></li>
+            <li><button onclick="showPage('legal');showLegal('dsde')" data-i18n="tabDSde">Datenschutz (DE)</button></li>
+            <li><button onclick="showPage('legal');showLegal('dses')" data-i18n="tabDSes">Privacidad (ES)</button></li>
+            <li><a href="mailto:info@upskill-academy.com">Kontakt</a></li>
+          </ul>
+        </div>
       </div>
-      <div class="footer-col">
-        <h5 data-i18n="footerNav">Navigation</h5>
-        <ul>
-          <li><button onclick="showSection('home')"           data-i18n="navHome">Home</button></li>
-          <li><button onclick="showSection('about-platform')" data-i18n="navWhat">Was ist UA</button></li>
-          <li><button onclick="showSection('topics')"         data-i18n="navTopics">Themen</button></li>
-          <li><button onclick="showSection('certificate')"    data-i18n="navCert">Zertifikat</button></li>
-          <li><button onclick="showSection('about-me')"       data-i18n="navAbout">Über mich</button></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h5 data-i18n="footerLegal">AGB & Rechtliches</h5>
-        <ul>
-          <li><button onclick="showSection('legal');showLegal('agb')"  data-i18n="tabAGB">AGB</button></li>
-          <li><button onclick="showSection('legal');showLegal('imp')"  data-i18n="tabImpr">Impressum</button></li>
-          <li><button onclick="showSection('legal');showLegal('dsde')" data-i18n="tabDSde">Datenschutz</button></li>
-          <li><button onclick="showSection('legal');showLegal('dses')" data-i18n="tabDSes">Privacidad</button></li>
-          <li><a href="mailto:info@upskill-academy.com">Kontakt</a></li>
-        </ul>
+      <div class="footer-bottom">
+        <p>© <span id="foot-year"></span> Sara Manoochehri · Upskill Academy · <span data-i18n="footRights">Alle Rechte vorbehalten</span></p>
+        <div class="footer-links">
+          <button onclick="showPage('legal');showLegal('imp')"  data-i18n="tabImp">Impressum</button>
+          <button onclick="showPage('legal');showLegal('dsde')" data-i18n="tabDSde">Datenschutz</button>
+        </div>
       </div>
     </div>
-    <div class="footer-bottom">
-      <p>© <span id="footer-year"></span> Sara Manoochehri · Upskill Academy · <span data-i18n="footerRights">Alle Rechte vorbehalten</span></p>
-      <div class="footer-links">
-        <button onclick="showSection('legal');showLegal('agb')"  data-i18n="tabAGB">AGB</button>
-        <button onclick="showSection('legal');showLegal('imp')"  data-i18n="tabImpr">Impressum</button>
-        <button onclick="showSection('legal');showLegal('dsde')" data-i18n="tabDSde">Datenschutz</button>
-      </div>
-    </div>
-  </div>
-</footer>
+  </footer>
 
-<!-- ══ AUTH MODAL ══ -->
+  <!-- ══ AUTH MODAL ══ -->
 
-<div class="modal-overlay" id="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title">
-  <div class="modal">
-    <button class="modal-close" onclick="closeAuth()" aria-label="Schließen">✕</button>
-    <div class="modal-logo">
-      <div class="logo-big" aria-hidden="true">🎓</div>
-      <h2 id="auth-title">Upskill Academy</h2>
-      <p data-i18n="authSubtitle">Speichere Fortschritt & lade Urkunden herunter</p>
-    </div>
-    <div class="modal-tabs" role="tablist">
-      <button class="modal-tab active" role="tab" aria-selected="true"  onclick="switchAuthTab('login')"    data-i18n="tabLogin">Anmelden</button>
-      <button class="modal-tab"        role="tab" aria-selected="false" onclick="switchAuthTab('register')" data-i18n="tabRegister">Registrieren</button>
-    </div>
-    <div id="auth-login" class="modal-form">
-      <div class="form-group"><label for="login-email" data-i18n="labelEmail">E-Mail</label><input type="email" id="login-email" autocomplete="email" placeholder="name@example.com"/></div>
-      <div class="form-group"><label for="login-pw"    data-i18n="labelPW">Passwort</label><input type="password" id="login-pw" autocomplete="current-password" placeholder="••••••••"/></div>
-      <button class="btn btn-primary" style="width:100%" onclick="doLogin()" data-i18n="btnDoLogin">Anmelden</button>
-      <div class="modal-divider" data-i18n="orWith">oder</div>
-      <button class="btn-social" onclick="socialLogin('Google')"><span style="font-size:20px">🔵</span> Google</button>
-    </div>
-    <div id="auth-register" class="modal-form" style="display:none">
-      <div class="form-group"><label for="reg-name"  data-i18n="labelName">Name</label><input type="text"     id="reg-name"  autocomplete="name" placeholder="Sara Manoochehri"/></div>
-      <div class="form-group"><label for="reg-email" data-i18n="labelEmail">E-Mail</label><input type="email"   id="reg-email" autocomplete="email" placeholder="name@example.com"/></div>
-      <div class="form-group">
-        <label for="reg-pw" data-i18n="labelPW">Passwort</label>
-        <input type="password" id="reg-pw" autocomplete="new-password" placeholder="Mindestens 8 Zeichen"/>
-        <span class="form-note" data-i18n="pwNote">Mindestens 8 Zeichen, inkl. Zahl.</span>
+  <div class="modal-overlay" id="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-heading">
+    <div class="modal">
+      <button class="modal-close" onclick="closeAuth()" aria-label="Modal schließen">✕</button>
+      <div class="modal-logo">
+        <div class="logo-big" aria-hidden="true">🎓</div>
+        <h2 id="auth-heading">Upskill Academy</h2>
+        <p data-i18n="authSub">Fortschritt speichern & Urkunden herunterladen</p>
       </div>
-      <button class="btn btn-primary" style="width:100%" onclick="doRegister()" data-i18n="btnDoRegister">Konto erstellen</button>
-      <p class="form-note" style="text-align:center" data-i18n="regTerms">Mit der Registrierung stimmst du unserer <button onclick="closeAuth();showSection('legal');showLegal('dsde')" style="color:var(--indigo);font-size:12px;text-decoration:underline;border:none;background:none;cursor:pointer;font-family:var(--font-sans)" data-i18n="privacyLink">Datenschutzerklärung</button> zu.</p>
+      <div class="modal-tabs" role="tablist" aria-label="Anmelden oder Registrieren">
+        <button class="modal-tab active" role="tab" aria-selected="true"  onclick="switchTab('login')"    data-i18n="tabLogin">Anmelden</button>
+        <button class="modal-tab"        role="tab" aria-selected="false" onclick="switchTab('register')" data-i18n="tabReg">Registrieren</button>
+      </div>
+
+```
+  <!-- Login Form -->
+  <form id="form-login" class="modal-form" novalidate onsubmit="doLogin(event)">
+    <div class="form-group">
+      <label for="li-email" data-i18n="lEmail">E-Mail</label>
+      <input type="email" id="li-email" autocomplete="email" placeholder="name@example.com" required aria-required="true" />
     </div>
-  </div>
+    <div class="form-group">
+      <label for="li-pw" data-i18n="lPW">Passwort</label>
+      <input type="password" id="li-pw" autocomplete="current-password" placeholder="••••••••" required aria-required="true" />
+    </div>
+    <button type="submit" class="btn btn-primary" style="width:100%;" data-i18n="doLogin">Anmelden</button>
+    <div class="modal-divider" data-i18n="orWith">oder</div>
+    <button type="button" class="btn-social" onclick="showToast('Google-Login kommt bald!')"><span style="font-size:1.25rem;">🔵</span> Google</button>
+  </form>
+
+  <!-- Register Form -->
+  <form id="form-register" class="modal-form" novalidate onsubmit="doRegister(event)" style="display:none;">
+    <div class="form-group">
+      <label for="rg-name" data-i18n="lName">Name</label>
+      <input type="text" id="rg-name" autocomplete="name" placeholder="Sara Manoochehri" required aria-required="true" />
+    </div>
+    <div class="form-group">
+      <label for="rg-email" data-i18n="lEmail">E-Mail</label>
+      <input type="email" id="rg-email" autocomplete="email" placeholder="name@example.com" required aria-required="true" />
+    </div>
+    <div class="form-group">
+      <label for="rg-pw" data-i18n="lPW">Passwort</label>
+      <input type="password" id="rg-pw" autocomplete="new-password" placeholder="Min. 8 Zeichen" required minlength="8" aria-required="true" aria-describedby="pw-hint" />
+      <span class="form-note" id="pw-hint" data-i18n="pwNote">Mindestens 8 Zeichen.</span>
+    </div>
+    <button type="submit" class="btn btn-primary" style="width:100%;" data-i18n="doReg">Konto erstellen</button>
+    <p class="form-note" style="text-align:center;" data-i18n="regTerms">Mit der Registrierung stimmst du unserer Datenschutzerklärung zu.</p>
+  </form>
 </div>
+```
 
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
 
-<!-- ══════════════════════════════════════════
-     JAVASCRIPT
-══════════════════════════════════════════ -->
+  <!-- ══ LIVE REGION (Toast) ══ -->
 
-<script>
-// ── i18n ──────────────────────────────────────
-const I18N = {
-  de:{
-    navHome:'Home',navWhat:'Was ist UA',navTopics:'Themen',navCert:'Zertifikat',navAbout:'Über mich',navLogin:'Anmelden',
-    drawerLangLabel:'Sprache wählen',drawerA11yLabel:'Barrierefreiheit',
-    a11yContrast:'◑ Kontrast',a11yLarge:'A⁺ Schrift',a11yDyslexia:'𝔸 Legasthenie',a11yMotion:'⏸ Animationen',
-    heroBadge:'Interaktives Lernen',heroTitle2:'Academy',heroDesc:'Die Upskill Academy App ist eine interaktive Lernplattform, die dir ermöglicht, Fachwissen in administrativen Bereichen wie HR, Gehaltsabrechnung und mehr spielerisch zu erlernen – auch direkt am Smartphone oder Tablet möglich.',heroQuizBtn:'🚀 Zum Quiz',heroLearnMore:'Mehr erfahren',scrollDown:'scroll',
-    featLabel:'Warum Upskill Academy?',featTitle:'Lernen, das wirklich funktioniert',featSub:'Entwickelt für Kursteilnehmer in Weiterbildungsprogrammen.',
-    feat1T:'Sofortiges Feedback',feat1P:'Nach jeder Antwort siehst du direkt ob du richtig lagst – mit Erklärung.',feat2T:'Lernen unterwegs',feat2P:'Optimiert für Smartphone und Tablet.',feat3T:'Praxisnah & relevant',feat3P:'Echte Inhalte aus Weiterbildungskursen.',feat4T:'Persönliche Urkunde',feat4P:'Beende ein Modul und erhalte dein Zertifikat.',
-    stat1:'Fragen · HR-Modul',stat2:'Sprachen',stat3:'Level pro Thema',stat4:'Kostenlos starten',
-    apLabel:'Die Plattform',apTitle:'Was ist Upskill Academy?',apSub:'Eine interaktive Lernapp für Weiterbildungskurse.',
-    step1T:'Quiz-basiertes Lernen',step1P:'Lerne durch gezielte Fragen und Antworten.',step2T:'Sofortiges Feedback',step2P:'Verstehe warum eine Antwort richtig oder falsch ist.',step3T:'Stufensystem',step3P:'Steige im Rang auf.',step4T:'Drei Sprachen',step4P:'DE, EN und ES.',step5T:'Barrierefreies Lernen',step5P:'Screenreader, Tastatur, Hoher Kontrast, Legasthenie-Schrift, Leselineal.',
-    advTitle:'Deine Vorteile',adv1T:'Interaktiv',adv1P:'Aktives Lernen statt passivem Lesen.',adv2T:'Praxisnah',adv2P:'Echte Kursinhalte wie beim CEP Norte.',adv3T:'Sofortig',adv3P:'Perfekt zur Prüfungsvorbereitung.',
-    topicsLabel:'Lernbereiche',topicsTitle:'Wähle dein Thema',topicsSub:'Jedes Thema führt durch Module und Quizzes.',
-    top1N:'HR – Human Resources',top1D:'Strategische Personalführung, Wettbewerbsvorteil',top1M:'4 Module · 40 Fragen · Verfügbar',top2N:'Gehaltsabrechnung',top2D:'Lohnarten, Abzüge, Steuerrecht',top3N:'Buchhaltung',top3D:'Grundlagen, Bilanz, GuV',top4N:'Marketing',top4D:'Grundlagen, Strategien, Digital',top5N:'Office Skills',top5D:'Excel, Kommunikation, PM',comingSoon:'Demnächst',
-    backTopics:'Zurück zu Themen',qsTitle:'Wähle dein Modul',backModules:'Zurück zu Modulen',qPill:'Frage',
-    certLabel:'Abschluss',certTitle:'Dein Zertifikat',certSub:'Zertifikate abgestuft nach deiner Leistung.',
-    ct0T:'Teilnahme',ct0P:'Unter 50%',ct1T:'Bestanden',ct1P:'50–74%',ct2T:'Mit Auszeichnung',ct2P:'75–99%',ct3T:'Höchstauszeichnung',ct3P:'100% – Perfekt!',
-    premH:'Premium Download',premP:'Teilen ist kostenlos. Für den PDF-Download ist eine Registrierung erforderlich.',premBtn:'Jetzt registrieren & starten',
-    amLabel:'Gründerin',amBio:'Gebürtige Iranerin, aufgewachsen in Deutschland, lebt auf Teneriffa.',amQuote:'„Ich habe einen HR-Kurs gemacht und dachte: Wie cool wäre es, das am Handy zu lernen und direkt abgefragt zu werden. Und hier sind wir."',amMission:'Die Upskill Academy macht Lernen einfacher, zugänglicher und angenehmer.',amVision:'Langfristig möchte ich die Plattform Kurscentern wie dem CEP Norte anbieten.',
-    shareTitle:'🎉 Ergebnis teilen',shareCopy:'Kopieren',certLoginHint:'🔒 Registriere dich, um deine Urkunde als PDF herunterzuladen.',certRegisterBtn:'Jetzt registrieren',
-    dashLabel:'Mein Bereich',dashTitle:'Mein Lernfortschritt',dashQuizzes:'Quizzes',dashCerts:'Urkunden',dashXP:'Erfahrungspunkte',dashMyCerts:'Meine Urkunden',dashNoCerts:'Noch keine Urkunden. Starte ein Quiz!',dashAchiev:'Errungenschaften',dashProgress:'Lernfortschritt HR',btnLogout:'Abmelden',
-    legalLabel:'Rechtliches',legalTitle:'Impressum & Datenschutz',tabImpr:'Impressum',tabDSde:'Datenschutz (DE)',tabDSes:'Privacidad (ES)',tabAGB:'AGB',imprH:'Impressum',imprDisH:'Haftungsausschluss',imprDis:'Diese Plattform dient ausschließlich zu Bildungszwecken.',agbH:'AGB',agb1:'§ 1 Geltungsbereich: Diese AGB gelten für die Nutzung der Upskill Academy.',agb2:'§ 2 Leistungsumfang: Lernmodule kostenlos, PDF-Zertifikat nach Registrierung.',agb3:'§ 3 Nutzung: Ausschließlich persönliche Weiterbildung.',agb4:'§ 4 Haftung: Keine Garantie für Vollständigkeit.',agb5:'§ 5 Gerichtsstand: Spanisches Recht, Santa Cruz de Tenerife.',
-    footerDesc:'Interaktives Lernen für HR & Administration.',footerNav:'Navigation',footerLegal:'AGB & Rechtliches',footerRights:'Alle Rechte vorbehalten',
-    authSubtitle:'Speichere Fortschritt & lade Urkunden herunter',tabLogin:'Anmelden',tabRegister:'Registrieren',labelEmail:'E-Mail',labelPW:'Passwort',labelName:'Name',pwNote:'Mindestens 8 Zeichen.',regTerms:'Mit der Registrierung stimmst du unserer',privacyLink:'Datenschutzerklärung',btnDoLogin:'Anmelden',btnDoRegister:'Konto erstellen',orWith:'oder',
-    q_label:'FRAGE',q_of:'von',q_next:'Weiter →',q_correct:'✅ Richtig!',q_wrong:'❌ Falsch.',btnRetry:'Nochmal',btnDL:'Urkunde herunterladen',btnHome:'Übersicht',
-    lbl_correct:'Richtig',lbl_wrong:'Falsch',lbl_pct:'Quote',lbl_name:'📝 Name für die Urkunde:',name_ph:'Vollständiger Name...',
-    ranks:['Praktikant','HR-Assistent','Sachbearbeiter','HR-Specialist','HR-Analyst','HR Business Partner','HR-Manager'],
-    difficulties:['Leicht','Mittel','Schwer','Experte'],
-    levelNames:['Grundlagen','Wettbewerbsvorteil','Planung & Struktur','HR-Manager Level'],
-    levelDesc:['Einstieg in die strategische HR-Direktion.','Verstehe, wie HR einen Wettbewerbsvorteil schafft.','Strategische Personalplanung und Struktur.','Der ultimative Test!'],
-    rankUp:'🎉 Rang-Aufstieg! Du bist jetzt:',rankLabel:'Du bist jetzt:',
-    bestMedal:'Beste Medaille:',questionsInfo:'10 Fragen ·',prevLevel:'Vorheriges Level abschließen',
-    lockedToast:'🔒 Schließe zuerst das vorherige Level ab!',noNameToast:'✏️ Bitte gib deinen Namen ein!',dlToast:'📜 Urkunde heruntergeladen!',
-    resultTitles:['Versuch es nochmal 💪','Bestanden! 👍','Sehr gut! 👏','Hervorragend! 🎉'],
-    certTiers:[{min:0,max:49,title:'Teilnahmeurkunde',medal:'📜'},{min:50,max:74,title:'Urkunde – Bestanden',medal:'🥉'},{min:75,max:99,title:'Urkunde – Mit Auszeichnung',medal:'🥈'},{min:100,max:100,title:'Urkunde – Höchstauszeichnung',medal:'🏆'}],
-    certHereby:'hat erfolgreich am Quiz',certCompleted:'der Upskill Academy teilgenommen und',certScored:'der Fragen korrekt beantwortet.',certSigned:'Ausgestellt von',certDate:'Datum',certModule:'HR – Strategische Personalführung',
-  },
-  en:{
-    navHome:'Home',navWhat:'About UA',navTopics:'Topics',navCert:'Certificate',navAbout:'About me',navLogin:'Sign in',
-    drawerLangLabel:'Language',drawerA11yLabel:'Accessibility',
-    a11yContrast:'◑ Contrast',a11yLarge:'A⁺ Large text',a11yDyslexia:'𝔸 Dyslexia',a11yMotion:'⏸ Animations',
-    heroBadge:'Interactive Learning',heroTitle2:'Academy',heroDesc:'The Upskill Academy app is an interactive learning platform that lets you master knowledge in administrative fields like HR, payroll and more – available directly on your smartphone or tablet.',heroQuizBtn:'🚀 Go to Quiz',heroLearnMore:'Learn more',scrollDown:'scroll',
-    featLabel:'Why Upskill Academy?',featTitle:'Learning that actually works',featSub:'Built for students in continuing education programmes.',
-    feat1T:'Instant Feedback',feat1P:'After every answer you see if you were right – with explanation.',feat2T:'Learn on the go',feat2P:'Optimised for smartphone and tablet.',feat3T:'Practical & relevant',feat3P:'Real content from actual training courses.',feat4T:'Personal Certificate',feat4P:'Get your certificate after completing a module.',
-    stat1:'Questions · HR Module',stat2:'Languages',stat3:'Levels per topic',stat4:'Free to start',
-    apLabel:'The Platform',apTitle:'What is Upskill Academy?',apSub:'An interactive learning app for continuing education.',
-    step1T:'Quiz-based learning',step1P:'Learn through targeted questions and answers.',step2T:'Instant feedback',step2P:'Understand why an answer is right or wrong.',step3T:'Level system',step3P:'Rank up from intern to HR manager.',step4T:'Three languages',step4P:'DE, EN and ES.',step5T:'Accessible learning',step5P:'Screen reader, keyboard, high contrast, dyslexia font, reading ruler.',
-    advTitle:'Your benefits',adv1T:'Interactive',adv1P:'Active learning instead of passive reading.',adv2T:'Practical',adv2P:'Real course content like at CEP Norte.',adv3T:'Instant',adv3P:'Perfect exam preparation.',
-    topicsLabel:'Learning areas',topicsTitle:'Choose your topic',topicsSub:'Each topic guides you through modules and quizzes.',
-    top1N:'HR – Human Resources',top1D:'Strategic HR, competitive advantage',top1M:'4 modules · 40 questions · Available',top2N:'Payroll',top2D:'Wages, deductions, tax law',top3N:'Accounting',top3D:'Basics, balance sheet, P&L',top4N:'Marketing',top4D:'Basics, strategies, digital',top5N:'Office Skills',top5D:'Excel, communication, PM',comingSoon:'Coming soon',
-    backTopics:'Back to topics',qsTitle:'Choose your module',backModules:'Back to modules',qPill:'Question',
-    certLabel:'Completion',certTitle:'Your Certificate',certSub:'Certificates graded by your performance.',
-    ct0T:'Participation',ct0P:'Under 50%',ct1T:'Passed',ct1P:'50–74%',ct2T:'With Distinction',ct2P:'75–99%',ct3T:'Highest Distinction',ct3P:'100% – Perfect!',
-    premH:'Premium Download',premP:'Sharing is free. PDF download requires registration.',premBtn:'Register & start now',
-    amLabel:'Founder',amBio:'Born in Iran, raised in Germany, living in Tenerife.',amQuote:'"I did an HR course and thought: how cool would it be to learn this on my phone and get quizzed. And here we are."',amMission:'Upskill Academy makes learning simpler, more accessible and enjoyable.',amVision:'Long-term I want to offer this to course centres like CEP Norte.',
-    shareTitle:'🎉 Share your result',shareCopy:'Copy',certLoginHint:'🔒 Register to download your certificate as PDF.',certRegisterBtn:'Register now',
-    dashLabel:'My area',dashTitle:'My Learning Progress',dashQuizzes:'Quizzes',dashCerts:'Certs',dashXP:'Experience points',dashMyCerts:'My Certificates',dashNoCerts:'No certificates yet. Start a quiz!',dashAchiev:'Achievements',dashProgress:'HR Learning Progress',btnLogout:'Sign out',
-    legalLabel:'Legal',legalTitle:'Legal Notice & Privacy',tabImpr:'Legal Notice',tabDSde:'Privacy (DE)',tabDSes:'Privacidad (ES)',tabAGB:'Terms',imprH:'Legal Notice',imprDisH:'Disclaimer',imprDis:'This platform is for educational purposes only.',agbH:'Terms & Conditions',agb1:'§ 1 Scope: These terms apply to the use of Upskill Academy.',agb2:'§ 2 Services: Learning modules are free; PDF certificate available after registration.',agb3:'§ 3 Usage: Personal training use only.',agb4:'§ 4 Liability: No guarantee for completeness.',agb5:'§ 5 Jurisdiction: Spanish law, Santa Cruz de Tenerife.',
-    footerDesc:'Interactive learning for HR & Administration.',footerNav:'Navigation',footerLegal:'Terms & Legal',footerRights:'All rights reserved',
-    authSubtitle:'Save progress & download certificates',tabLogin:'Sign in',tabRegister:'Register',labelEmail:'Email',labelPW:'Password',labelName:'Name',pwNote:'At least 8 characters.',regTerms:'By registering you agree to our',privacyLink:'Privacy Policy',btnDoLogin:'Sign in',btnDoRegister:'Create account',orWith:'or',
-    q_label:'QUESTION',q_of:'of',q_next:'Next →',q_correct:'✅ Correct!',q_wrong:'❌ Wrong.',btnRetry:'Try again',btnDL:'Download Certificate',btnHome:'Overview',
-    lbl_correct:'Correct',lbl_wrong:'Wrong',lbl_pct:'Score',lbl_name:'📝 Your name for the certificate:',name_ph:'Full name...',
-    ranks:['Intern','HR Assistant','Administrator','HR Specialist','HR Analyst','HR Business Partner','HR Manager'],
-    difficulties:['Easy','Medium','Hard','Expert'],
-    levelNames:['Fundamentals','Competitive Advantage','Planning & Structure','HR Manager Level'],
-    levelDesc:['Introduction to strategic HR.','How HR creates competitive advantage.','Strategic workforce planning.','The ultimate test!'],
-    rankUp:'🎉 Rank up! You are now:',rankLabel:'You are now:',
-    bestMedal:'Best medal:',questionsInfo:'10 questions ·',prevLevel:'Complete previous level first',
-    lockedToast:'🔒 Complete the previous level first!',noNameToast:'✏️ Please enter your name!',dlToast:'📜 Certificate downloaded!',
-    resultTitles:['Try again 💪','Passed! 👍','Well done! 👏','Outstanding! 🎉'],
-    certTiers:[{min:0,max:49,title:'Certificate of Participation',medal:'📜'},{min:50,max:74,title:'Certificate – Passed',medal:'🥉'},{min:75,max:99,title:'Certificate – With Distinction',medal:'🥈'},{min:100,max:100,title:'Certificate – Highest Distinction',medal:'🏆'}],
-    certHereby:'has successfully participated in the quiz',certCompleted:'of Upskill Academy and answered',certScored:'of the questions correctly.',certSigned:'Issued by',certDate:'Date',certModule:'HR – Strategic People Management',
-  },
-  es:{
-    navHome:'Inicio',navWhat:'Qué es UA',navTopics:'Temas',navCert:'Certificado',navAbout:'Sobre mí',navLogin:'Acceder',
-    drawerLangLabel:'Idioma',drawerA11yLabel:'Accesibilidad',
-    a11yContrast:'◑ Contraste',a11yLarge:'A⁺ Letra grande',a11yDyslexia:'𝔸 Dislexia',a11yMotion:'⏸ Animaciones',
-    heroBadge:'Aprendizaje interactivo',heroTitle2:'Academy',heroDesc:'La app Upskill Academy es una plataforma de aprendizaje interactiva que te permite dominar conocimientos en áreas administrativas como RRHH, nóminas y más – también directamente desde tu smartphone o tablet.',heroQuizBtn:'🚀 Al Quiz',heroLearnMore:'Saber más',scrollDown:'scroll',
-    featLabel:'¿Por qué Upskill Academy?',featTitle:'Aprendizaje que realmente funciona',featSub:'Diseñado para estudiantes en programas de formación continua.',
-    feat1T:'Feedback inmediato',feat1P:'Tras cada respuesta sabes si acertaste, con explicación.',feat2T:'Aprende en movimiento',feat2P:'Optimizado para smartphone y tablet.',feat3T:'Práctico y relevante',feat3P:'Contenido real de cursos de formación.',feat4T:'Certificado personal',feat4P:'Obtén tu certificado al completar un módulo.',
-    stat1:'Preguntas · Módulo RRHH',stat2:'Idiomas',stat3:'Niveles por tema',stat4:'Empieza gratis',
-    apLabel:'La plataforma',apTitle:'¿Qué es Upskill Academy?',apSub:'Una app de aprendizaje interactiva para la formación continua.',
-    step1T:'Aprendizaje por quiz',step1P:'Aprende con preguntas y respuestas específicas.',step2T:'Feedback inmediato',step2P:'Entiende por qué una respuesta es correcta o incorrecta.',step3T:'Sistema de niveles',step3P:'Sube de rango.',step4T:'Tres idiomas',step4P:'DE, EN y ES.',step5T:'Aprendizaje accesible',step5P:'Lector de pantalla, teclado, alto contraste, fuente para dislexia, regla de lectura.',
-    advTitle:'Tus ventajas',adv1T:'Interactivo',adv1P:'Aprendizaje activo en lugar de lectura pasiva.',adv2T:'Práctico',adv2P:'Contenido real como en el CEP Norte.',adv3T:'Inmediato',adv3P:'Perfecto para preparar exámenes.',
-    topicsLabel:'Áreas de aprendizaje',topicsTitle:'Elige tu tema',topicsSub:'Cada tema te guía por módulos y quizzes.',
-    top1N:'RRHH – Recursos Humanos',top1D:'Dirección estratégica, ventaja competitiva',top1M:'4 módulos · 40 preguntas · Disponible',top2N:'Nóminas',top2D:'Tipos de salario, deducciones, fiscalidad',top3N:'Contabilidad',top3D:'Fundamentos, balance, resultados',top4N:'Marketing',top4D:'Fundamentos, estrategias, digital',top5N:'Habilidades de oficina',top5D:'Excel, comunicación, PM',comingSoon:'Próximamente',
-    backTopics:'Volver a temas',qsTitle:'Elige tu módulo',backModules:'Volver a módulos',qPill:'Pregunta',
-    certLabel:'Finalización',certTitle:'Tu Certificado',certSub:'Certificados graduados según tu rendimiento.',
-    ct0T:'Participación',ct0P:'Menos del 50%',ct1T:'Aprobado',ct1P:'50–74%',ct2T:'Con distinción',ct2P:'75–99%',ct3T:'Máxima distinción',ct3P:'100% – ¡Perfecto!',
-    premH:'Descarga Premium',premP:'Compartir es gratis. La descarga en PDF requiere registro.',premBtn:'Regístrate y empieza',
-    amLabel:'Fundadora',amBio:'De origen iraní, criada en Alemania, vive en Tenerife.',amQuote:'"Hice un curso de RRHH y pensé: ¡qué genial sería aprender esto en el móvil y que me preguntaran! Y aquí estamos."',amMission:'Upskill Academy hace el aprendizaje más sencillo y accesible.',amVision:'A largo plazo quiero ofrecer la plataforma a centros como el CEP Norte.',
-    shareTitle:'🎉 Compartir resultado',shareCopy:'Copiar',certLoginHint:'🔒 Regístrate para descargar tu diploma en PDF.',certRegisterBtn:'Registrarse ahora',
-    dashLabel:'Mi área',dashTitle:'Mi progreso de aprendizaje',dashQuizzes:'Quizzes',dashCerts:'Diplomas',dashXP:'Puntos de experiencia',dashMyCerts:'Mis Diplomas',dashNoCerts:'Sin diplomas aún. ¡Empieza un quiz!',dashAchiev:'Logros',dashProgress:'Progreso RRHH',btnLogout:'Cerrar sesión',
-    legalLabel:'Legal',legalTitle:'Aviso legal y privacidad',tabImpr:'Aviso legal',tabDSde:'Datenschutz (DE)',tabDSes:'Privacidad (ES)',tabAGB:'CGC',imprH:'Aviso legal',imprDisH:'Exención de responsabilidad',imprDis:'Esta plataforma es exclusivamente para fines educativos.',agbH:'Condiciones Generales',agb1:'§ 1 Ámbito: Estas condiciones se aplican al uso de Upskill Academy.',agb2:'§ 2 Servicios: Módulos gratuitos; certificado PDF tras registro.',agb3:'§ 3 Uso: Exclusivamente formación personal.',agb4:'§ 4 Responsabilidad: Sin garantía de integridad.',agb5:'§ 5 Jurisdicción: Derecho español, Santa Cruz de Tenerife.',
-    footerDesc:'Aprendizaje interactivo para RRHH y administración.',footerNav:'Navegación',footerLegal:'CGC y legal',footerRights:'Todos los derechos reservados',
-    authSubtitle:'Guarda tu progreso y descarga diplomas',tabLogin:'Acceder',tabRegister:'Registrarse',labelEmail:'Correo',labelPW:'Contraseña',labelName:'Nombre',pwNote:'Mínimo 8 caracteres.',regTerms:'Al registrarte aceptas nuestra',privacyLink:'política de privacidad',btnDoLogin:'Acceder',btnDoRegister:'Crear cuenta',orWith:'o',
-    q_label:'PREGUNTA',q_of:'de',q_next:'Siguiente →',q_correct:'✅ ¡Correcto!',q_wrong:'❌ Incorrecto.',btnRetry:'Reintentar',btnDL:'Descargar Diploma',btnHome:'Inicio',
-    lbl_correct:'Correctas',lbl_wrong:'Incorrectas',lbl_pct:'Porcentaje',lbl_name:'📝 Tu nombre para el diploma:',name_ph:'Nombre completo...',
-    ranks:['Becario','Asistente RRHH','Administrativo','Especialista RRHH','Analista RRHH','HR Business Partner','HR Manager'],
-    difficulties:['Fácil','Medio','Difícil','Experto'],
-    levelNames:['Fundamentos','Ventaja Competitiva','Planificación & Estructura','Nivel HR Manager'],
-    levelDesc:['Introducción a la dirección estratégica.','Cómo RRHH crea ventaja competitiva.','Planificación estratégica y estructura.','¡La prueba definitiva!'],
-    rankUp:'🎉 ¡Subida de rango! Ahora eres:',rankLabel:'Ahora eres:',
-    bestMedal:'Mejor medalla:',questionsInfo:'10 preguntas ·',prevLevel:'Completa el nivel anterior',
-    lockedToast:'🔒 ¡Completa primero el nivel anterior!',noNameToast:'✏️ ¡Por favor introduce tu nombre!',dlToast:'📜 ¡Diploma descargado!',
-    resultTitles:['¡Inténtalo de nuevo! 💪','¡Aprobado! 👍','¡Muy bien! 👏','¡Excelente! 🎉'],
-    certTiers:[{min:0,max:49,title:'Certificado de Participación',medal:'📜'},{min:50,max:74,title:'Certificado – Aprobado',medal:'🥉'},{min:75,max:99,title:'Certificado – Con distinción',medal:'🥈'},{min:100,max:100,title:'Certificado – Máxima distinción',medal:'🏆'}],
-    certHereby:'ha participado exitosamente en el quiz',certCompleted:'de Upskill Academy y ha respondido',certScored:'de las preguntas correctamente.',certSigned:'Emitido por',certDate:'Fecha',certModule:'RRHH – Dirección Estratégica',
-  }
-};
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
-// ── QUESTIONS (full set) ──────────────────────
-const QDB_DE = [
-  [{q:'Was ist die Dirección Estratégica de RRHH?',a:['Ein rein administrativer Ansatz','Ein Ansatz, der HR in die Unternehmensstrategie integriert','Eine Abteilung, die nur Gehälter berechnet','Eine externe Beratungsstelle'],correct:1,exp:'Sie integriert Personalmanagement ins Zentrum der Unternehmensstrategie.'},
-   {q:'Woraus entsteht jede HR-Strategie?',a:['Aus dem Wunsch des Personalchefs','Aus der Unternehmensstrategie','Aus gesetzlichen Vorgaben','Aus Branchentrends'],correct:1,exp:'Jede HR-Strategie entspringt der Unternehmensstrategie.'},
-   {q:'In welcher Etappe ist HR reaktiv?',a:['Etapa 3','Etapa 2','Etapa 1','Etapa 4'],correct:2,exp:'Etapa 1 ist der reaktive Ansatz: nur Verträge und Gehaltslisten.'},
-   {q:'Was bedeutet „reaktiv"?',a:['Proaktiv reagieren','Erst handeln wenn ein Problem aufgetreten ist','Daten analysieren','Personal strategisch planen'],correct:1,exp:'Reaktiv: nur handeln, wenn etwas schiefläuft.'},
-   {q:'Typisches Beispiel für HR in Etapa 1?',a:['People Analytics','An der Strategie teilnehmen','Erst Ersatz suchen wenn jemand kündigt','Klimabefragungen'],correct:2,exp:'In Etapa 1 beginnt HR erst nach der Kündigung mit der Suche.'},
-   {q:'Was ist Etapa 2?',a:['Weniger Aufgaben','Spezialisierte Funktionen: Auswahl, Schulung, Motivation','Vollständige Integration','Vollständige Automatisierung'],correct:1,exp:'Etapa 2: neue Funktionen, aber noch keine strategische Teilnahme.'},
-   {q:'Was bedeutet Etapa 3?',a:['Nur administrativ','HR wird Schlüsselabteilung für die Zukunft','Nur mit Gewerkschaften','Verantwortlich für Marketing'],correct:1,exp:'Etapa 3: HR wird proaktiv und analytisch.'},
-   {q:'Welche Technologien beschleunigen strategisches HR?',a:['Fax und Drucker','Digitalisierung, Homeoffice, Automatisierung, KI','Nur Social Media','Nur Cloud'],correct:1,exp:'Digitalisierung, Telearbeit, Automatisierung und KI.'},
-   {q:'Was ist People Analytics?',a:['HR-Software für Gehälter','Analyse von Personaldaten für datenbasierte Entscheidungen','Verfahren zur Rekrutierung','Teambuilding-Methode'],correct:1,exp:'Personaldaten analysieren wie Finanzdaten.'},
-   {q:'HR bei internationaler Expansion?',a:['Mehr Büromaterial','Sprachkenntnisse, interkulturelle Kompetenz, Mobilitätspolitiken','Alle entlassen','Nur Gehaltsstruktur'],correct:1,exp:'Sprachkenntnisse, interkulturelle Kompetenzen und Mobilitätspolitiken vorausplanen.'}],
-  [{q:'Was bedeutet Wettbewerbsvorteil im HR-Kontext?',a:['Niedrigere Gehälter','Durch Mitarbeiter dauerhaft besser als Konkurrenten','Mehr Werbung','Mehr Technologie'],correct:1,exp:'Wettbewerbsvorteil durch einzigartige, schwer kopierbare Mitarbeiter.'},
-   {q:'Drei Bedingungen für Wettbewerbsvorteil?',a:['Billig, jung, flexibel','Schwer zu imitieren, wertschöpfend, nachhaltig','Nur hohe Bildung','Überstunden'],correct:1,exp:'Schwer zu imitieren, wertschöpfend organisiert, nachhaltig.'},
-   {q:'Was bedeutet Upskilling?',a:['Entlassen und ersetzen','Bestehende Fähigkeiten verbessern','Neuen Rol annehmen','Nur externe Schulungen'],correct:1,exp:'Bestehende Kompetenzen verbessern.'},
-   {q:'Was bedeutet Reskilling?',a:['Gleicher Job neue Werkzeuge','Neue Fähigkeiten für anderen Beruf','Auf Rente vorbereiten','Führungskompetenz'],correct:1,exp:'Berufliche Neuausrichtung.'},
-   {q:'HR bei innovationsorientiertem Unternehmen?',a:['Strenge Kontrolle','Kreativität, Fehlertoleranz, Teamarbeit','Kosten reduzieren','Hierarchien stärken'],correct:1,exp:'Diverse Teams, kreative Räume, Anerkennung neuer Ideen.'},
-   {q:'Was passiert ohne HR-Wettbewerbsvorteil?',a:['Internationaler Erfolg','Hohe Fluktuation, schlechtes Klima, Talentmangel','Mehr Motivation','Mehr Produktivität'],correct:1,exp:'Fluktuation, schlechtes Klima, Talentschwierigkeiten.'},
-   {q:'Warum sind Menschen schwerer zu kopieren als Maschinen?',a:['Menschen sind billiger','Einzigartige Kombination aus Talent, Kultur, Führung','Keine Technologie','Gesetze'],correct:1,exp:'Die einzigartige Kombination ist extrem schwer zu replizieren.'},
-   {q:'HR in kundenserviceorientiertem Unternehmen?',a:['Nur Techniker','Soziale Kompetenzen, Empathie, kundenbezogene Anreize','Nur Gehalte','Nur Effizienz'],correct:1,exp:'Soziale Fähigkeiten und Anreize an Kundenzufriedenheit.'},
-   {q:'Aufgabe von HR bezüglich Führung?',a:['Führungskräfte entfernen','In Kommunikation, Motivation, Konfliktmanagement schulen','Gehaltserhöhungen','Ignorieren'],correct:1,exp:'HR schult Führungskräfte in Kommunikation und Konfliktlösung.'},
-   {q:'Was sind Vergütungs- und Anerkennungssysteme?',a:['Nur Grundgehalt','Gehälter, Anreize, Vorteile für Gewinnung und Bindung','Nur Boni','Strafmaßnahmen'],correct:1,exp:'Gehälter, Anreize und Sozialleistungen.'}],
-  [{q:'Was ist strategische Personalplanung?',a:['Nur auf Vakanzen reagieren','Vorausdenken welche Mitarbeiter gebraucht werden','Alle gleich einsetzen','Nur externe Beratung'],correct:1,exp:'Vorhersehen, vorbereiten, ausrichten.'},
-   {q:'Logische Reihenfolge Personalplanung?',a:['HR→Unternehmen→Markt','Unternehmensstrategie→HR→Plan','Mitarbeiter→HR→Unternehmen','Gesetz→HR→Unternehmen'],correct:1,exp:'Strategie → HR übersetzt → Aktionsplan.'},
-   {q:'Was analysiert HR beim internen Audit?',a:['Nur Konkurrenz','Belegschaft, Kompetenzen, Klima, Prozesse','Nur Finanzen','Nur Gehälter'],correct:1,exp:'Belegschaft, Kompetenzen, Klima, Effizienz der Prozesse.'},
-   {q:'Was enthält ein DAFO für HR?',a:['Nur Stärken/Schwächen','Stärken, Schwächen, Chancen, Risiken','Nur externe Analyse','Nur Zufriedenheitsdaten'],correct:1,exp:'Alle vier Dimensionen.'},
-   {q:'Quantitative vs. qualitative Personalplanung?',a:['Quantitativ=Gehälter; Qualitativ=Kompetenzen','Quantitativ=Wie viele? Qualitativ=Welche Profile?','Intern vs. extern','Kein Unterschied'],correct:1,exp:'Quantitativ: Anzahl. Qualitativ: Fähigkeiten und Profile.'},
-   {q:'Typische HR-KPIs?',a:['Aktienkurs','Fluktuationsrate, Absentismus, Schulungsstunden, Zufriedenheit','Nur Umsatz','Nur Kundenbewertungen'],correct:1,exp:'Fluktuation, Absentismus, Vakanzdauer, Schulungsstunden.'},
-   {q:'Funktion von Selektion & Rekrutierung?',a:['Nur Gehaltsverhandlungen','Richtige Personen: Profil→Stelle→Onboarding','Nur Schulungen','Nur gesetzliche Pflichten'],correct:1,exp:'Profil, Ausschreibung, Interviews, Onboarding.'},
-   {q:'Was ist die Rolle des HR Business Partner?',a:['Externer Berater','RRHH-Person für Geschäftsbereich als interner Berater','Der CEO','Nur Schulungen'],correct:1,exp:'HRBP: HR-Spezialist für einen Unternehmensbereich.'},
-   {q:'Was macht ein People Analyst?',a:['Teambuilding','Personaldaten analysieren für datenbasierte Entscheidungen','Tarifverträge','Nur Ausschreibungen'],correct:1,exp:'HR-Daten analysieren für evidenzbasierte Entscheidungen.'},
-   {q:'HR-Struktur Großunternehmen vs. KMU?',a:['Großunternehmen weniger HR','Großunternehmen: spezialisiert; KMU: 1-3 Personen','KMU immer ausgelagert','Kein Unterschied'],correct:1,exp:'Großunternehmen: vollständige Abteilung. KMU: 1-3 Personen.'}],
-  [{q:'Was bedeutet HR als Transformationsagent?',a:['Nur Strukturen verwalten','Veränderungen anstoßen, begleiten, Widerstände reduzieren','Alle ersetzen','Nur externe Berater'],correct:1,exp:'Wandel initiieren und Mitarbeiter begleiten.'},
-   {q:'HR bei digitaler Transformation?',a:['Nur Software kaufen','Kompetenzlücken identifizieren, digitale Schulungen, Begleitung','Alle durch Roboter','Nur IT'],correct:1,exp:'Kompetenzlücken identifizieren und digitale Schulungen gestalten.'},
-   {q:'Hauptziele der HR-Gestión?',a:['Nur Kosten senken','Richtige Personen gewinnen, entwickeln, halten, motivieren, sicheres Umfeld','Nur Gehälter','Nur Gesetze'],correct:1,exp:'6 Ziele: anziehen, entwickeln, halten, motivieren, Umfeld, ausrichten.'},
-   {q:'Strategische, taktische, operative Ziele?',a:['Alle identisch','Strategisch=langfristig; Taktisch=mittelfristig; Operativ=kurzfristig','Operativ ist langfristiger','Taktisch = über 5 Jahre'],correct:1,exp:'Strategisch→Taktisch→Operativ.'},
-   {q:'Was zeigt hohe freiwillige Fluktuation?',a:['Attraktives Unternehmen','Probleme mit Klima, Führung, Gehalt, Entwicklung','Rente','Wachstum'],correct:1,exp:'Hohe freiwillige Fluktuation deutet auf Probleme hin.'},
-   {q:'Bessere Selektion und Unternehmensresultate?',a:['Kein Zusammenhang','Bessere Selektion→besserer Service→zufriedene Kunden→mehr Umsatz','Nur höhere Gehälter','Werbung überflüssig'],correct:1,exp:'Kette: Selektion→Kundenerlebnis→Umsatz→Vorteil.'},
-   {q:'Risiko ohne klare HR-Ziele?',a:['Alles besser','Aktionen ohne Nutzen, Geld ohne Rücklauf, Fehler wiederholen','Mitarbeiter selbstständiger','Kosten sinken'],correct:1,exp:'Ohne Ziele: sinnlose Aktionen, kein Rückfluss.'},
-   {q:'Funktion von Prävention von Arbeitsrisiken?',a:['Nur administrativ','Risiken bewerten, Prävention, Schulungen, Unfälle untersuchen','Nur Gehälter','Nur externe Audits'],correct:1,exp:'Risiken evaluieren, Prävention, Schulungen, Unfalluntersuchung.'},
-   {q:'Was umfasst Diversität & Inklusion?',a:['Nur Frauen einstellen','Gleichstellungspolitiken, Sensibilisierung, diskriminierungsfreie Prozesse','Nur Quoten','Nur nach Alter sortieren'],correct:1,exp:'Politiken, Sensibilisierung, diskriminierungsfreie Prozesse.'},
-   {q:'HR-Indikatoren interpretieren vs. betrachten?',a:['Nur Zahlen anschauen','Vergleichen, kritisch fragen, Ursachen finden','Daten weitergeben','Nur jährlich messen'],correct:1,exp:'Vergleichen, hinterfragen, Ursachen suchen.'}]
-];
+  <!-- ══ SCRIPT (ganz unten, vor </body>) ══ -->
 
-// ── STATE ─────────────────────────────────────
-let lang = 'de';
-let user = null;
-let qState = {
-  currentLevel:null, currentQ:0, score:0, answered:false, _shuffled:[],
-  unlockedLevels:[0], completedLevels:{}, currentRank:0, lastPct:0
-};
-const RANK_ICONS = ['🎓','📋','🗂️','👔','📊','🤝','🏆'];
-const LEVEL_META = [
-  {emoji:'📚',medal:'🥉',rankUnlock:1},{emoji:'⚔️',medal:'🥈',rankUnlock:3},
-  {emoji:'📐',medal:'🥇',rankUnlock:5},{emoji:'👑',medal:'🏆',rankUnlock:6}
-];
-const ACHIEVEMENTS = [
-  {id:'first_quiz',icon:'🎯',name:'Erster Quiz / First Quiz / Primer Quiz'},
-  {id:'all_correct',icon:'💯',name:'Perfekt / Perfect / Perfecto'},
-  {id:'three_modules',icon:'🔥',name:'3 Module'},
-  {id:'sharer',icon:'📢',name:'Teiler / Sharer / Compartidor'},
-  {id:'top_rank',icon:'🏆',name:'HR Manager'},
-  {id:'multilingual',icon:'🌍',name:'Mehrsprachig / Multilingual'},
-];
-
-// ── INIT ──────────────────────────────────────
-function init() {
-  document.getElementById('footer-year').textContent = new Date().getFullYear();
-  loadState();
-  // Hash-based routing: read URL hash on load and on change
-  handleHash();
-  window.addEventListener('hashchange', handleHash);
-  window.addEventListener('scroll', () => {
-    document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 10);
-  });
-  // Reading ruler mouse tracking
-  document.addEventListener('mousemove', e => {
-    if (document.body.classList.contains('reading-ruler-on')) {
-      document.getElementById('reading-ruler').style.top = (e.clientY - 22) + 'px';
-    }
-  });
-  // Close drawer on Escape
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closeDrawer(); closeAuth(); }
-  });
-  applyLang('de');
-  restoreA11yPrefs();
-}
-
-// ── HASH ROUTING ──────────────────────────────
-// GitHub Pages serves index.html; we use hash (#section-id) for navigation.
-// All internal links use window.location.hash so the page never reloads.
-const SECTIONS = ['home','about-platform','topics','quiz-select','quiz','result','certificate','about-me','dashboard','legal'];
-
-function handleHash() {
-  const hash = window.location.hash.replace('#','') || 'home';
-  const id = SECTIONS.includes(hash) ? hash : 'home';
-  _activateSection(id);
-}
-
-function showSection(id) {
-  window.location.hash = id; // triggers hashchange → handleHash → _activateSection
-}
-
-function _activateSection(id) {
-  SECTIONS.forEach(s => {
-    const el = document.getElementById('section-'+s);
-    if (el) el.classList.toggle('active', s === id);
-  });
-  // Update nav active state
-  document.querySelectorAll('.nav-link[data-section]').forEach(l =>
-    l.classList.toggle('active', l.getAttribute('data-section') === id)
-  );
-  window.scrollTo(0, 0);
-  if (id === 'quiz-select') { renderRankLadder(); renderLevelGrid(); }
-  if (id === 'dashboard')   { renderDashboard(); }
-}
-
-// ── LANG ──────────────────────────────────────
-function setLang(l) {
-  lang = l;
-  document.documentElement.lang = l;
-  const ids = ['btn-de','btn-en','btn-es','d-btn-de','d-btn-en','d-btn-es'];
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const match = id.includes('-de') ? 'de' : id.includes('-en') ? 'en' : 'es';
-    el.classList.toggle('active', match === l);
-    el.setAttribute('aria-pressed', match === l);
-  });
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const k = el.getAttribute('data-i18n');
-    if (I18N[l][k] !== undefined) el.textContent = I18N[l][k];
-  });
-  // Manual dynamic elements
-  ['lbl-name-input','lbl-correct','lbl-wrong','lbl-pct'].forEach(id => {
-    const el = document.getElementById(id); if (!el) return;
-    const map = {'lbl-name-input':'lbl_name','lbl-correct':'lbl_correct','lbl-wrong':'lbl_wrong','lbl-pct':'lbl_pct'};
-    el.textContent = t(map[id]);
-  });
-  const cn = document.getElementById('cert-name'); if (cn) cn.placeholder = t('name_ph');
-  const nb = document.getElementById('next-btn');  if (nb) nb.textContent = t('q_next');
-  renderRankLadder();
-  renderLevelGrid();
-  // Track multilingual usage
-  if (user && !user.achievements.includes('multilingual') && l !== 'de') {
-    user.achievements.push('multilingual'); saveUser();
-  }
-}
-function t(k) { return (I18N[lang] && I18N[lang][k] !== undefined) ? I18N[lang][k] : (I18N.de[k] || k); }
-
-// ── ACCESSIBILITY ─────────────────────────────
-const A11Y_PREFS_KEY = 'upskill_a11y';
-
-function toggleA11y(cls, btnId, drawerBtnId) {
-  document.body.classList.toggle(cls);
-  const active = document.body.classList.contains(cls);
-  [btnId, drawerBtnId].forEach(id => {
-    const b = document.getElementById(id); if (!b) return;
-    b.classList.toggle('active', active);
-    b.setAttribute('aria-pressed', active);
-  });
-  saveA11yPrefs();
-  if (cls === 'no-motion') {
-    document.documentElement.style.setProperty('--ease','linear');
-    if (!active) document.documentElement.style.removeProperty('--ease');
-  }
-}
-function toggleRuler() {
-  document.body.classList.toggle('reading-ruler-on');
-  const btn = document.getElementById('a11y-ruler');
-  const active = document.body.classList.contains('reading-ruler-on');
-  if (btn) { btn.classList.toggle('active', active); btn.setAttribute('aria-pressed', active); }
-  saveA11yPrefs();
-}
-function saveA11yPrefs() {
-  const prefs = {
-    hc: document.body.classList.contains('high-contrast'),
-    lt: document.body.classList.contains('large-text'),
-    df: document.body.classList.contains('dyslexia-font'),
-    rr: document.body.classList.contains('reading-ruler-on'),
-    nm: document.body.classList.contains('no-motion'),
-  };
-  try { localStorage.setItem(A11Y_PREFS_KEY, JSON.stringify(prefs)); } catch(e) {}
-}
-function restoreA11yPrefs() {
-  try {
-    const p = JSON.parse(localStorage.getItem(A11Y_PREFS_KEY) || '{}');
-    if (p.hc) toggleA11y('high-contrast','a11y-contrast','da-contrast');
-    if (p.lt) toggleA11y('large-text','a11y-large','da-large');
-    if (p.df) toggleA11y('dyslexia-font','a11y-dyslexia','da-dyslexia');
-    if (p.rr) toggleRuler();
-    if (p.nm) toggleA11y('no-motion','a11y-motion','da-motion');
-  } catch(e) {}
-}
-
-// ── DRAWER ────────────────────────────────────
-function openDrawer() {
-  document.getElementById('mobile-drawer').classList.add('open');
-  document.getElementById('drawer-overlay').classList.add('open');
-  document.getElementById('mobile-drawer').removeAttribute('aria-hidden');
-  document.getElementById('ham-btn').setAttribute('aria-expanded','true');
-  document.querySelector('.drawer-close').focus();
-}
-function closeDrawer() {
-  document.getElementById('mobile-drawer').classList.remove('open');
-  document.getElementById('drawer-overlay').classList.remove('open');
-  document.getElementById('mobile-drawer').setAttribute('aria-hidden','true');
-  document.getElementById('ham-btn').setAttribute('aria-expanded','false');
-}
-
-// ── LEGAL TABS ────────────────────────────────
-function showLegal(tab) {
-  ['imp','dsde','dses','agb'].forEach(t => {
-    const el = document.getElementById('legal-'+t);
-    if (el) el.style.display = t === tab ? 'block' : 'none';
-  });
-  document.querySelectorAll('.legal-tab').forEach((btn, i) => {
-    const tabs = ['imp','dsde','dses','agb'];
-    const active = tabs[i] === tab;
-    btn.classList.toggle('active', active);
-    btn.setAttribute('aria-selected', active);
-  });
-}
-
-// ── STATE PERSISTENCE ─────────────────────────
-function loadState() {
-  try {
-    const s = localStorage.getItem('upskill_v4');
-    if (s) { const d=JSON.parse(s); qState.unlockedLevels=d.u||[0]; qState.completedLevels=d.c||{}; qState.currentRank=d.r||0; }
-    const u = localStorage.getItem('upskill_user');
-    if (u) { user = JSON.parse(u); updateAuthUI(); }
-  } catch(e) {}
-}
-function saveState() {
-  try { localStorage.setItem('upskill_v4', JSON.stringify({u:qState.unlockedLevels,c:qState.completedLevels,r:qState.currentRank})); } catch(e) {}
-}
-function saveUser() { try { localStorage.setItem('upskill_user', JSON.stringify(user)); } catch(e) {} }
-
-// ── AUTH ──────────────────────────────────────
-function openAuth()  { document.getElementById('auth-modal').classList.add('open'); }
-function closeAuth() { document.getElementById('auth-modal').classList.remove('open'); }
-document.getElementById('auth-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeAuth(); });
-
-function switchAuthTab(tab) {
-  document.getElementById('auth-login').style.display    = tab==='login'    ? 'flex' : 'none';
-  document.getElementById('auth-register').style.display = tab==='register' ? 'flex' : 'none';
-  document.querySelectorAll('.modal-tab').forEach((b, i) => {
-    const active = (i===0&&tab==='login')||(i===1&&tab==='register');
-    b.classList.toggle('active', active);
-    b.setAttribute('aria-selected', active);
-  });
-}
-
-function doLogin() {
-  const email = document.getElementById('login-email').value.trim();
-  const pw    = document.getElementById('login-pw').value;
-  if (!email || !pw) { showToast('⚠️ ' + (lang==='es'?'Rellena todos los campos':'Please fill all fields')); return; }
-  const stored = localStorage.getItem('upskill_acc_'+email);
-  if (!stored) { showToast('⚠️ ' + (lang==='es'?'Cuenta no encontrada':'Account not found. Please register.')); return; }
-  const acc = JSON.parse(stored);
-  user = { name:acc.name, email, completedLevels:{...qState.completedLevels}, certs:acc.certs||[], xp:acc.xp||0, achievements:acc.achievements||[] };
-  saveUser(); updateAuthUI(); closeAuth();
-  showToast('👋 ' + (lang==='es'?'¡Bienvenido/a de nuevo, ':'Willkommen zurück, ') + user.name.split(' ')[0] + '!');
-}
-
-function doRegister() {
-  const name  = document.getElementById('reg-name').value.trim();
-  const email = document.getElementById('reg-email').value.trim();
-  const pw    = document.getElementById('reg-pw').value;
-  if (!name || !email || !pw) { showToast('⚠️ Bitte alle Felder ausfüllen'); return; }
-  if (pw.length < 8) { showToast('⚠️ ' + t('pwNote')); return; }
-  user = { name, email, completedLevels:{}, certs:[], xp:0, achievements:[] };
-  localStorage.setItem('upskill_acc_'+email, JSON.stringify({name,email,certs:[],xp:0,achievements:[]}));
-  saveUser(); updateAuthUI(); closeAuth();
-  showToast('🎉 ' + (lang==='de'?'Konto erstellt! Willkommen, ':lang==='es'?'¡Cuenta creada! Bienvenido/a, ':'Account created! Welcome, ') + name.split(' ')[0] + '!');
-  spawnConfetti();
-}
-
-function socialLogin(provider) { showToast('ℹ️ ' + provider + (lang==='de'?' kommt bald!':(lang==='es'?' próximamente!':' coming soon!'))); }
-
-function logout() { user=null; localStorage.removeItem('upskill_user'); updateAuthUI(); showSection('home'); showToast('👋 ' + (lang==='de'?'Abgemeldet.':(lang==='es'?'Sesión cerrada.':'Signed out.'))); }
-
-function updateAuthUI() {
-  const btn = document.getElementById('nav-auth-btn');
-  if (user) {
-    btn.textContent = '👤 ' + user.name.split(' ')[0];
-    btn.onclick = () => showSection('dashboard');
-  } else {
-    btn.textContent = t('navLogin');
-    btn.onclick = openAuth;
-  }
-  const cnw = document.getElementById('cert-name-wrap');
-  const clh = document.getElementById('cert-login-hint');
-  const bd  = document.getElementById('btn-download');
-  if (cnw) cnw.style.display  = user ? 'block'       : 'none';
-  if (clh) clh.style.display  = user ? 'none'        : 'block';
-  if (bd)  bd.style.display   = user ? 'inline-flex' : 'none';
-}
-
-// ── RANK LADDER ───────────────────────────────
-function renderRankLadder() {
-  const el = document.getElementById('rank-ladder'); if (!el) return;
-  const ranks = t('ranks');
-  el.innerHTML = '';
-  ranks.forEach((r, i) => {
-    if (i > 0) { const c=document.createElement('div'); c.className='rank-conn'+(i<=qState.currentRank?' filled':''); el.appendChild(c); }
-    const s = document.createElement('div');
-    s.className = 'rank-step' + (i < qState.currentRank?' unlocked':'') + (i===qState.currentRank?' current':'');
-    s.setAttribute('role','listitem');
-    s.setAttribute('aria-label', r + (i===qState.currentRank?' (aktuell)':''));
-    s.innerHTML = `<div class="rs-icon" aria-hidden="true">${RANK_ICONS[i]}</div><span class="rs-lbl">${r}</span>`;
-    el.appendChild(s);
-  });
-}
-
-// ── LEVEL GRID ────────────────────────────────
-function renderLevelGrid() {
-  const el = document.getElementById('level-grid'); if (!el) return;
-  const diffs = t('difficulties'), names = t('levelNames'), descs = t('levelDesc');
-  el.innerHTML = '';
-  LEVEL_META.forEach((lm, i) => {
-    const unlocked = qState.unlockedLevels.includes(i);
-    const done = qState.completedLevels[i];
-    const card = document.createElement('article');
-    card.className = 'level-card' + (unlocked ? '' : ' locked');
-    card.setAttribute('role','listitem');
-    card.setAttribute('tabindex','0');
-    card.setAttribute('aria-label', names[i] + (unlocked ? '' : ' – ' + t('prevLevel')));
-    if (unlocked) {
-      card.onclick = () => startLevel(i);
-      card.onkeypress = e => { if (e.key==='Enter') startLevel(i); };
-    } else {
-      card.onclick = () => showToast(t('lockedToast'));
-    }
-    let stars = '';
-    if (done !== undefined) for (let s=0;s<4;s++) stars += s<done ? '⭐' : '☆';
-    const diffClass = ['diff-easy','diff-medium','diff-hard','diff-expert'][i];
-    card.innerHTML = `
-      <span class="lc-diff ${unlocked ? diffClass : 'diff-locked'}">${unlocked ? diffs[i] : '🔒'}</span>
-      <div class="lc-icon" aria-hidden="true">${lm.emoji}</div>
-      <h3>${names[i]}</h3><p>${descs[i]}</p>
-      ${done!==undefined ? `<div class="level-stars" aria-label="${done} von 4 Sternen">${stars}</div>` : ''}
-      <div class="level-info">${done!==undefined ? t('bestMedal')+' '+lm.medal : unlocked ? t('questionsInfo')+' '+lm.medal : t('prevLevel')}</div>
-    `;
-    el.appendChild(card);
-  });
-}
-
-// ── QUIZ ──────────────────────────────────────
-function startLevel(levelId) {
-  const qs = QDB_DE[levelId]; // use DE questions (structure same for all languages)
-  qState.currentLevel=levelId; qState.currentQ=0; qState.score=0; qState.answered=false;
-  qState._shuffled = [...qs].sort(() => Math.random() - .5);
-  document.getElementById('quiz-level-title').textContent = LEVEL_META[levelId].emoji + ' ' + t('levelNames')[levelId];
-  document.getElementById('q-total').textContent = qState._shuffled.length;
-  document.getElementById('q-score').textContent = '0';
-  document.getElementById('next-btn').textContent = t('q_next');
-  showSection('quiz');
-  renderQuestion();
-}
-
-function renderQuestion() {
-  const q = qState._shuffled[qState.currentQ];
-  const total = qState._shuffled.length;
-  qState.answered = false;
-  document.getElementById('q-current').textContent = qState.currentQ + 1;
-  document.getElementById('q-number').textContent  = t('q_label') + ' ' + (qState.currentQ+1) + ' ' + t('q_of') + ' ' + total;
-  document.getElementById('q-text').textContent    = q.q;
-  const pct = Math.round((qState.currentQ / total) * 100);
-  const pf = document.getElementById('progress-fill');
-  pf.style.width = pct + '%';
-  pf.parentElement.setAttribute('aria-valuenow', pct);
-  document.getElementById('explanation').style.display = 'none';
-  document.getElementById('next-btn').style.display    = 'none';
-  const cont = document.getElementById('answers-container');
-  cont.innerHTML = '';
-  const letters = ['A','B','C','D'];
-  const idx = q.a.map((_,i) => i).sort(() => Math.random() - .5);
-  const sh  = idx.map(i => ({text:q.a[i], origIdx:i}));
-  const corrSh = sh.findIndex(a => a.origIdx === q.correct);
-  sh.forEach((ans, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'answer-btn';
-    btn.setAttribute('aria-label', 'Antwort ' + letters[i] + ': ' + ans.text);
-    btn.innerHTML = `<span class="answer-letter" aria-hidden="true">${letters[i]}</span>${ans.text}`;
-    btn.onclick = () => handleAnswer(i, corrSh, q.exp);
-    cont.appendChild(btn);
-  });
-}
-
-function handleAnswer(sel, corr, exp) {
-  if (qState.answered) return;
-  qState.answered = true;
-  const btns = document.querySelectorAll('.answer-btn');
-  btns.forEach(b => b.disabled = true);
-  const ok = sel === corr;
-  if (ok) { qState.score++; document.getElementById('q-score').textContent = qState.score; btns[sel].classList.add('correct'); }
-  else    { btns[sel].classList.add('wrong'); btns[corr].classList.add('missed'); }
-  const expl = document.getElementById('explanation');
-  expl.innerHTML = `<strong>${ok ? t('q_correct') : t('q_wrong')}</strong> ${exp}`;
-  expl.style.display = 'block';
-  document.getElementById('next-btn').style.display = 'inline-flex';
-}
-
-function nextQuestion() {
-  qState.currentQ++;
-  if (qState.currentQ >= qState._shuffled.length) showResults();
-  else renderQuestion();
-}
-
-// ── RESULTS ───────────────────────────────────
-function showResults() {
-  const lm = LEVEL_META[qState.currentLevel];
-  const total = qState._shuffled.length, correct = qState.score, pct = Math.round((correct/total)*100);
-  qState.lastPct = pct;
-  let stars = 1; if(pct>=90) stars=4; else if(pct>=75) stars=3; else if(pct>=50) stars=2;
-  qState.completedLevels[qState.currentLevel] = Math.max(qState.completedLevels[qState.currentLevel]||0, stars);
-  if (pct>=50 && !qState.unlockedLevels.includes(qState.currentLevel+1) && qState.currentLevel+1<4) qState.unlockedLevels.push(qState.currentLevel+1);
-  let rankedUp = false;
-  if (pct>=60 && qState.currentRank < lm.rankUnlock) { qState.currentRank = lm.rankUnlock; rankedUp = true; }
-  saveState();
-  if (user) {
-    const tiers = t('certTiers');
-    const tier = tiers.find(ti => pct>=ti.min && pct<=ti.max) || tiers[0];
-    user.certs = user.certs || [];
-    user.certs.push({ level:t('levelNames')[qState.currentLevel], pct, medal:tier.medal, date:new Date().toLocaleDateString() });
-    user.xp = (user.xp||0) + Math.round(pct/10)*5;
-    if (!user.achievements.includes('first_quiz'))   user.achievements.push('first_quiz');
-    if (pct===100 && !user.achievements.includes('all_correct')) user.achievements.push('all_correct');
-    if (user.certs.length>=3 && !user.achievements.includes('three_modules')) user.achievements.push('three_modules');
-    if (qState.currentRank>=6 && !user.achievements.includes('top_rank')) user.achievements.push('top_rank');
-    saveUser();
-  }
-  const tiers = t('certTiers');
-  const tier = tiers.find(ti => pct>=ti.min && pct<=ti.max) || tiers[0];
-  const ranks = t('ranks');
-  let rtIdx = 0; if(pct>=90)rtIdx=3; else if(pct>=70)rtIdx=2; else if(pct>=50)rtIdx=1;
-  document.getElementById('result-medal').textContent = lm.medal;
-  document.getElementById('result-medal').setAttribute('aria-label', tier.title);
-  document.getElementById('result-title').textContent = t('resultTitles')[rtIdx];
-  document.getElementById('result-rank-lbl').innerHTML = `${t('rankLabel')} <strong>${RANK_ICONS[qState.currentRank]} ${ranks[qState.currentRank]}</strong>`;
-  document.getElementById('score-number').innerHTML = `${correct}<small>/${total}</small>`;
-  setTimeout(() => {
-    document.getElementById('score-ring').style.background = `conic-gradient(var(--indigo) ${pct*3.6}deg, var(--gray-200) 0deg)`;
-    document.getElementById('score-ring').setAttribute('aria-label', pct + '% – ' + tier.title);
-  }, 300);
-  document.getElementById('stat-correct').textContent = correct;
-  document.getElementById('stat-wrong').textContent   = total - correct;
-  document.getElementById('stat-pct').textContent     = pct + '%';
-  document.getElementById('lbl-correct').textContent  = t('lbl_correct');
-  document.getElementById('lbl-wrong').textContent    = t('lbl_wrong');
-  document.getElementById('lbl-pct').textContent      = t('lbl_pct');
-  const banner = document.getElementById('rank-up-banner');
-  if (rankedUp) { banner.style.display='block'; banner.innerHTML=`${t('rankUp')} <strong>${RANK_ICONS[qState.currentRank]} ${ranks[qState.currentRank]}</strong>`; }
-  else banner.style.display = 'none';
-  updateAuthUI();
-  showSection('result');
-  if (pct >= 70) spawnConfetti();
-}
-
-// ── SHARE ─────────────────────────────────────
-function shareWA() {
-  const txt = encodeURIComponent(`🎓 ${qState.lastPct}% – "${t('levelNames')[qState.currentLevel]}" · Upskill Academy\nhttps://upskill-academy.com`);
-  window.open('https://wa.me/?text='+txt, '_blank');
-  if (user && !user.achievements.includes('sharer')) { user.achievements.push('sharer'); saveUser(); }
-  showToast('📱 WhatsApp...');
-}
-function shareLI() {
-  window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent('https://upskill-academy.com'), '_blank');
-  showToast('💼 LinkedIn...');
-}
-function copyShare() {
-  const txt = `🎓 ${qState.lastPct}% im Upskill Academy Quiz! https://upskill-academy.com`;
-  navigator.clipboard.writeText(txt).then(() => showToast('✅ ' + (lang==='de'?'Kopiert!':lang==='es'?'¡Copiado!':'Copied!')));
-}
-
-// ── PDF CERT ──────────────────────────────────
-function downloadCert() {
-  if (!user) { openAuth(); return; }
-  const name = (document.getElementById('cert-name').value.trim()) || user.name;
-  if (!name) { showToast(t('noNameToast')); return; }
-  const pct=qState.lastPct, total=qState._shuffled?qState._shuffled.length:10, correct=qState.score;
-  const tiers = t('certTiers');
-  const tier  = tiers.find(ti => pct>=ti.min && pct<=ti.max) || tiers[0];
-  const today = new Date().toLocaleDateString(lang==='es'?'es-ES':lang==='en'?'en-GB':'de-DE',{year:'numeric',month:'long',day:'numeric'});
-  const {jsPDF} = window.jspdf;
-  const doc = new jsPDF({orientation:'landscape',unit:'mm',format:'a4'});
-  const W=297, H=210;
-  doc.setFillColor(248,250,252); doc.rect(0,0,W,H,'F');
-  doc.setFillColor(79,70,229);   doc.rect(0,0,W,18,'F');
-  doc.setFillColor(13,148,136);  doc.rect(W-8,0,8,H,'F');
-  doc.setDrawColor(79,70,229); doc.setLineWidth(1);  doc.rect(12,24,W-24,H-32);
-  doc.setLineWidth(.3); doc.rect(15,27,W-30,H-38);
-  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(9);
-  doc.text('UPSKILL ACADEMY · Interaktives Lernen', W/2, 11, {align:'center'});
-  doc.setFont('helvetica','bold'); doc.setFontSize(26); doc.setTextColor(79,70,229);
-  doc.text(tier.title.toUpperCase(), W/2, 52, {align:'center'});
-  doc.setDrawColor(79,70,229); doc.setLineWidth(.8); doc.line(W/2-60,57,W/2+60,57);
-  doc.setFont('helvetica','italic'); doc.setFontSize(10); doc.setTextColor(100,116,139);
-  const l1 = lang==='es'?'Se certifica que':lang==='en'?'This certifies that':'Hiermit wird bestätigt, dass';
-  doc.text(l1, W/2, 68, {align:'center'});
-  doc.setFont('helvetica','bold'); doc.setFontSize(24); doc.setTextColor(30,41,59);
-  doc.text(name, W/2, 84, {align:'center'});
-  const nw = doc.getTextWidth(name);
-  doc.setDrawColor(13,148,136); doc.setLineWidth(.6); doc.line(W/2-nw/2,87,W/2+nw/2,87);
-  doc.setFont('helvetica','normal'); doc.setFontSize(10); doc.setTextColor(100,116,139);
-  doc.text(t('certHereby'), W/2, 98, {align:'center'});
-  doc.text(`"${t('levelNames')[qState.currentLevel]}" ${t('certCompleted')}`, W/2, 107, {align:'center'});
-  doc.setFont('helvetica','bold'); doc.setTextColor(79,70,229);
-  doc.text(`${correct} ${t('q_of')} ${total} (${pct}%) ${t('certScored')}`, W/2, 116, {align:'center'});
-  doc.setFillColor(79,70,229); doc.roundedRect(W/2-16,H-50,32,14,3,3,'F');
-  doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.setTextColor(255,255,255);
-  doc.text(pct+'%', W/2, H-40, {align:'center'});
-  doc.setDrawColor(226,232,240); doc.setLineWidth(.4); doc.line(40,H-38,W-40,H-38);
-  doc.setFont('helvetica','normal'); doc.setFontSize(8); doc.setTextColor(100,116,139);
-  doc.line(28,H-26,110,H-26); doc.text(t('certSigned'), 69, H-22, {align:'center'});
-  doc.setFont('helvetica','bold'); doc.setTextColor(30,41,59); doc.text('Sara Manoochehri', 69, H-17, {align:'center'});
-  doc.setFont('helvetica','normal'); doc.setTextColor(100,116,139);
-  doc.line(W-110,H-26,W-28,H-26); doc.text(t('certDate'), W-69, H-22, {align:'center'});
-  doc.setFont('helvetica','bold'); doc.setTextColor(30,41,59); doc.text(today, W-69, H-17, {align:'center'});
-  doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(148,163,184);
-  doc.text('© Copyright by Sara Manoochehri · Upskill Academy', W/2, H-9, {align:'center'});
-  doc.save('Upskill_Academy_' + name.replace(/[^a-zA-Z0-9]/g,'_') + '.pdf');
-  showToast(t('dlToast'));
-}
-
-// ── DASHBOARD ─────────────────────────────────
-function renderDashboard() {
-  if (!user) { showSection('home'); openAuth(); return; }
-  document.getElementById('dash-avatar').textContent = user.name.charAt(0).toUpperCase();
-  document.getElementById('dash-name').textContent   = user.name;
-  document.getElementById('dash-email').textContent  = user.email;
-  document.getElementById('dash-quizzes').textContent = (user.certs||[]).length;
-  document.getElementById('dash-certs').textContent   = (user.certs||[]).length;
-  const xp = user.xp || 0, lvl = Math.floor(xp/100)+1, prog = xp % 100;
-  document.getElementById('xp-level-lbl').textContent = 'Level '+lvl;
-  document.getElementById('xp-pts').textContent       = xp+' XP';
-  const xf = document.getElementById('xp-fill');
-  xf.style.width = prog + '%';
-  xf.parentElement.setAttribute('aria-valuenow', prog);
-  const cl = document.getElementById('cert-list');
-  if (!user.certs || !user.certs.length) {
-    cl.innerHTML = `<p style="color:var(--text-muted);font-size:14px;">${t('dashNoCerts')}</p>`;
-  } else {
-    cl.innerHTML = user.certs.map(c =>
-      `<div class="cert-item"><span class="ci-medal">${c.medal}</span><div class="ci-info"><div class="ci-name">${c.level}</div><div class="ci-date">${c.date}</div></div><span class="ci-pct">${c.pct}%</span></div>`
-    ).join('');
-  }
-  const ag = document.getElementById('achievement-grid');
-  ag.innerHTML = ACHIEVEMENTS.map(a => {
-    const earned = (user.achievements||[]).includes(a.id);
-    return `<div class="achievement ${earned?'earned':''}" aria-label="${a.name}${earned?' – erreicht':''}"><div class="ach-icon">${a.icon}</div><div class="ach-name">${a.name.split('/')[lang==='de'?0:lang==='en'?1:2]?.trim()||a.name}</div></div>`;
-  }).join('');
-  const po = document.getElementById('progress-overview');
-  po.innerHTML = t('levelNames').map((n,i) => {
-    const done = qState.completedLevels[i];
-    const p = done ? [0,25,50,75,100][done] : 0;
-    return `<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span>${n}</span><span style="color:var(--indigo);font-weight:600">${p}%</span></div><div class="xp-bar" role="progressbar" aria-valuenow="${p}" aria-valuemin="0" aria-valuemax="100" aria-label="${n}: ${p}%"><div class="xp-fill" style="width:${p}%"></div></div></div>`;
-  }).join('');
-}
-
-function retryLevel() { startLevel(qState.currentLevel); }
-
-// ── UTILS ─────────────────────────────────────
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
-}
-function spawnConfetti() {
-  const cols = ['#4F46E5','#0D9488','#F59E0B','#F43F5E','#10B981','#6366F1'];
-  for (let i=0;i<60;i++) {
-    const el = document.createElement('div');
-    el.className = 'confetti-piece';
-    el.style.cssText = `left:${Math.random()*100}vw;top:-10px;width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()*.8}s;`;
-    document.body.appendChild(el);
-    setTimeout(() => el.remove(), 4000);
-  }
-}
-
-init();
-</script>
+  <script src="script.js"></script>
 
 </body>
 </html>
