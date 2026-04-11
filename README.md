@@ -1,6 +1,6 @@
 # Upskill Academy
 
-Upskill Academy ist eine interaktive Lernplattform mit Quiz Funktionen zur Vorbereitung auf berufliche Themen wie HR, Nóminas und Contabilidad.
+Upskill Academy ist eine interaktive Lernplattform mit Quiz Funktionen zur Vorbereitung auf berufliche Themen wie HR, Lohnbuchhaltung und Grundlagen der Buchhaltung.
 
 ## Live Demo
 https://kutschuli.github.io/HR-Academy-Quiz-/
