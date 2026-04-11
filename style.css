@@ -8,41 +8,43 @@ UPSKILL ACADEMY — style.css
 
 /* ── DESIGN TOKENS ── */
 :root {
-/* Brand Palette */
-–indigo:       #4F46E5;
-–indigo-mid:   #6366F1;
-–indigo-light: #A5B4FC;
-–indigo-pale:  #EEF2FF;
-–teal:         #0D9488;
-–teal-light:   #CCFBF1;
-–amber:        #F59E0B;
-–amber-light:  #FEF3C7;
-–rose:         #F43F5E;
-–green:        #10B981;
-–green-light:  #D1FAE5;
-–red:          #EF4444;
-–red-light:    #FEE2E2;
+--indigo: #4F46E5;
+--indigo-mid: #6366F1;
+--indigo-light: #A5B4FC;
+--indigo-pale: #EEF2FF;
+
+--teal: #0D9488;
+--teal-light: #CCFBF1;
+
+--amber: #F59E0B;
+--amber-light: #FEF3C7;
+
+--rose: #F43F5E;
+--green: #10B981;
+--green-light: #D1FAE5;
+--red: #EF4444;
+--red-light: #FEE2E2;
 
 /* Neutrals */
-–white:        #FFFFFF;
-–gray-50:      #F8FAFC;
-–gray-100:     #F1F5F9;
-–gray-200:     #E2E8F0;
-–gray-300:     #CBD5E1;
-–gray-400:     #94A3B8;
-–gray-500:     #64748B;
-–gray-600:     #475569;
-–gray-700:     #334155;
-–gray-800:     #1E293B;
-–gray-900:     #0F172A;
+--white: #FFFFFF;
+--gray-50: #F8FAFC;
+--gray-100: #F1F5F9;
+--gray-200: #E2E8F0;
+--gray-300: #CBD5E1;
+--gray-400: #94A3B8;
+--gray-500: #64748B;
+--gray-600: #475569;
+--gray-700: #334155;
+--gray-800: #1E293B;
+--gray-900: #0F172A;
 
 /* Semantic */
-–bg:           var(–gray-50);
-–surface:      var(–white);
-–border:       var(–gray-200);
-–text:         var(–gray-800);
-–text-muted:   var(–gray-500);
-–text-subtle:  var(–gray-400);
+--bg: var(--gray-50);
+--surface: var(--white);
+--border: var(--gray-200);
+--text: var(--gray-800);
+--text-muted: var(--gray-500);
+--text-subtle: var(--gray-400);
 
 /* Typography */
 –font-sans:    ‘Plus Jakarta Sans’, system-ui, sans-serif;
@@ -1411,7 +1413,7 @@ transition: all .2s;
 
 /* ── FOOTER ── */
 footer {
-background: var(–-gray-900);
+background: var(–gray-900);
 color: rgba(255,255,255,.7);
 padding: 48px 0 32px;
 margin-top: 80px;
