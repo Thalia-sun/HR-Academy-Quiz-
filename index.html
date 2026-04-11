@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-
 <html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Upskill Academy</title>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
 <style>
 :root{
   --primary:#4A90E2;
@@ -34,21 +35,90 @@
 html{
   scroll-behavior:smooth;
 }
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--background);
+  color:var(--text);
+}
+
+/* HEADER */
+.header{
+  padding:20px;
+  text-align:center;
+  font-weight:600;
+  font-size:20px;
+  background:var(--primary-dark);
+  color:white;
+}
+
+/* HERO */
+.hero{
+  text-align:center;
+  padding:60px 20px 40px;
+  max-width:800px;
+  margin:0 auto;
+}
+
+.hero h1{
+  font-size:28px;
+  margin-bottom:15px;
+}
+
+.hero p{
+  color:var(--text-light);
+  margin-bottom:25px;
+}
+
+/* BUTTON */
+.start-btn{
+  background:var(--primary);
+  color:white;
+  border:none;
+  padding:14px 22px;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:500;
+}
+
+.start-btn:hover{
+  background:var(--accent);
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+  padding:40px 20px;
+  max-width:900px;
+  margin:0 auto;
+}
+
+/* CARD */
+.card{
+  background:var(--card);
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.05);
+  text-align:center;
+}
+</style>
+
+</head>
+
 <body>
 
-<!-- NEU: Header -->
 <header class="header">
   Upskill Academy
 </header>
 
-<!-- NEU: Hero -->
 <section class="hero">
   <h1>Lerne HR, Lohnbuchhaltung und Grundlagen der Buchhaltung interaktiv</h1>
   <p>Deine mehrsprachige Lernplattform mit Quiz, Praxis und Zertifikat.</p>
   <button class="start-btn">Lernen starten</button>
 </section>
 
-<!-- NEU: Themen -->
 <section class="grid">
   <div class="card">
     <h2>HR</h2>
@@ -66,9 +136,8 @@ html{
   </div>
 </section>
 
-<!-- HIER bleibt dein bestehender Quiz Code -->
 </body>
-</style>
+</html>
 
 
 /* ── NAV ── */
